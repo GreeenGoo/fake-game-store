@@ -3,10 +3,12 @@ import { Button } from "../components/ui/Button"
 import api from "../api"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
+import { useNavigate } from "react-router-dom"
 
 export function Home() {
   const [state, setState] = useState()
 
+  const navigate = useNavigate();
   const [gamesData, setGamesData] = useState<GlobalResponse<GamesList>>()
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,6 +35,10 @@ export function Home() {
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
 
+  const handleGameClick = (id: string) => {
+    navigate(`/game/${id}`);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Welcome!</h1>
@@ -43,7 +49,7 @@ export function Home() {
           <p className="text-xl font-semibold mb-4">Total Games: {gamesData.data.allGamesHead.totalGamesCount}</p>
           <ul className="space-y-4">
             {gamesData.data.allGamesList.map((game) => (
-              <li key={game.id} className="flex flex-col md:flex-row bg-gray-50 p-4 rounded-lg shadow-sm">
+              <li key={game.id} className="flex flex-col md:flex-row bg-gray-50 p-4 rounded-lg shadow-sm" onClick={() => handleGameClick(game.id)}>
                 <img 
                   src={game.thumbnail} 
                   alt={game.name} 

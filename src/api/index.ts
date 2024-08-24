@@ -22,4 +22,13 @@ const api = axios.create({
 //   }
 // )
 
+export const getGameById = async (id: string) => {
+  try {
+    const response = await api.get(`/games/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching game data');
+  }
+};
+
 export default api
