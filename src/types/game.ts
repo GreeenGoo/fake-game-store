@@ -1,3 +1,5 @@
+import { Game } from "@/pages/game"
+
 export type Game = {
   id: string
   name: string
@@ -15,6 +17,8 @@ export type Game = {
   rating: number
 }
 
+export type CreateGame = Omit<Game, "id" | "sku" | "isActive" | "rating">
+
 type GamesHead = {
   totalGamesCount: number
   totalPages: number
@@ -23,6 +27,6 @@ type GamesHead = {
 }
 
 export type GamesList = {
-    allGamesHead: GamesHead;
-    allGamesList: Game[];
+  allGamesHead: GamesHead
+  allGamesList: Game[]
 }
