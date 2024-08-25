@@ -1,40 +1,37 @@
 import api from "@/api"
+import { GlobalResponse } from "@/types"
 import { Game as SingleGame } from "@/types/game"
-import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 
 const defaultImage = "https://via.placeholder.com/150?text=No+Image"
 
 export function Game() {
   const { id } = useParams<{ id: string }>()
-  const [game, setGame] = useState<SingleGame | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchGame = async () => {
-      try {
-        const response = await api.get<{ data: SingleGame; status: string; error: any }>(`/games/${id}`);
-        setGame(response.data.data);
-      } catch (error: any) {
-        setError("Failed to fetch game data")
-      } finally {
-        setLoading(false)
-      }
+  const handleFetchSingleGame = async () => {
+    const response = await api.get<{ data: SingleGame; status: string; error: any }>(`/games/${id}`)
+    if (response.status !== 200) {
+      throw Error("Error fetching data")
     }
+    console.log("Response is", response)
+    return response.data
+  }
 
-    fetchGame()
-  }, [id])
+  const {
+    data: singleGameData,
+    isLoading,
+    isError
+  } = useQuery<GlobalResponse<SingleGame>>({
+    queryKey: ["game"],
+    queryFn: handleFetchSingleGame
+  })
+  console.log("Query is ", singleGameData)
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>{error}</p>
-  if (!game) return <p>No game data available</p>
-
-  const releaseDate = game.releaseDate ? new Date(game.releaseDate).toLocaleDateString() : "N/A"
-  const price = game.price !== undefined ? `$${game.price.toFixed(2)}` : "N/A"
-  const rating = game.rating !== undefined ? game.rating : "N/A"
-
-  console.log(game)
+  if (!singleGameData) return <p>No game data available</p>
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error was occured while fetching game data</p>
+  const game = singleGameData.data
 
   return (
     <div className="container mx-auto p-4">
@@ -50,13 +47,13 @@ export function Game() {
         <strong>Developer:</strong> {game.developer || "Unknown"}
       </p>
       <p className="text-lg mb-2">
-        <strong>Price:</strong> {price}
+        <strong>Price:</strong> {game.price}
       </p>
       <p className="text-lg mb-2">
-        <strong>Release Date:</strong> {releaseDate}
+        <strong>Release Date:</strong> {new Date(game.releaseDate).toLocaleDateString()}
       </p>
       <p className="text-lg mb-2">
-        <strong>Rating:</strong> {rating}
+        <strong>Rating:</strong> {game.rating}
       </p>
       <p className="text-lg mb-2">
         <strong>Genres:</strong>{" "}
