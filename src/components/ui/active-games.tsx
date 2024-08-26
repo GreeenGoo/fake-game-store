@@ -8,11 +8,11 @@ type ListOfGames = {
   gamesData: GlobalResponse<GamesList>
 }
 
-export function GamesListForUser({ gamesData }: ListOfGames) {
+export function ActiveGamesList({ gamesData }: ListOfGames) {
   const navigate = useNavigate()
 
   const handleGameClick = (id: string) => {
-    navigate(`/game/${id}`)
+    navigate(`/games/${id}`)
   }
   return (
     <div>

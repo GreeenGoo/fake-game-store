@@ -1,13 +1,13 @@
-import { GamesListForUser } from "@/components/ui/games-for-user"
-import { useCreateGame, useGamesList } from "@/features/games"
+import { ActiveGamesList } from "@/components/ui/active-games"
+import { useCreateGame, useActiveGamesList } from "@/features/games"
 import { CreateGame } from "@/types/game"
 
 export function Home() {
-  const gamesData = useGamesList()
+  const gamesData = useActiveGamesList()
   const createGame = useCreateGame()
 
   const createMockProduct: CreateGame = {
-    name: "Mount&Blade",
+    name: "Trolls",
     thumbnail: "https://example.com/galactic-conquest-thumbnail.jpg",
     images: [
       "https://example.com/galactic-conquest-image1.jpg",
@@ -30,7 +30,7 @@ export function Home() {
       </button>
       {gamesData.isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {gamesData.isError && <p className="text-lg text-red-600">Error fetching active games</p>}
-      {gamesData.data && <GamesListForUser gamesData={gamesData.data} />}
+      {gamesData.data && <ActiveGamesList gamesData={gamesData.data} />}
     </div>
   )
 }

@@ -1,20 +1,29 @@
+import { useLogin } from "@/features/authentication"
 import React, { FormEvent, useState } from "react"
 
 interface LoginModalProps {
   isOpen: boolean
   onClose: () => void
+  onLogin: (token: string) => void
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, onLogin }: LoginModalProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const login = useLogin()
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    // Логика обработки логина
-    console.log("Email:", email)
-    console.log("Password:", password)
-    onClose()
+
+    try {
+      const data = await login.mutateAsync({ email, password })
+      if (data.data.token) {
+        onLogin(data.data.token)
+      }
+      onClose()
+    } catch (error) {
+      console.error("Login failed:", error)
+    }
   }
 
   if (!isOpen) return null

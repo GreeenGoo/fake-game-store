@@ -11,7 +11,24 @@ import { Game } from "@/pages/game"
 //   return [QUERY_KEY]
 // }
 
-export function useGamesList() {
+export function useAllGamesList() {
+  const {
+    data: gamesData,
+    isLoading,
+    isError
+  } = useQuery<GlobalResponse<GamesList>>({
+    queryKey: ["games/all"],
+    queryFn: GameService.getAll
+  })
+
+  return {
+    data: gamesData,
+    isLoading,
+    isError
+  }
+}
+
+export function useActiveGamesList() {
   const {
     data: gamesData,
     isLoading,
@@ -46,7 +63,7 @@ export function useGetSingleGame(id: string) {
     isLoading,
     isError
   } = useQuery<GlobalResponse<SingleGame>>({
-    queryKey: ["game"],
+    queryKey: ["games"],
     queryFn: () => GameService.getSingleGame(id)
   })
 

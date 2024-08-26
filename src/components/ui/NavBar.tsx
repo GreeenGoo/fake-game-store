@@ -9,14 +9,15 @@ import {
   MenuItems
 } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const navigation = [
   { name: "All games", href: "/games/all", current: true },
   { name: "Active games", href: "/games/active", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false }
-];
+]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
@@ -25,9 +26,36 @@ function classNames(...classes: string[]) {
 export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("authToken"))
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+  const navigate = useNavigate()
 
   const openLoginModal = () => setLoginModalOpen(true)
   const closeLoginModal = () => setLoginModalOpen(false)
+
+  const handleLogin = (newToken: string) => {
+    localStorage.setItem("authToken", newToken)
+    setToken(newToken)
+    closeLoginModal()
+  }
+
+  const handleLogout = () => {
+    const userConfirmed = window.confirm("Точно ли вы хотите выйти?")
+    if (userConfirmed) {
+      localStorage.removeItem("authToken")
+      setToken(null)
+      navigate("/games/active")
+    }
+  }
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("authToken"))
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+    return () => {
+      window.removeEventListener("storage", handleStorageChange)
+    }
+  }, [])
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -118,6 +146,7 @@ export default function NavBar() {
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      onClick={handleLogout}
                     >
                       Sign out
                     </a>
@@ -161,7 +190,7 @@ export default function NavBar() {
           ))}
         </div>
       </DisclosurePanel>
-      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onLogin={handleLogin} />
     </Disclosure>
   )
 }

@@ -13,11 +13,11 @@ export type Game = {
   price: number
   description: string
   sku: string
-  isActive: boolean
+  active: boolean
   rating: number
 }
 
-export type CreateGame = Omit<Game, "id" | "sku" | "isActive" | "rating">
+export type CreateGame = Omit<Game, "id" | "sku" | "active" | "rating">
 
 type GamesHead = {
   totalGamesCount: number
