@@ -1,6 +1,6 @@
 import api from "."
 
-import { CreateGame, Game, Game as SingleGame } from "@/types/game"
+import { CreateGame, Game as SingleGame } from "@/types/game"
 const RESOURCE = "games"
 
 export default {

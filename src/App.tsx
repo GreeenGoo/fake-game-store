@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { Home } from "./pages/home"
 import { Game } from "./pages/game"
+import NavBar from "./components/ui/NavBar"
 
 function App() {
   return (
     <Router>
+      <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/game/:id" element={<Game />} />
+        <Route path="/games/active" element={<Home />} />
+        <Route path="/games/:id" element={<Game />} />
       </Routes>
     </Router>
   )
