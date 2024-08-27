@@ -6,7 +6,6 @@ export function AllGames() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Welcome!</h1>
       {gamesData.isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {gamesData.isError && <p className="text-lg text-red-600">Error fetching active games</p>}
       {gamesData.data && <AllGamesList gamesData={gamesData.data} />}
