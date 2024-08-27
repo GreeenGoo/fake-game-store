@@ -14,7 +14,6 @@ export default {
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }
-    console.log("Response is", response)
     return response.data
   },
 
@@ -23,7 +22,6 @@ export default {
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }
-    console.log("Response is", response)
     return response.data
   },
 
@@ -37,12 +35,21 @@ export default {
     return res.data
   },
 
+  deleteGame: async (id: string) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.delete(`/${RESOURCE}/${id}`, {
+      headers: {
+        Authorization: token
+      }
+    })
+    return res.data
+  },
+
   getSingleGame: async (id: string) => {
     const response = await api.get<{ data: SingleGame; status: string; error: any }>(`/games/${id}`)
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }
-    console.log("Response is", response)
     return response.data
   }
 }

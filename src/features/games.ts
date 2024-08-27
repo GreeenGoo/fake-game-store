@@ -56,6 +56,18 @@ export function useCreateGame() {
   return mutation
 }
 
+export function useDeleteGame() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (id: string) => GameService.deleteGame(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["games/all"] })
+    }
+  })
+
+  return mutation
+}
+
 export function useGetSingleGame(id: string) {
   const {
     data: singleGameData,

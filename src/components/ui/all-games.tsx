@@ -3,6 +3,7 @@ import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
+import { useDeleteGame } from "@/features/games"
 
 type ListOfGames = {
   gamesData: GlobalResponse<GamesList>
@@ -12,6 +13,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const games = gamesData.data.allGamesList
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const tableRef = useRef<HTMLTableElement | null>(null)
+  const deleteGame = useDeleteGame()
 
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
@@ -30,7 +32,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   }
 
   const handleRemoveGame = (id: string) => {
-    console.log(`Remove game with id: ${id}`)
+    deleteGame.mutate(id)
   }
 
   const handleAddKey = (id: string) => {
