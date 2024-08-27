@@ -3,7 +3,6 @@ import GameService from "@/api/games"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Game } from "@/pages/game"
 
 // const QUERY_KEY = "games"
 // export function getQueryKey(id?: string) {

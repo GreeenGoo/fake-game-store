@@ -10,13 +10,11 @@ import {
 } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const navigation = [
   { name: "All games", href: "/games/all", current: true },
-  { name: "Active games", href: "/games/active", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false }
+  { name: "Active games", href: "/games/active", current: false }
 ]
 
 function classNames(...classes: string[]) {
@@ -27,6 +25,7 @@ export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("authToken"))
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const openLoginModal = () => setLoginModalOpen(true)
   const closeLoginModal = () => setLoginModalOpen(false)
@@ -38,7 +37,7 @@ export default function NavBar() {
   }
 
   const handleLogout = () => {
-    const userConfirmed = window.confirm("Точно ли вы хотите выйти?")
+    const userConfirmed = window.confirm("Are you sure you'd like to log out?")
     if (userConfirmed) {
       localStorage.removeItem("authToken")
       setToken(null)
@@ -84,9 +83,9 @@ export default function NavBar() {
                   <a
                     key={item.name}
                     href={item.href}
-                    aria-current={item.current ? "page" : undefined}
+                    aria-current={location.pathname === item.href ? "page" : undefined}
                     className={classNames(
-                      item.current
+                      location.pathname === item.href
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "rounded-md px-3 py-2 text-sm font-medium"
@@ -177,9 +176,9 @@ export default function NavBar() {
               key={item.name}
               as="a"
               href={item.href}
-              aria-current={item.current ? "page" : undefined}
+              aria-current={location.pathname === item.href ? "page" : undefined}
               className={classNames(
-                item.current
+                location.pathname === item.href
                   ? "bg-gray-900 text-white"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white",
                 "block rounded-md px-3 py-2 text-base font-medium"
