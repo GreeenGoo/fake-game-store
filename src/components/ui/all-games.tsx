@@ -4,6 +4,7 @@ import { GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
 import { useDeleteGame } from "@/features/games"
+import { useNavigate } from "react-router-dom"
 
 type ListOfGames = {
   gamesData: GlobalResponse<GamesList>
@@ -14,13 +15,14 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const tableRef = useRef<HTMLTableElement | null>(null)
   const deleteGame = useDeleteGame()
+  const navigate = useNavigate()
 
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
   }
 
   const handleAddGame = () => {
-    console.log("Add new game")
+    navigate(`/games/add`)
   }
 
   const handleOpenGame = (id: string) => {

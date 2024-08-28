@@ -51,5 +51,21 @@ export default {
       throw Error("Error fetching data")
     }
     return response.data
-  }
+  },
+
+  getGenres: async () => {
+    const response = await api.get<{ data: Array<string>; status: string; error: any }>(`/games/genres`)
+    if (response.status !== 200) {
+      throw Error("Error fetching genres")
+    }
+    return response.data
+  },
+
+  getPlayerSupport: async () => {
+    const response = await api.get<{ data: Array<string>; status: string; error: any }>(`/games/player-support`)
+    if (response.status !== 200) {
+      throw Error("Error fetching player supports")
+    }
+    return response.data
+  },
 }

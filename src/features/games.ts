@@ -84,3 +84,37 @@ export function useGetSingleGame(id: string) {
     isError
   }
 }
+
+export function useGenres() {
+  const {
+    data: genres,
+    isLoading,
+    isError
+  } = useQuery<GlobalResponse<Array<string>>>({
+    queryKey: ["games/genres"],
+    queryFn: () => GameService.getGenres()
+  })
+
+  return {
+    genres,
+    isLoading,
+    isError
+  }
+}
+
+export function usePlayerSupports() {
+  const {
+    data: playerSupports,
+    isLoading,
+    isError
+  } = useQuery<GlobalResponse<Array<string>>>({
+    queryKey: ["games/player-support"],
+    queryFn: () => GameService.getPlayerSupport()
+  })
+
+  return {
+    playerSupports,
+    isLoading,
+    isError
+  }
+}
