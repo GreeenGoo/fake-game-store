@@ -1,10 +1,8 @@
 import { ActiveGamesList } from "@/components/ui/active-games"
-import { useCreateGame, useActiveGamesList } from "@/features/games"
-import { CreateGame } from "@/types/game"
+import { useActiveGamesList } from "@/features/games"
 
 export function Home() {
   const gamesData = useActiveGamesList()
-  const createGame = useCreateGame()
 
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
