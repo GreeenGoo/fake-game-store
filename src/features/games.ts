@@ -3,6 +3,7 @@ import GameService from "@/api/games"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useState } from "react"
 
 // const QUERY_KEY = "games"
 // export function getQueryKey(id?: string) {
@@ -154,4 +155,29 @@ export function useGetKeysAmount(id: string) {
   })
 
   return { amount, isLoading, isError }
+}
+
+export function useActivateGame() {
+  const queryClient = useQueryClient()
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const mutation = useMutation<GlobalResponse<SingleGame>, Error, [string, boolean]>({
+    mutationFn: ([id, activate]) => GameService.activateGame(id, activate),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["games/all"] })
+    },
+    onError: (error: Error) => {
+      setErrorMessage("There should be at least one key to activate game.")
+    }
+  })
+
+  const handlePopupMessage = () => {
+    setErrorMessage(null)
+  }
+
+  return {
+    ...mutation,
+    errorMessage,
+   handlePopupMessage
+  }
 }

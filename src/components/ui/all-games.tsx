@@ -3,8 +3,9 @@ import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import { useAddGameKey, useDeleteGame, useGetKeysAmount } from "@/features/games"
+import { useActivateGame, useAddGameKey, useDeleteGame} from "@/features/games"
 import { useNavigate } from "react-router-dom"
+import { Popup } from "./popup-message"
 
 type ListOfGames = {
   gamesData: GlobalResponse<GamesList>
@@ -17,6 +18,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const deleteGame = useDeleteGame()
   const navigate = useNavigate()
   const addGameKey = useAddGameKey()
+  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame();
 
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
@@ -52,12 +54,11 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   }
 
   const handleAddKey = (id: string) => {
-    console.log(id)
     addGameKey.mutate(id)
   }
 
-  const handleActivateGame = (id: string) => {
-    console.log(`Activate/deactivate game with id: ${id}`)
+  const handleActivateGame = (id: string, gameActivationStatus: boolean) => {
+    activateGame([id, !gameActivationStatus])
   }
 
   useEffect(() => {
@@ -177,7 +178,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
                           <i className="fas fa-key mr-2"></i> Add Game Key
                         </button>
                         <button
-                          onClick={() => handleActivateGame(game.id)}
+                          onClick={() => handleActivateGame(game.id, game.active)}
                           className="btn bg-yellow-500 border border-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
                         >
                           <i className="fas fa-check-circle mr-2"></i> Activate/Deactivate Game
@@ -190,6 +191,9 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             ))}
           </tbody>
         </table>
+        {errorMessage && (
+          <Popup message={errorMessage} onClose={handlePopupMessage} />
+        )}
       </div>
     </div>
   )

@@ -111,5 +111,21 @@ export default {
       throw Error("Error fetching data")
     }
     return response.data
+  },
+
+  activateGame: async (id: string, activate: boolean) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    var activationType = ""
+    activate ? (activationType = "activation") : (activationType = "deactivation")
+    const res = await api.patch(
+      `/${RESOURCE}/${activationType}/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    return res.data
   }
 }
