@@ -1,3 +1,5 @@
+type AddFields<T, U> = T & U;
+
 export type Login = {
   email: string
   password: string
@@ -18,3 +20,8 @@ type User = {
   address: string
   phone: string
 }
+
+export type SignUp = AddFields<Login, {
+  name: string;
+  confirmPassword: string;
+}>;

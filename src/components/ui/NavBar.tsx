@@ -1,4 +1,4 @@
-import LoginModal from "@/pages/login"
+import React, { useState, useEffect } from "react"
 import {
   Disclosure,
   DisclosureButton,
@@ -9,8 +9,9 @@ import {
   MenuItems
 } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
-import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+import LoginModal from "@/pages/login"
+import SignUpPanel from "./sign-up"
 
 const navigation = [
   { name: "All games", href: "/games/all", current: true },
@@ -24,11 +25,15 @@ function classNames(...classes: string[]) {
 export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("authToken"))
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+  const [isRegisterModalOpen, setRegisterModalOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
   const openLoginModal = () => setLoginModalOpen(true)
   const closeLoginModal = () => setLoginModalOpen(false)
+
+  const openRegisterModal = () => setRegisterModalOpen(true)
+  const closeRegisterModal = () => setRegisterModalOpen(false)
 
   const handleLogin = (newToken: string) => {
     localStorage.setItem("authToken", newToken)
@@ -61,7 +66,6 @@ export default function NavBar() {
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
@@ -150,7 +154,10 @@ export default function NavBar() {
                 >
                   Login
                 </button>
-                <button className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <button
+                  onClick={openRegisterModal}
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
                   Sign Up
                 </button>
               </div>
@@ -180,6 +187,11 @@ export default function NavBar() {
         </div>
       </DisclosurePanel>
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onLogin={handleLogin} />
+      <SignUpPanel
+        isOpen={isRegisterModalOpen}
+        onClose={closeRegisterModal}
+        onRegister={handleLogin}
+      />
     </Disclosure>
   )
 }
