@@ -3,7 +3,7 @@ import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import { useDeleteGame } from "@/features/games"
+import { useAddGameKey, useDeleteGame, useGetKeysAmount } from "@/features/games"
 import { useNavigate } from "react-router-dom"
 
 type ListOfGames = {
@@ -16,6 +16,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const tableRef = useRef<HTMLTableElement | null>(null)
   const deleteGame = useDeleteGame()
   const navigate = useNavigate()
+  const addGameKey = useAddGameKey()
 
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
@@ -51,7 +52,8 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   }
 
   const handleAddKey = (id: string) => {
-    console.log(`Add key for game with id: ${id}`)
+    console.log(id)
+    addGameKey.mutate(id)
   }
 
   const handleActivateGame = (id: string) => {
@@ -92,6 +94,9 @@ export function AllGamesList({ gamesData }: ListOfGames) {
                 Genre
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Keys
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Developer
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -123,6 +128,9 @@ export function AllGamesList({ gamesData }: ListOfGames) {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{game.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {game.genreList.join(", ")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {game.quantity}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {game.developer}

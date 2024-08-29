@@ -24,6 +24,7 @@ export default function CreateUpdateGame() {
     id: "",
     name: "",
     genreList: [],
+    quantity: 0,
     thumbnail: "",
     images: [],
     developer: "",
@@ -161,7 +162,7 @@ export default function CreateUpdateGame() {
       "Are you sure you'd like to cancel creating the game? The information will not be saved!"
     )
     if (cancelCreatingGame) {
-      navigate(-1)
+      navigate("games/all")
     }
   }
 

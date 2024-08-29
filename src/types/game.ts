@@ -4,6 +4,7 @@ export type Game = {
   id: string
   name: string
   genreList: string[]
+  quantity: number
   thumbnail: string
   images: string[]
   developer: string

@@ -64,7 +64,9 @@ export default {
   },
 
   getGenres: async () => {
-    const response = await api.get<{ data: Array<string>; status: string; error: any }>(`/games/genres`)
+    const response = await api.get<{ data: Array<string>; status: string; error: any }>(
+      `/games/genres`
+    )
     if (response.status !== 200) {
       throw Error("Error fetching genres")
     }
@@ -72,10 +74,42 @@ export default {
   },
 
   getPlayerSupport: async () => {
-    const response = await api.get<{ data: Array<string>; status: string; error: any }>(`/games/player-support`)
+    const response = await api.get<{ data: Array<string>; status: string; error: any }>(
+      `/games/player-support`
+    )
     if (response.status !== 200) {
       throw Error("Error fetching player supports")
     }
     return response.data
   },
+
+  addGameKey: async (id: string) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(
+      `/${RESOURCE}/keys/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    return res.data
+  },
+
+  getGameKeysAmount: async (id: string) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const response = await api.get<{ data: number; status: string; error: any }>(
+      `/games/keys/${id}`,
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    if (response.status !== 200) {
+      throw Error("Error fetching data")
+    }
+    return response.data
+  }
 }

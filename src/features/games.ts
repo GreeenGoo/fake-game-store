@@ -130,3 +130,28 @@ export function usePlayerSupports() {
     isError
   }
 }
+
+export function useAddGameKey() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (id: string) => GameService.addGameKey(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["games/all"] })
+    }
+  })
+
+  return mutation
+}
+
+export function useGetKeysAmount(id: string) {
+  const {
+    data: amount,
+    isLoading,
+    isError
+  } = useQuery<GlobalResponse<number>>({
+    queryKey: ["games/keys"],
+    queryFn: () => GameService.getGameKeysAmount(id)
+  })
+
+  return { amount, isLoading, isError }
+}
