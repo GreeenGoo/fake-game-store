@@ -1,5 +1,5 @@
 import api from "."
-import { Login, SignUp } from "@/types/authentication"
+import { Login, SignUp } from "@/types/user"
 
 const RESOURCE = "auth"
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import AuthenticationService from "@/api/authentication"
-import { LoggedInUser, Login, SignUp } from "@/types/authentication"
+import { LoggedInUser, Login, SignUp } from "@/types/user"
 import { GlobalResponse } from "@/types"
 
 export function useLogin() {

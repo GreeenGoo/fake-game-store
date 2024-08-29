@@ -1,5 +1,5 @@
 import { AllGamesList } from "@/components/ui/all-games"
-import { useActiveGamesList, useAllGamesList } from "@/features/games"
+import { useAllGamesList } from "@/features/games"
 
 export function AllGames() {
   const gamesData = useAllGamesList()

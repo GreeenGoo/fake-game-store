@@ -10,7 +10,7 @@ export type LoggedInUser = {
   user: User
 }
 
-type User = {
+export type User = {
   id: string
   name: string
   email: string

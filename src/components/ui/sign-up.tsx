@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button } from "./Button"
-import { SignUp } from "@/types/authentication"
+import { SignUp } from "@/types/user"
 import { useSignUp } from "@/features/authentication"
 
 type SignUpProps = {

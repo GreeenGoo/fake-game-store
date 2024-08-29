@@ -4,6 +4,7 @@ import { Game } from "./pages/game"
 import NavBar from "./components/ui/NavBar"
 import { AllGames } from "./pages/all-games"
 import CreateUpdateGame from "./pages/create-update-game"
+import { UserProfilePage } from "./pages/profile"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/games/active" element={<Home />} />
         <Route path="/games/:id" element={<Game />} />
         <Route path="/games/add" element={<CreateUpdateGame />} />
+        <Route path="/users/me" element={<UserProfilePage />} />
       </Routes>
     </Router>
   )
