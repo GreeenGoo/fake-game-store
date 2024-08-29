@@ -1,6 +1,6 @@
 import api from "."
 
-import { CreateGame, Game as SingleGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, Game as SingleGame } from "@/types/game"
 const RESOURCE = "games"
 
 export default {
@@ -28,6 +28,16 @@ export default {
   createGame: async (game: CreateGame) => {
     const token = "Bearer " + localStorage.getItem("authToken")
     const res = await api.post(`/${RESOURCE}`, game, {
+      headers: {
+        Authorization: token
+      }
+    })
+    return res.data
+  },
+
+  updateGame: async (game: CreateOrUpdateGame) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.patch(`/${RESOURCE}`, game, {
       headers: {
         Authorization: token
       }

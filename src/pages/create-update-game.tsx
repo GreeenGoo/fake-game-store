@@ -1,16 +1,55 @@
-import { useCreateGame, useGenres, usePlayerSupports } from "@/features/games"
+import {
+  useCreateGame,
+  useGenres,
+  useGetSingleGame,
+  usePlayerSupports,
+  useUpdateGame
+} from "@/features/games"
 import { UserCircleIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Popup } from "@/components/ui/popup-message"
-import { CreateGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
 
 export default function CreateUpdateGame() {
   const genres = useGenres()
   const playerSupport = usePlayerSupports()
   const createGame = useCreateGame()
+  const updateGame = useUpdateGame()
 
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const [newGame, setNewGame] = useState<CreateOrUpdateGame>({
+    id: "",
+    name: "",
+    genreList: [],
+    thumbnail: "",
+    images: [],
+    developer: "",
+    releaseDate: new Date(),
+    systemRequirements: "",
+    playerSupport: [],
+    price: 0,
+    description: ""
+  })
+
+  const [popupState, setPopupState] = useState<{ show: boolean; message: string }>({
+    show: false,
+    message: ""
+  })
+
+  const isUpdate = Boolean(location.state?.myData?.id)
+  const { singleGameData } = isUpdate
+    ? useGetSingleGame(location.state.myData?.id)
+    : { singleGameData: null }
+
+  useEffect(() => {
+    if (isUpdate && singleGameData) {
+      const gameForUploading = convertToCreateOrUpdateGame(singleGameData.data)
+      setNewGame(gameForUploading)
+    }
+  }, [isUpdate, singleGameData])
 
   const validateFields = (game: CreateGame): boolean => {
     return (
@@ -28,22 +67,20 @@ export default function CreateUpdateGame() {
     )
   }
 
-  const [newGame, setNewGame] = useState<CreateGame>({
-    name: "",
-    genreList: [],
-    thumbnail: "",
-    images: [],
-    developer: "",
-    releaseDate: new Date(),
-    systemRequirements: "",
-    playerSupport: [],
-    price: 0,
-    description: ""
-  })
-  const [popupState, setPopupState] = useState<{ show: boolean; message: string }>({
-    show: false,
-    message: ""
-  })
+  const convertToCreateGame = (game: CreateOrUpdateGame): CreateGame => {
+    const { id, ...createGame } = game
+    console.log("Create game is ", createGame)
+    return createGame
+  }
+
+  const convertToCreateOrUpdateGame = (game: Game): CreateOrUpdateGame => {
+    const { sku, active, rating, ...createGame } = game
+    console.log("Create or update game is ", createGame)
+    return {
+      ...createGame,
+      releaseDate: createGame.releaseDate ? new Date(createGame.releaseDate) : new Date()
+    } as CreateOrUpdateGame
+  }
 
   const handlenewGameChanges = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -121,7 +158,7 @@ export default function CreateUpdateGame() {
 
   const handleCancel = () => {
     const cancelCreatingGame = window.confirm(
-      "Are you sure you'd like to cancel creating the game? The infotmation will not be saved!"
+      "Are you sure you'd like to cancel creating the game? The information will not be saved!"
     )
     if (cancelCreatingGame) {
       navigate(-1)
@@ -130,10 +167,15 @@ export default function CreateUpdateGame() {
 
   const handleSave = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
-    console.log(newGame)
     if (validateFields(newGame)) {
-      createGame.mutate(newGame)
-      navigate(`/games/all`)
+      if (isUpdate) {
+        updateGame.mutate(newGame)
+        navigate(`/games/all`)
+      } else {
+        const gameForCreation = convertToCreateGame(newGame)
+        createGame.mutate(gameForCreation)
+        navigate(`/games/all`)
+      }
     } else {
       handleShowPopup("Fill all the necessary fields")
     }

@@ -22,15 +22,28 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   }
 
   const handleAddGame = () => {
-    navigate(`/games/add`)
+    navigate(`/games/add`, {
+      state: {
+        myData: {
+          type: "creating"
+        }
+      }
+    })
   }
 
   const handleOpenGame = (id: string) => {
-    console.log(`Open game with id: ${id}`)
+    navigate(`/games/${id}`)
   }
 
   const handleUpdateGame = (id: string) => {
-    console.log(`Update game with id: ${id}`)
+    navigate(`/games/add`, {
+      state: {
+        myData: {
+          type: "updating",
+          id: id
+        }
+      }
+    })
   }
 
   const handleRemoveGame = (id: string) => {

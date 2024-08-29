@@ -19,6 +19,8 @@ export type Game = {
 
 export type CreateGame = Omit<Game, "id" | "sku" | "active" | "rating">
 
+export type CreateOrUpdateGame = Omit<Game, "sku" | "active" | "rating">
+
 type GamesHead = {
   totalGamesCount: number
   totalPages: number

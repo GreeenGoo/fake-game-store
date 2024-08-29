@@ -1,4 +1,4 @@
-import { CreateGame, Game as SingleGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, Game as SingleGame } from "@/types/game"
 import GameService from "@/api/games"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
@@ -49,7 +49,19 @@ export function useCreateGame() {
   const mutation = useMutation({
     mutationFn: (game: CreateGame) => GameService.createGame(game),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["games"] })
+      queryClient.invalidateQueries({ queryKey: ["games/all"] })
+    }
+  })
+
+  return mutation
+}
+
+export function useUpdateGame() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (game: CreateOrUpdateGame) => GameService.updateGame(game),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["games/all"] })
     }
   })
 
