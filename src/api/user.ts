@@ -1,3 +1,4 @@
+import { ChangeUserPassword } from "@/types/user"
 import api from "."
 
 const RESOURCE = "users"
@@ -14,5 +15,14 @@ export default {
       throw Error("Error fetching data")
     }
     return response.data
+  },
+  changePassword: async (passwordInfo: ChangeUserPassword) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(`/${RESOURCE}/me/update-password`, passwordInfo, {
+      headers: {
+        Authorization: token
+      }
+    })
+    return res.data
   }
 }

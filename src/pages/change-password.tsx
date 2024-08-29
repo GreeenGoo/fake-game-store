@@ -1,4 +1,8 @@
+import { Popup } from "@/components/ui/popup-message"
+import { useChangePassword } from "@/features/user"
+import { ChangeUserPassword } from "@/types/user"
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface ChangePasswordProps {
   isOpen: boolean
@@ -6,32 +10,49 @@ interface ChangePasswordProps {
 }
 
 export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
-  const [oldPassword, setOldPassword] = useState("")
-  const [newPassword, setNewPassword] = useState("")
-  const [confirmNewPassword, setConfirmNewPassword] = useState("")
+  const [passwordChange, setPasswordChange] = useState<ChangeUserPassword>({
+    password: "",
+    newPassword: "",
+    newPasswordConfirm: ""
+  })
   const [isLoading, setIsLoading] = useState(false)
+  const { mutate, errorMessage, isError, handlePopupMessage } = useChangePassword()
+  const navigate = useNavigate()
+
+  const handlePasswordChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target
+
+    setPasswordChange((prevState) => ({
+      ...prevState,
+      [name]: value
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (newPassword !== confirmNewPassword) {
-      alert("New passwords do not match")
+
+    if (passwordChange.newPassword !== passwordChange.newPasswordConfirm) {
+      alert("New passwords do not match.")
       return
     }
 
     setIsLoading(true)
-    try {
 
-
-
-
-      alert("Password changed successfully")
-      onClose()
-    } catch (error) {
-      console.error("Password change failed:", error)
-      alert("Failed to change password")
-    } finally {
-      setIsLoading(false)
-    }
+    mutate(passwordChange, {
+      onSuccess: () => {
+        alert("Password changed successfully.")
+        localStorage.removeItem("authToken")
+        navigate("/games/active")
+        onClose()
+        window.location.reload()
+      },
+      onError: () => {
+        alert(errorMessage || "An error occurred while changing password.")
+      },
+      onSettled: () => {
+        setIsLoading(false)
+      }
+    })
   }
 
   if (!isOpen) return null
@@ -42,14 +63,15 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Old Password
             </label>
             <input
-              id="oldPassword"
+              id="password"
               type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
+              name="password"
+              value={passwordChange.password}
+              onChange={(e) => handlePasswordChanges(e)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
@@ -61,8 +83,9 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
             <input
               id="newPassword"
               type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              name="newPassword"
+              value={passwordChange.newPassword}
+              onChange={(e) => handlePasswordChanges(e)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
@@ -72,10 +95,11 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
               Confirm New Password
             </label>
             <input
-              id="confirmNewPassword"
+              id="newPasswordConfirm"
               type="password"
-              value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              name="newPasswordConfirm"
+              value={passwordChange.newPasswordConfirm}
+              onChange={(e) => handlePasswordChanges(e)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
@@ -96,6 +120,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
         >
           Cancel
         </button>
+        {errorMessage && <Popup message={errorMessage} onClose={handlePopupMessage} />}
       </div>
     </div>
   )
