@@ -1,6 +1,6 @@
 import { GlobalResponse } from "@/types"
-import { GameOrderDto, OrderDto } from "@/types/order"
-import { useQuery } from "@tanstack/react-query"
+import { OrderDto } from "@/types/order"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import OrderService from "../api/order"
 
 export function useGetCurrentUserCard() {
@@ -18,4 +18,16 @@ export function useGetCurrentUserCard() {
     isLoading,
     isError
   }
+}
+
+export function useDeleteGameFromCard() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (id: string) => OrderService.deleteGameFromCard(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
+    }
+  })
+
+  return mutation
 }

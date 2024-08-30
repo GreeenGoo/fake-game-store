@@ -1,3 +1,5 @@
+"use client"
+
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import {
   Table,
@@ -8,19 +10,28 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { GameInCard } from "@/types/game"
-import { useGetCurrentUserCard } from "@/features/order"
+import { useDeleteGameFromCard, useGetCurrentUserCard } from "@/features/order"
+import { useMemo } from "react"
 
 export function Card() {
   const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
+  const deleteGameFromCard = useDeleteGameFromCard()
 
-  const data: GameInCard[] =
-    gamesData?.data.games.map((gameEntry) => ({
-      id: gameEntry.game.id,
-      name: gameEntry.game.name,
-      thumbnail: gameEntry.game.thumbnail,
-      price: gameEntry.game.price,
-      quantity: gameEntry.quantity
-    })) || []
+  const data: GameInCard[] = useMemo(
+    () =>
+      gamesData?.data.games.map((gameEntry) => ({
+        id: gameEntry.game.id,
+        name: gameEntry.game.name,
+        thumbnail: gameEntry.game.thumbnail,
+        price: gameEntry.game.price,
+        quantity: gameEntry.quantity
+      })) || [],
+    [gamesData]
+  )
+
+  const handleDelete = (id: string) => {
+    deleteGameFromCard.mutate(id)
+  }
 
   const columns: ColumnDef<GameInCard>[] = [
     {
@@ -45,6 +56,18 @@ export function Card() {
     {
       accessorKey: "quantity",
       header: "Quantity"
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <button
+          onClick={() => handleDelete(row.original.id)}
+          className="text-red-500 hover:text-red-700"
+        >
+          <i className="fas fa-trash"></i>
+        </button>
+      )
     }
   ]
 
@@ -53,6 +76,8 @@ export function Card() {
     columns,
     getCoreRowModel: getCoreRowModel()
   })
+
+  console.log("Just to make sure it works.")
 
   return (
     <div className="rounded-md border">
