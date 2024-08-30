@@ -34,3 +34,14 @@ export type ChangeUserPassword = {
   newPassword: string
   newPasswordConfirm: string
 }
+
+export type ForgotPassword = {
+  email: string
+}
+
+export type ResetPasswordWithCode = {
+  password: string
+  confirmPassword: string
+}
+
+export type ResetPasswordWithCodePlusCode = AddFields<ResetPasswordWithCode, { code: string }>
