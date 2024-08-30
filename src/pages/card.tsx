@@ -1,5 +1,3 @@
-"use client"
-
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import {
   Table,
@@ -9,36 +7,47 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status"
-  },
-  {
-    accessorKey: "email",
-    header: "Email"
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount"
-  }
-]
-
-const data: Payment[] = [
-  { id: "1", amount: 100, status: "success", email: "example1@email.com" },
-  { id: "2", amount: 200, status: "pending", email: "example2@email.com" },
-  { id: "3", amount: 300, status: "failed", email: "example3@email.com" }
-]
+import { GameInCard } from "@/types/game"
+import { useGetCurrentUserCard } from "@/features/order"
 
 export function Card() {
+  const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
+
+  const data: GameInCard[] =
+    gamesData?.data.games.map((gameEntry) => ({
+      id: gameEntry.game.id,
+      name: gameEntry.game.name,
+      thumbnail: gameEntry.game.thumbnail,
+      price: gameEntry.game.price,
+      quantity: gameEntry.quantity
+    })) || []
+
+  const columns: ColumnDef<GameInCard>[] = [
+    {
+      accessorKey: "thumbnail",
+      header: "Image",
+      cell: ({ getValue }) => (
+        <img
+          src={getValue<string>()}
+          alt="Thumbnail"
+          className="w-12 h-12 rounded-full object-cover"
+        />
+      )
+    },
+    {
+      accessorKey: "name",
+      header: "Name"
+    },
+    {
+      accessorKey: "price",
+      header: "Price"
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity"
+    }
+  ]
+
   const table = useReactTable({
     data,
     columns,
@@ -51,15 +60,13 @@ export function Card() {
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                )
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>

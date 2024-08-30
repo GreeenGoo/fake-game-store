@@ -33,3 +33,11 @@ export type GamesList = {
   allGamesHead: GamesHead
   allGamesList: Game[]
 }
+
+export type GameInCard = {
+  id: string
+  thumbnail: string
+  name: string
+  price: number
+  quantity: number
+}

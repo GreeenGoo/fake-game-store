@@ -1,5 +1,11 @@
 import { useState } from "react"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+  SheetDescription
+} from "@/components/ui/sheet"
 import { ActiveGamesList } from "@/components/ui/active-games"
 import { useActiveGamesList } from "@/features/games"
 import { CreditCard } from "lucide-react"
@@ -25,6 +31,8 @@ export function Home() {
           </button>
         </SheetTrigger>
         <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetTitle></SheetTitle>
+          <SheetDescription></SheetDescription>
           <h2 className="text-xl font-bold mb-4">Card</h2>
           <Card />
         </SheetContent>
