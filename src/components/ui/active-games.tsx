@@ -1,3 +1,4 @@
+import { useAddGameToCard } from "@/features/order"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import { useNavigate } from "react-router-dom"
@@ -10,10 +11,16 @@ type ListOfGames = {
 
 export function ActiveGamesList({ gamesData }: ListOfGames) {
   const navigate = useNavigate()
+  const addGameToCard = useAddGameToCard()
 
   const handleGameClick = (id: string) => {
     navigate(`/games/${id}`)
   }
+
+  const handleAddToOrder = (id: string) => {
+    addGameToCard.mutate(id)
+  }
+
   return (
     <div>
       {gamesData ? (
@@ -26,7 +33,7 @@ export function ActiveGamesList({ gamesData }: ListOfGames) {
                 <div
                   key={game.id}
                   onClick={() => handleGameClick(game.id)}
-                  className="group cursor-pointer"
+                  className="group relative cursor-pointer"
                 >
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                     <img
@@ -37,6 +44,15 @@ export function ActiveGamesList({ gamesData }: ListOfGames) {
                   </div>
                   <h3 className="mt-4 text-sm text-gray-700">{game.name}</h3>
                   <p className="mt-1 text-lg font-medium text-gray-900">{game.price}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleAddToOrder(game.id)
+                    }}
+                    className="absolute top-2 right-2 p-1 rounded-full bg-gray-800 text-white hover:bg-gray-600"
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
                 </div>
               ))}
             </div>

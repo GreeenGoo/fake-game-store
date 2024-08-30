@@ -20,6 +20,18 @@ export function useGetCurrentUserCard() {
   }
 }
 
+export function useAddGameToCard() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (id: string) => OrderService.addGameToCard(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
+    }
+  })
+
+  return mutation
+}
+
 export function useDeleteGameFromCard() {
   const queryClient = useQueryClient()
   const mutation = useMutation({
