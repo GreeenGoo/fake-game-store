@@ -20,6 +20,18 @@ export function useGetCurrentUserCard() {
   }
 }
 
+export function useCheckoutCurrentOrder() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: () => OrderService.checkoutCurrentOrder(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
+    }
+  })
+
+  return mutation
+}
+
 export function useAddGameToCard() {
   const queryClient = useQueryClient()
   const mutation = useMutation({

@@ -16,6 +16,20 @@ export default {
     return response.data
   },
 
+  checkoutCurrentOrder: async () => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(
+      `/users/me/${RESOURCE}/current/checkout`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    return res.data
+  },
+
   addGameToCard: async (id: string) => {
     const token = "Bearer " + localStorage.getItem("authToken")
     const res = await api.post(

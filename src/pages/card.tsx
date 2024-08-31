@@ -10,12 +10,17 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { GameInCard } from "@/types/game"
-import { useDeleteGameFromCard, useGetCurrentUserCard } from "@/features/order"
+import {
+  useCheckoutCurrentOrder,
+  useDeleteGameFromCard,
+  useGetCurrentUserCard
+} from "@/features/order"
 import { useMemo } from "react"
 
 export function Card() {
   const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
   const deleteGameFromCard = useDeleteGameFromCard()
+  const checkoutOrder = useCheckoutCurrentOrder()
 
   const data: GameInCard[] = useMemo(
     () =>
@@ -82,7 +87,7 @@ export function Card() {
   })
 
   const handleCheckout = () => {
-    console.log("Checkout!")
+    checkoutOrder.mutate()
   }
 
   return (
