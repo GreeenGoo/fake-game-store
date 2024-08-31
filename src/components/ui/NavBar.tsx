@@ -15,7 +15,8 @@ import SignUpPanel from "./sign-up"
 
 const navigation = [
   { name: "All games", href: "/games/all", current: true },
-  { name: "Active games", href: "/games/active", current: false }
+  { name: "Active games", href: "/games/active", current: false },
+  { name: "My orders", href: "/users/me/orders", current: false }
 ]
 
 function classNames(...classes: string[]) {

@@ -16,6 +16,20 @@ export default {
     return response.data
   },
 
+  getCurrentUserOrders: async () => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const response = await api.get(`/users/me/${RESOURCE}`, {
+      headers: {
+        Authorization: token
+      }
+    })
+
+    if (response.status !== 200) {
+      throw Error("Error fetching data")
+    }
+    return response.data
+  },
+
   checkoutCurrentOrder: async () => {
     const token = "Bearer " + localStorage.getItem("authToken")
     const res = await api.post(

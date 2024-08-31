@@ -20,6 +20,19 @@ export function useGetCurrentUserCard() {
   }
 }
 
+export function useGetCurrentUserOrders() {
+  const { data, isLoading, isError } = useQuery<GlobalResponse<OrderDto[]>>({
+    queryKey: ["users/me/orders"],
+    queryFn: OrderService.getCurrentUserOrders
+  })
+
+  return {
+    data,
+    isLoading,
+    isError
+  }
+}
+
 export function useCheckoutCurrentOrder() {
   const queryClient = useQueryClient()
   const mutation = useMutation({

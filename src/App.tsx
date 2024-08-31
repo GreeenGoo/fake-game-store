@@ -6,6 +6,7 @@ import { AllGames } from "./pages/all-games"
 import CreateUpdateGame from "./pages/create-update-game"
 import { UserProfilePage } from "./pages/profile"
 import { Card } from "./pages/card"
+import MyOrders from "./pages/my-orders"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/games/add" element={<CreateUpdateGame />} />
         <Route path="/users/me" element={<UserProfilePage />} />
         <Route path="/users/me/orders/current" element={<Card />} />
+        <Route path="/users/me/orders" element={<MyOrders />} />
       </Routes>
     </Router>
   )
