@@ -10,13 +10,12 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { useGetCurrentUserOrders } from "@/features/order"
+import { useGetCurrentUserOrders, usePayCurrentOrder } from "@/features/order"
+import { PayForOrder } from "@/types/order"
 
 export default function MyOrders() {
   const { data: ordersData, isLoading, isError } = useGetCurrentUserOrders()
-
-  console.log("Data on page is ", ordersData)
-  // const payOrder = usePayOrder()
+  const payOrder = usePayCurrentOrder()
 
   const data = useMemo(
     () =>
@@ -34,8 +33,8 @@ export default function MyOrders() {
   )
 
   const handlePayment = (orderId: string) => {
-    console.log("Pay for order ", orderId)
-    //   payOrder.mutate(orderId)
+    const payForOrderProps: PayForOrder = { orderId: orderId, isPaidSuccessfully: true }
+    payOrder.mutate(payForOrderProps)
   }
 
   const columns: ColumnDef<any>[] = [

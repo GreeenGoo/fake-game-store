@@ -1,3 +1,4 @@
+import { PayForOrder } from "@/types/order"
 import api from "."
 const RESOURCE = "orders"
 
@@ -28,6 +29,16 @@ export default {
       throw Error("Error fetching data")
     }
     return response.data
+  },
+
+  payCurrentOrder: async (payCurrentOrderProps: PayForOrder) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(`/users/me/${RESOURCE}/current/pay`, payCurrentOrderProps, {
+      headers: {
+        Authorization: token
+      }
+    })
+    return res.data
   },
 
   checkoutCurrentOrder: async () => {

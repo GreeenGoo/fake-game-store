@@ -1,5 +1,5 @@
 import { GlobalResponse } from "@/types"
-import { OrderDto } from "@/types/order"
+import { OrderDto, PayForOrder } from "@/types/order"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import OrderService from "../api/order"
 
@@ -31,6 +31,18 @@ export function useGetCurrentUserOrders() {
     isLoading,
     isError
   }
+}
+
+export function usePayCurrentOrder() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (payCurrentOrderProps: PayForOrder) => OrderService.payCurrentOrder(payCurrentOrderProps),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users/me/orders"] })
+    }
+  })
+
+  return mutation
 }
 
 export function useCheckoutCurrentOrder() {

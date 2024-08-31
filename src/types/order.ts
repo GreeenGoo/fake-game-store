@@ -15,6 +15,11 @@ export type GameOrderDto = {
   quantity: number
 }
 
+export type PayForOrder = {
+  orderId: string
+  isPaidSuccessfully: boolean
+}
+
 enum OrderStatus {
   PROCESSING = "PROCESSING",
   APPROVED = "APPROVED",
