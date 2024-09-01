@@ -1,15 +1,15 @@
 import { useAddGameToCard } from "@/features/order"
 import { GlobalResponse } from "@/types"
-import { GamesList } from "@/types/game"
+import { Game, GamesList } from "@/types/game"
 import { useNavigate } from "react-router-dom"
 
 const defaultImage = "https://via.placeholder.com/150?text=No+Image"
 
 type ListOfGames = {
-  gamesData: GlobalResponse<GamesList>
+  gamesData: Game[]
 }
 
-export function ActiveGamesList({ gamesData }: ListOfGames) {
+export function ActiveGamesList(gamesData: ListOfGames) {
   const navigate = useNavigate()
   const addGameToCard = useAddGameToCard()
 
@@ -29,7 +29,7 @@ export function ActiveGamesList({ gamesData }: ListOfGames) {
             <h2 className="sr-only">Products</h2>
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8">
-              {gamesData.data.allGamesList.map((game) => (
+              {gamesData.gamesData.map((game) => (
                 <div
                   key={game.id}
                   onClick={() => handleGameClick(game.id)}

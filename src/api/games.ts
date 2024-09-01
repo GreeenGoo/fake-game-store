@@ -28,8 +28,16 @@ export default {
     return response.data
   },
 
-  getAllActive: async () => {
-    const response = await api.get(`/${RESOURCE}/active`)
+  getAllActive: async ({
+    sortField,
+    sortValue,
+    pageNumber,
+    pageSize,
+    searchKeyword,
+    genres,
+    playerSupport
+  }: GamesFiltering) => {
+    const response = await api.get(`/${RESOURCE}/active?sort=${sortField}&order=${sortValue}&page=${pageNumber}&size=${pageSize}&search=${searchKeyword}&genres=${genres}&playerSupports=${playerSupport}`)
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }

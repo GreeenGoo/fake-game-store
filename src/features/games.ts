@@ -28,14 +28,14 @@ export function useAllGamesList(filterSettings: GamesFiltering) {
   }
 }
 
-export function useActiveGamesList() {
+export function useActiveGamesList(filterSettings: GamesFiltering) {
   const {
     data: gamesData,
     isLoading,
     isError
   } = useQuery<GlobalResponse<GamesList>>({
-    queryKey: ["games/active"],
-    queryFn: GameService.getAllActive
+    queryKey: ["games/active", filterSettings],
+    queryFn: () => GameService.getAllActive(filterSettings)
   })
 
   return {
