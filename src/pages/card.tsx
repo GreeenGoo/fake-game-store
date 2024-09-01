@@ -12,6 +12,7 @@ import {
 import { GameInCard } from "@/types/game"
 import {
   useCheckoutCurrentOrder,
+  useCleanCurrentUserCard,
   useDeleteGameFromCard,
   useGetCurrentUserCard
 } from "@/features/order"
@@ -21,6 +22,7 @@ export function Card() {
   const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
   const deleteGameFromCard = useDeleteGameFromCard()
   const checkoutOrder = useCheckoutCurrentOrder()
+  const clearCard = useCleanCurrentUserCard()
 
   const data: GameInCard[] = useMemo(
     () =>
@@ -90,6 +92,10 @@ export function Card() {
     checkoutOrder.mutate()
   }
 
+  const handleClearCart = () => {
+    clearCard.mutate()
+  }
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -133,12 +139,20 @@ export function Card() {
             ${calculateTotal().toFixed(2)}
           </span>
         </div>
-        <button
-          onClick={() => handleCheckout()}
-          className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-        >
-          Checkout
-        </button>
+        <div className="flex space-x-2 mt-4">
+          <button
+            onClick={() => handleClearCart()}
+            className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+          >
+            Clear Cart
+          </button>
+          <button
+            onClick={() => handleCheckout()}
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   )

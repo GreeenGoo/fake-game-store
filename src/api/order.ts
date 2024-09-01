@@ -91,5 +91,15 @@ export default {
       }
     })
     return res.data
+  },
+
+  cleanCurrentUserCard: async () => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.delete(`/users/me/${RESOURCE}/current`, {
+      headers: {
+        Authorization: token
+      }
+    })
+    return res.data
   }
 }

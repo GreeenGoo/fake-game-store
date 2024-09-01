@@ -49,7 +49,8 @@ export function useGetCurrentUserOrders() {
 export function usePayCurrentOrder() {
   const queryClient = useQueryClient()
   const mutation = useMutation({
-    mutationFn: (payCurrentOrderProps: PayForOrder) => OrderService.payCurrentOrder(payCurrentOrderProps),
+    mutationFn: (payCurrentOrderProps: PayForOrder) =>
+      OrderService.payCurrentOrder(payCurrentOrderProps),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users/me/orders"] })
     }
@@ -86,6 +87,18 @@ export function useDeleteGameFromCard() {
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: (id: string) => OrderService.deleteGameFromCard(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
+    }
+  })
+
+  return mutation
+}
+
+export function useCleanCurrentUserCard() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: () => OrderService.cleanCurrentUserCard(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
     }
