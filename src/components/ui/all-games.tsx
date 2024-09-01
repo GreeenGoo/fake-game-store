@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, ChangeEventHandler, ChangeEvent } from "react"
 import { GlobalResponse } from "@/types"
 import { Game, GamesFiltering, GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
@@ -31,10 +31,10 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
   const [sortBarValue, setSortBarValue] = useState<string>("")
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBarValue(event.target.value)
+  const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target
     if (name === "sortBy" && value !== "") {
+      setSortBarValue(event.target.value)
       const sortFieldAndOrder = value.split("_")
       setFilters((prevState) => ({
         ...prevState,
@@ -42,7 +42,12 @@ export function AllGamesList({ gamesData }: ListOfGames) {
         sortValue: sortFieldAndOrder[1]
       }))
     } else if (name === "pageSize" && value !== "") {
-      console.log("Size is ", value)
+      setFilters((prevState) => ({
+        ...prevState,
+        [name]: value
+      }))
+    } else if (name === "searchKeyword") {
+      console.log("SearchKeyword is ", value)
       setFilters((prevState) => ({
         ...prevState,
         [name]: value
@@ -53,7 +58,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   useEffect(() => {
     if (data) {
       setGames(data.data.allGamesList)
-      console.log("Game was refreshed and games per page is ", filters.pageSize)
+      console.log("Game was refreshed and searchKeyword is ", filters.searchKeyword)
     }
   }, [data])
 
@@ -145,6 +150,18 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             <option value="15">15 games</option>
             <option value="20">20 games</option>
           </select>
+        </div>
+        <div>
+          <input
+            id="searchKeyword"
+            type="text"
+            name="searchKeyword"
+            value={filters.searchKeyword}
+            onChange={handleChange}
+            placeholder="Mario"
+            min="0"
+            step="1"
+          />
         </div>
         <button
           onClick={handleAddGame}
