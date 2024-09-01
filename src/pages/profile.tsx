@@ -1,24 +1,29 @@
-import { useState } from "react";
-import { ChangePassword } from "./change-password";
-import { useGetCurrentUser } from "@/features/user";
+import { useState } from "react"
+import { ChangePassword } from "./change-password"
+import { VerificationModal } from "./verification"
+import { useGetCurrentUser } from "@/features/user"
 
 export function UserProfilePage() {
-  const [isChangePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [isChangePasswordOpen, setChangePasswordOpen] = useState(false)
+  const [isVerificationOpen, setVerificationOpen] = useState(false)
 
-  const openChangePassword = () => setChangePasswordOpen(true);
-  const closeChangePassword = () => setChangePasswordOpen(false);
+  const openChangePassword = () => setChangePasswordOpen(true)
+  const closeChangePassword = () => setChangePasswordOpen(false)
 
-  const { data, isLoading, isError } = useGetCurrentUser();
+  const openVerification = () => setVerificationOpen(true)
+  const closeVerification = () => setVerificationOpen(false)
+
+  const { data, isLoading, isError } = useGetCurrentUser()
 
   if (isLoading) {
-    return <p>Loading user info...</p>;
+    return <p>Loading user info...</p>
   }
 
   if (!data) {
-    throw new Error("Something went wrong displaying user info.");
+    throw new Error("Something went wrong displaying user info.")
   }
 
-  const user = data.data;
+  const user = data.data
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -41,7 +46,11 @@ export function UserProfilePage() {
           <div className="flex justify-between">
             <div className="font-medium text-gray-700">Date of Birth:</div>
             <div className="text-gray-600">
-              {user.birthDate ? user.birthDate.toString() : <span className="italic text-gray-500">There is no data</span>}
+              {user.birthDate ? (
+                user.birthDate.toString()
+              ) : (
+                <span className="italic text-gray-500">There is no data</span>
+              )}
             </div>
           </div>
           <div className="flex justify-between">
@@ -51,23 +60,39 @@ export function UserProfilePage() {
                 user.activeStatus === "ACTIVE"
                   ? "text-green-600"
                   : user.activeStatus === "UNVERIFIED"
-                  ? "text-yellow-600"
-                  : "text-red-600"
+                    ? "text-yellow-600"
+                    : "text-red-600"
               }`}
             >
               {user.activeStatus}
+              {user.activeStatus === "UNVERIFIED" && (
+                <button
+                  onClick={openVerification}
+                  className="ml-4 bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  Verify
+                </button>
+              )}
             </div>
           </div>
           <div className="flex justify-between">
             <div className="font-medium text-gray-700">Address:</div>
             <div className="text-gray-600">
-              {user.address ? user.address : <span className="italic text-gray-500">There is no data</span>}
+              {user.address ? (
+                user.address
+              ) : (
+                <span className="italic text-gray-500">There is no data</span>
+              )}
             </div>
           </div>
           <div className="flex justify-between">
             <div className="font-medium text-gray-700">Phone:</div>
             <div className="text-gray-600">
-              {user.phone ? user.phone.toString() : <span className="italic text-gray-500">There is no data</span>}
+              {user.phone ? (
+                user.phone.toString()
+              ) : (
+                <span className="italic text-gray-500">There is no data</span>
+              )}
             </div>
           </div>
         </div>
@@ -81,8 +106,8 @@ export function UserProfilePage() {
           Change Password
         </button>
       </div>
-
       <ChangePassword isOpen={isChangePasswordOpen} onClose={closeChangePassword} />
+      <VerificationModal isOpen={isVerificationOpen} onClose={closeVerification} />{" "}
     </div>
-  );
+  )
 }
