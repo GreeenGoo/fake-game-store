@@ -41,3 +41,13 @@ export type GameInCard = {
   price: number
   quantity: number
 }
+
+export type GamesFiltering = {
+  sortField: string
+  sortValue: string
+  pageNumber: string
+  pageSize: string
+  searchKeyword: string
+  genres: string[]
+  playerSupport: string[]
+}

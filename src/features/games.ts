@@ -1,4 +1,4 @@
-import { CreateGame, CreateOrUpdateGame, Game as SingleGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, GamesFiltering, Game as SingleGame } from "@/types/game"
 import GameService from "@/api/games"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
@@ -11,14 +11,14 @@ import { useState } from "react"
 //   return [QUERY_KEY]
 // }
 
-export function useAllGamesList() {
+export function useAllGamesList(filterSettings: GamesFiltering) {
   const {
     data: gamesData,
     isLoading,
     isError
   } = useQuery<GlobalResponse<GamesList>>({
-    queryKey: ["games/all"],
-    queryFn: GameService.getAll
+    queryKey: ["games/all", filterSettings],
+    queryFn: () => GameService.getAll(filterSettings)
   })
 
   return {
@@ -178,6 +178,6 @@ export function useActivateGame() {
   return {
     ...mutation,
     errorMessage,
-   handlePopupMessage
+    handlePopupMessage
   }
 }

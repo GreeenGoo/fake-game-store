@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react"
 import { GlobalResponse } from "@/types"
-import { GamesList } from "@/types/game"
+import { Game, GamesFiltering, GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import { useActivateGame, useAddGameKey, useDeleteGame} from "@/features/games"
+import { useActivateGame, useAddGameKey, useAllGamesList, useDeleteGame } from "@/features/games"
 import { useNavigate } from "react-router-dom"
 import { Popup } from "./popup-message"
 
@@ -12,13 +12,45 @@ type ListOfGames = {
 }
 
 export function AllGamesList({ gamesData }: ListOfGames) {
-  const games = gamesData.data.allGamesList
+  const [filters, setFilters] = useState<GamesFiltering>({
+    sortField: "",
+    sortValue: "",
+    pageNumber: "",
+    pageSize: "",
+    searchKeyword: "",
+    genres: [],
+    playerSupport: []
+  })
+  const { data, isLoading, isError } = useAllGamesList(filters)
+  const [games, setGames] = useState<Game[]>(data ? data.data.allGamesList : [])
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const tableRef = useRef<HTMLTableElement | null>(null)
   const deleteGame = useDeleteGame()
   const navigate = useNavigate()
   const addGameKey = useAddGameKey()
-  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame();
+  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
+  const [selectedValue, setSelectedValue] = useState<string>("")
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedValue(event.target.value)
+    const { name, value } = event.target
+    if (name === "sortBy") {
+      const sortFieldAndOrder = value.split("_")
+      setFilters((prevState) => ({
+        ...prevState,
+        sortField: sortFieldAndOrder[0],
+        sortValue: sortFieldAndOrder[1]
+      }))
+    }
+    // const { data, isLoading, isError } = useAllGamesList(filters)
+    if (data) setGames(data.data.allGamesList)
+  }
+
+  useEffect(() => {
+    if (data) {
+      setGames(data.data.allGamesList)
+    }
+  }, [data])
 
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
@@ -75,6 +107,26 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   return (
     <div className="overflow-x-auto">
       <div>
+        <div>
+          <select
+            id="sortBy"
+            name="sortBy"
+            value={selectedValue}
+            onChange={(event) => handleChange(event)}
+            className="border px-2 py-1 rounded"
+          >
+            <option value="">Sort by...</option>
+            <option value="name_asc">Name (Ascending)</option>
+            <option value="name_desc">Name (Descending)</option>
+            <option value="releaseDate_asc">Release Date (Ascending)</option>
+            <option value="releaseDate_desc">Release Date (Descending)</option>
+            <option value="price_asc">Price (Ascending)</option>
+            <option value="price_desc">Price (Descending)</option>
+            <option value="averageRating_asc">Average Rating (Ascending)</option>
+            <option value="averageRating_desc">Average Rating (Descending)</option>
+          </select>
+          <p>Selected value: {selectedValue}</p>
+        </div>
         <button
           onClick={handleAddGame}
           className="bg-blue-500 border border-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 flex items-center space-x-2 mb-4"
@@ -191,9 +243,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             ))}
           </tbody>
         </table>
-        {errorMessage && (
-          <Popup message={errorMessage} onClose={handlePopupMessage} />
-        )}
+        {errorMessage && <Popup message={errorMessage} onClose={handlePopupMessage} />}
       </div>
     </div>
   )

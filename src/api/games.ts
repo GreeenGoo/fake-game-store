@@ -1,16 +1,28 @@
 import api from "."
 
-import { CreateGame, CreateOrUpdateGame, Game as SingleGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, GamesFiltering, Game as SingleGame } from "@/types/game"
 const RESOURCE = "games"
 
 export default {
-  getAll: async () => {
+  getAll: async ({
+    sortField,
+    sortValue,
+    pageNumber,
+    pageSize,
+    searchKeyword,
+    genres,
+    playerSupport
+  }: GamesFiltering) => {
     const token = "Bearer " + localStorage.getItem("authToken")
-    const response = await api.get(`/${RESOURCE}/all`, {
-      headers: {
-        Authorization: token
+    const response = await api.get(
+      `/${RESOURCE}/all?sort=${sortField}&order=${sortValue}&page=${pageNumber}&size=${pageSize}&search=${searchKeyword}&genres=${genres}&playerSupports=${playerSupport}`,
+      {
+        headers: {
+          Authorization: token
+        }
       }
-    })
+    )
+    console.log(response)
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }

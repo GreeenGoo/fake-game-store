@@ -2,7 +2,15 @@ import { AllGamesList } from "@/components/ui/all-games"
 import { useAllGamesList } from "@/features/games"
 
 export function AllGames() {
-  const gamesData = useAllGamesList()
+  const gamesData = useAllGamesList({
+    sortField: "",
+    sortValue: "",
+    pageNumber: "",
+    pageSize: "",
+    searchKeyword: "",
+    genres: [],
+    playerSupport: []
+  })
 
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
