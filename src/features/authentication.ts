@@ -1,6 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import AuthenticationService from "@/api/authentication"
-import { ForgotPassword, LoggedInUser, Login, ResetPasswordWithCodePlusCode, SignUp } from "@/types/user"
+import {
+  ForgotPassword,
+  LoggedInUser,
+  Login,
+  ResetPasswordWithCodePlusCode,
+  SignUp
+} from "@/types/user"
 import { GlobalResponse } from "@/types"
 
 export function useLogin() {
@@ -28,29 +34,53 @@ export function useSignUp() {
 }
 
 export function useForgotPassword() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const mutation = useMutation<GlobalResponse<string>, Error, ForgotPassword>({
     mutationFn: (email: ForgotPassword) => AuthenticationService.sendCodeForResetingPassword(email),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["login"] });
-      localStorage.setItem("authToken", "");
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ["login"] })
+      localStorage.setItem("authToken", "")
+    }
+  })
 
-  return mutation;
+  return mutation
 }
 
 export function useResetPasswordWithCode() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const mutation = useMutation<GlobalResponse<LoggedInUser>, Error, ResetPasswordWithCodePlusCode>({
     mutationFn: (passwordData) => AuthenticationService.useResetPasswordWithCode(passwordData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["login"] });
-      localStorage.setItem("authToken", "");
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ["login"] })
+      localStorage.setItem("authToken", "")
+    }
+  })
 
-  return mutation;
+  return mutation
+}
+
+export function useSendVerificationCode() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: AuthenticationService.sendVerificationEmail,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["login"] })
+    }
+  })
+
+  return mutation
+}
+
+export function useVerifyUser() {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (code: string) => AuthenticationService.verifyUser(code),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["login"] })
+    }
+  })
+
+  return mutation
 }

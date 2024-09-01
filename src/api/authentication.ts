@@ -40,5 +40,34 @@ export default {
       }
     )
     return res.data
+  },
+
+  sendVerificationEmail: async () => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(
+      `/${RESOURCE}/verify/send-mail`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    return res.data
+  },
+
+  verifyUser: async (code: string) => {
+    const token = "Bearer " + localStorage.getItem("authToken")
+    const res = await api.post(
+      `/${RESOURCE}/verify/${code}`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    console.log("We're here!", res.data)
+    return res.data
   }
 }
