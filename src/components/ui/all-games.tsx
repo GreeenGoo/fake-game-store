@@ -13,6 +13,15 @@ import {
 } from "@/features/games"
 import { useNavigate } from "react-router-dom"
 import { Popup } from "./popup-message"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from "@/components/ui/pagination"
 
 type ListOfGames = {
   gamesData: GlobalResponse<GamesList>
@@ -98,6 +107,10 @@ export function AllGamesList({ gamesData }: ListOfGames) {
     }
   }, [data])
 
+  const handlePagination = (value: string) => {
+    setFilters((prevState) => ({ ...prevState, pageNumber: value }))
+  }
+
   const handleRowClick = (id: string) => {
     setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
   }
@@ -149,6 +162,8 @@ export function AllGamesList({ gamesData }: ListOfGames) {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+
+  if (!data?.data.allGamesHead.totalPages) return <p>Data is empty</p>
 
   return (
     <div className="overflow-x-auto">
@@ -373,6 +388,56 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             ))}
           </tbody>
         </table>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={
+                  parseInt(filters.pageNumber) <= 1 ? "pointer-events-none opacity-50" : undefined
+                }
+                href="#"
+                onClick={() =>
+                  handlePagination(Math.max(parseInt(filters.pageNumber) - 1, 1).toString())
+                }
+              />
+            </PaginationItem>
+
+            {Array.from({ length: data?.data.allGamesHead.totalPages || 0 }, (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  href="#"
+                  isActive={parseInt(filters.pageNumber) === index + 1}
+                  onClick={() => handlePagination((index + 1).toString())}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {parseInt(filters.pageNumber) < (data?.data.allGamesHead.totalPages || 0) && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() =>
+                  handlePagination(
+                    Math.min(
+                      parseInt(filters.pageNumber) + 1,
+                      data?.data.allGamesHead.totalPages || 0
+                    ).toString()
+                  )
+                }
+                className={
+                  parseInt(filters.pageNumber) === data?.data.allGamesHead.totalPages ? "pointer-events-none opacity-50" : undefined
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
         {errorMessage && <Popup message={errorMessage} onClose={handlePopupMessage} />}
       </div>
     </div>
