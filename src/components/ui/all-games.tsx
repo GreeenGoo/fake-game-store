@@ -1,9 +1,16 @@
-import { useState, useEffect, useRef, ChangeEventHandler, ChangeEvent } from "react"
+import { useState, useEffect, useRef, ChangeEvent } from "react"
 import { GlobalResponse } from "@/types"
 import { Game, GamesFiltering, GamesList } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import { useActivateGame, useAddGameKey, useAllGamesList, useDeleteGame } from "@/features/games"
+import {
+  useActivateGame,
+  useAddGameKey,
+  useAllGamesList,
+  useDeleteGame,
+  useGenres,
+  usePlayerSupports
+} from "@/features/games"
 import { useNavigate } from "react-router-dom"
 import { Popup } from "./popup-message"
 
@@ -21,6 +28,8 @@ export function AllGamesList({ gamesData }: ListOfGames) {
     genres: [],
     playerSupport: []
   })
+  const genres = useGenres()
+  const playerSupport = usePlayerSupports()
   const { data, isLoading, isError } = useAllGamesList(filters)
   const [games, setGames] = useState<Game[]>(data ? data.data.allGamesList : [])
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
@@ -30,6 +39,19 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const addGameKey = useAddGameKey()
   const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
   const [sortBarValue, setSortBarValue] = useState<string>("")
+
+  const handleReset = () => {
+    setFilters({
+      sortField: "",
+      sortValue: "",
+      pageNumber: "1",
+      pageSize: "10",
+      searchKeyword: "",
+      genres: [],
+      playerSupport: []
+    })
+    setSortBarValue("")
+  }
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target
@@ -47,18 +69,32 @@ export function AllGamesList({ gamesData }: ListOfGames) {
         [name]: value
       }))
     } else if (name === "searchKeyword") {
-      console.log("SearchKeyword is ", value)
       setFilters((prevState) => ({
         ...prevState,
         [name]: value
       }))
+    } else if (name === "genreList") {
+      setFilters((prevState) => {
+        const newGenres = prevState.genres.includes(value)
+          ? prevState.genres.filter((genre) => genre !== value)
+          : [...prevState.genres, value]
+
+        return { ...prevState, genres: newGenres }
+      })
+    } else if (name === "playerSupport") {
+      setFilters((prevState) => {
+        const newPlayerSupport = prevState.playerSupport.includes(value)
+          ? prevState.playerSupport.filter((playerS) => playerS !== value)
+          : [...prevState.playerSupport, value]
+
+        return { ...prevState, playerSupport: newPlayerSupport }
+      })
     }
   }
 
   useEffect(() => {
     if (data) {
       setGames(data.data.allGamesList)
-      console.log("Game was refreshed and searchKeyword is ", filters.searchKeyword)
     }
   }, [data])
 
@@ -163,6 +199,64 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             step="1"
           />
         </div>
+        <div>
+          <label htmlFor="genres" className="block text-sm font-medium text-gray-700">
+            Select Genres
+          </label>
+          <select
+            id="genreList"
+            name="genreList"
+            multiple
+            value={filters.genres}
+            onChange={handleChange}
+            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            {genres.genres?.data.map((genre, index) => (
+              <option key={index} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <ul className="mt-2 list-disc list-inside text-gray-700">
+            {filters.genres &&
+              Array.isArray(filters.genres) &&
+              filters.genres.map((genre, index) => <li key={index}>{genre}</li>)}
+          </ul>
+        </div>
+
+        <div>
+          <label htmlFor="playerSupport" className="block text-sm font-medium text-gray-700">
+            Select PlayerSupport
+          </label>
+          <select
+            id="playerSupport"
+            name="playerSupport"
+            multiple
+            value={filters.playerSupport}
+            onChange={handleChange}
+            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            {playerSupport.playerSupports?.data.map((playerSupport, index) => (
+              <option key={index} value={playerSupport}>
+                {playerSupport}
+              </option>
+            ))}
+          </select>
+          <ul className="mt-2 list-disc list-inside text-gray-700">
+            {filters.playerSupport &&
+              Array.isArray(filters.playerSupport) &&
+              filters.playerSupport.map((playerS, index) => <li key={index}>{playerS}</li>)}
+          </ul>
+        </div>
+        <button
+          id="resetButton"
+          name="resetButton"
+          onClick={handleReset}
+          className="bg-blue-500 border border-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 flex items-center space-x-2 mb-4"
+        >
+          <i className="fas fa-redo"></i>
+          <span>Reset</span>
+        </button>
         <button
           onClick={handleAddGame}
           className="bg-blue-500 border border-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 flex items-center space-x-2 mb-4"
