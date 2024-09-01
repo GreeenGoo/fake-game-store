@@ -22,7 +22,6 @@ export default {
         }
       }
     )
-    console.log(response)
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }

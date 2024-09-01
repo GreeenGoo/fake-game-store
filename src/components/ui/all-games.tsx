@@ -15,8 +15,8 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
     sortValue: "",
-    pageNumber: "",
-    pageSize: "",
+    pageNumber: "1",
+    pageSize: "10",
     searchKeyword: "",
     genres: [],
     playerSupport: []
@@ -29,26 +29,31 @@ export function AllGamesList({ gamesData }: ListOfGames) {
   const navigate = useNavigate()
   const addGameKey = useAddGameKey()
   const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
-  const [selectedValue, setSelectedValue] = useState<string>("")
+  const [sortBarValue, setSortBarValue] = useState<string>("")
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedValue(event.target.value)
+    setSortBarValue(event.target.value)
     const { name, value } = event.target
-    if (name === "sortBy") {
+    if (name === "sortBy" && value !== "") {
       const sortFieldAndOrder = value.split("_")
       setFilters((prevState) => ({
         ...prevState,
         sortField: sortFieldAndOrder[0],
         sortValue: sortFieldAndOrder[1]
       }))
+    } else if (name === "pageSize" && value !== "") {
+      console.log("Size is ", value)
+      setFilters((prevState) => ({
+        ...prevState,
+        [name]: value
+      }))
     }
-    // const { data, isLoading, isError } = useAllGamesList(filters)
-    if (data) setGames(data.data.allGamesList)
   }
 
   useEffect(() => {
     if (data) {
       setGames(data.data.allGamesList)
+      console.log("Game was refreshed and games per page is ", filters.pageSize)
     }
   }, [data])
 
@@ -111,7 +116,7 @@ export function AllGamesList({ gamesData }: ListOfGames) {
           <select
             id="sortBy"
             name="sortBy"
-            value={selectedValue}
+            value={sortBarValue}
             onChange={(event) => handleChange(event)}
             className="border px-2 py-1 rounded"
           >
@@ -125,7 +130,21 @@ export function AllGamesList({ gamesData }: ListOfGames) {
             <option value="averageRating_asc">Average Rating (Ascending)</option>
             <option value="averageRating_desc">Average Rating (Descending)</option>
           </select>
-          <p>Selected value: {selectedValue}</p>
+        </div>
+        <div>
+          <select
+            id="pageSize"
+            name="pageSize"
+            value={filters.pageSize}
+            onChange={(event) => handleChange(event)}
+            className="border px-2 py-1 rounded"
+          >
+            <option value="">Games per page...</option>
+            <option value="5">5 games</option>
+            <option value="10">10 games</option>
+            <option value="15">15 games</option>
+            <option value="20">20 games</option>
+          </select>
         </div>
         <button
           onClick={handleAddGame}
