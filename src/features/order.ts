@@ -3,6 +3,19 @@ import { OrderDto, PayForOrder } from "@/types/order"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import OrderService from "../api/order"
 
+export function useAllOrders() {
+  const { data, isLoading, isError } = useQuery<GlobalResponse<OrderDto[]>>({
+    queryKey: ["orders"],
+    queryFn: OrderService.getAllOrders
+  })
+
+  return {
+    data,
+    isLoading,
+    isError
+  }
+}
+
 export function useGetCurrentUserCard() {
   const {
     data: gamesData,
