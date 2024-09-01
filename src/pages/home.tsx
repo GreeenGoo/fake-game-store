@@ -11,6 +11,7 @@ import { useActiveGamesList, useGenres, usePlayerSupports } from "@/features/gam
 import { CreditCard } from "lucide-react"
 import { Card } from "./card"
 import { Game, GamesFiltering } from "@/types/game"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 
 export function Home() {
   const genres = useGenres()
@@ -85,6 +86,10 @@ export function Home() {
         return { ...prevState, playerSupport: newPlayerSupport }
       })
     }
+  }
+
+  const handlePagination = (value: string) => {
+    setFilters((prevState) => ({ ...prevState, pageNumber: value }))
   }
 
   return (
@@ -204,6 +209,57 @@ export function Home() {
       {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
       {games && <ActiveGamesList gamesData={games} />}
+
+      <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={
+                  parseInt(filters.pageNumber) <= 1 ? "pointer-events-none opacity-50" : undefined
+                }
+                href="#"
+                onClick={() =>
+                  handlePagination(Math.max(parseInt(filters.pageNumber) - 1, 1).toString())
+                }
+              />
+            </PaginationItem>
+
+            {Array.from({ length: data?.data.allGamesHead.totalPages || 0 }, (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  href="#"
+                  isActive={parseInt(filters.pageNumber) === index + 1}
+                  onClick={() => handlePagination((index + 1).toString())}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {parseInt(filters.pageNumber) < (data?.data.allGamesHead.totalPages || 0) && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() =>
+                  handlePagination(
+                    Math.min(
+                      parseInt(filters.pageNumber) + 1,
+                      data?.data.allGamesHead.totalPages || 0
+                    ).toString()
+                  )
+                }
+                className={
+                  parseInt(filters.pageNumber) === data?.data.allGamesHead.totalPages ? "pointer-events-none opacity-50" : undefined
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
