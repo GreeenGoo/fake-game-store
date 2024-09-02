@@ -1,7 +1,3 @@
-"use client"
-
-import { useMemo } from "react"
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import {
   Table,
   TableBody,
@@ -10,41 +6,31 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { useGetCurrentUserOrders, usePayCurrentOrder } from "@/features/order"
-import { PayForOrder } from "@/types/order"
+import { OrderDto } from "@/types/order"
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
-export default function MyOrders() {
-  const { data: ordersData, isLoading, isError } = useGetCurrentUserOrders()
-  const payOrder = usePayCurrentOrder()
+type MyOrdersListProps = {
+  orders: OrderDto[]
+  handlePayment: (orderId: string) => void
+}
 
-  const data = useMemo(
-    () =>
-      ordersData?.data
-        .filter((order) => order.totalPrice > 0)
-        .map((order) => ({
-          id: order.id,
-          totalPrice: order.totalPrice,
-          createdAt: new Date(order.createdAt).toLocaleDateString(),
-          status: order.status,
-          paymentStatus: order.paymentStatus,
-          games: order.games.map((gameEntry) => gameEntry.game.name).join(", ")
-        })) || [],
-    [ordersData]
-  )
-
-  const handlePayment = (orderId: string) => {
-    const payForOrderProps: PayForOrder = { orderId: orderId, isPaidSuccessfully: true }
-    payOrder.mutate(payForOrderProps)
-  }
-
-  const columns: ColumnDef<any>[] = [
+export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProps) {
+  const columns: ColumnDef<OrderDto>[] = [
     {
       accessorKey: "createdAt",
-      header: "Date"
+      header: "Date",
+      cell: ({ getValue }) => {
+        const date = new Date(getValue() as string)
+        return date.toLocaleDateString()
+      }
     },
     {
       accessorKey: "games",
-      header: "Games"
+      header: "Games",
+      cell: ({ row }) => {
+        console.log(row.original.games)
+        return row.original.games.map((game) => game.game.name).join(", ")
+      }
     },
     {
       accessorKey: "totalPrice",
@@ -74,7 +60,7 @@ export default function MyOrders() {
   ]
 
   const table = useReactTable({
-    data,
+    data: orders,
     columns,
     getCoreRowModel: getCoreRowModel()
   })

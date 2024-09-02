@@ -1,4 +1,3 @@
-import { Popup } from "@/components/ui/popup-message"
 import { useChangePassword } from "@/features/user"
 import { ChangeUserPassword } from "@/types/user"
 import React, { useState } from "react"
@@ -16,7 +15,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
     newPasswordConfirm: ""
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { mutate, errorMessage, isError, handlePopupMessage } = useChangePassword()
+  const { mutate, errorMessage, isError } = useChangePassword()
   const navigate = useNavigate()
 
   const handlePasswordChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +119,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
         >
           Cancel
         </button>
-        {errorMessage && <Popup message={errorMessage} onClose={handlePopupMessage} />}
       </div>
     </div>
   )

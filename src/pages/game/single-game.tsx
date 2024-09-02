@@ -1,4 +1,4 @@
-import { SingleGame } from "@/components/ui/single-game"
+import { SingleGame } from "@/components/game/single-game"
 import { useGetSingleGame } from "@/features/games"
 import { useParams } from "react-router-dom"
 

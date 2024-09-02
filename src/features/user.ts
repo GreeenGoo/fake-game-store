@@ -34,11 +34,8 @@ export function useChangePassword() {
     }
   })
 
-  const handlePopupMessage = () => {}
-
   return {
     ...mutation,
-    errorMessage,
-    handlePopupMessage
+    errorMessage
   }
 }

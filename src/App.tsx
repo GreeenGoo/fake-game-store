@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import { Home } from "./pages/home"
-import { Game } from "./pages/game"
+import { Home } from "./pages/game/active-games"
+import { Game } from "./pages/game/single-game"
 import NavBar from "./components/ui/NavBar"
-import { AllGames } from "./pages/all-games"
-import CreateUpdateGame from "./pages/create-update-game"
+import { AllGames } from "./pages/game/all-games"
+import CreateUpdateGame from "./pages/game/create-update-game"
 import { UserProfilePage } from "./pages/profile"
 import { Card } from "./pages/card"
-import MyOrders from "./pages/my-orders"
-import AllOrders from "./pages/all-orders"
+import MyOrders from "./pages/orders/my-orders"
+import AllOrders from "./pages/orders/all-orders"
 
 function App() {
   return (

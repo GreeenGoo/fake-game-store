@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from "react"
-import { useAllOrders } from "@/features/order"
 import { OrderDto } from "@/types/order"
 
-export default function AllOrders() {
-  const { data, isLoading, isError } = useAllOrders()
-  const [orders, setOrders] = useState<OrderDto[]>([])
+type AllOrdersListProps = {
+  orders: OrderDto[]
+}
 
-  useEffect(() => {
-    if (data && data.status === "success") {
-      setOrders(data.data)
-    }
-  }, [data])
-
-  if (isLoading) return <p>Loading...</p>
-  if (isError) return <p>Error fetching orders.</p>
-  if (orders.length === 0) return <p>No orders found.</p>
-
+export default function AllOrdersList({ orders }: AllOrdersListProps) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
