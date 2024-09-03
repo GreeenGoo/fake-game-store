@@ -10,7 +10,7 @@ export type LoggedInUser = {
   user: User
 }
 
-type Role = "ADMIN" | "USER"
+export type Role = "ADMIN" | "USER"
 
 export type User = {
   id: string

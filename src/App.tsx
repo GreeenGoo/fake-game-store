@@ -11,6 +11,7 @@ import { Card } from "./pages/card"
 import MyOrders from "./pages/orders/my-orders"
 import AllOrders from "./pages/orders/all-orders"
 import { UserProvider } from "../src/context/UserContext"
+import ProtectedRoute from "./ProtectedRoute"
 
 const queryClient = new QueryClient()
 
@@ -21,15 +22,57 @@ function App() {
         <Router>
           <NavBar />
           <Routes>
-            <Route path="/games/all" element={<AllGames />} />
             <Route path="/games/active" element={<Home />} />
             <Route path="/games/:id" element={<Game />} />
-            <Route path="/games/add" element={<CreateUpdateGame />} />
-            <Route path="/users/me" element={<UserProfilePage />} />
-            <Route path="/users/me/orders/current" element={<Card />} />
-            <Route path="/users/me/orders" element={<MyOrders />} />
-            <Route path="/orders" element={<AllOrders />} />
-            <Route path="/login" element={<p>Please login</p>} />
+            <Route path="/not-authorized" element={<p>Not Authorized</p>} />
+            <Route
+              path="/games/all"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <AllGames />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/games/add"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <CreateUpdateGame />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users/me"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN", "USER"]}>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users/me/orders/current"
+              element={
+                <ProtectedRoute allowedRoles={["USER"]}>
+                  <Card />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users/me/orders"
+              element={
+                <ProtectedRoute allowedRoles={["USER"]}>
+                  <MyOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <AllOrders />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Router>
       </UserProvider>
