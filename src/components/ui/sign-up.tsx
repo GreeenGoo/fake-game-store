@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { Button } from "./Button"
-import { SignUp } from "@/types/user"
+import { SignUp, User } from "@/types/user"
 import { useSignUp } from "@/features/authentication"
 
 type SignUpProps = {
   isOpen: boolean
   onClose: () => void
-  onRegister: (newToken: string) => void
+  onRegister: (newToken: string, user: User) => void
 }
 
 const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => {
@@ -40,7 +40,7 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
 
     signUpQuery.mutate(signUp, {
       onSuccess: (data) => {
-        onRegister(data.data.token)
+        onRegister(data.data.token, data.data.user)
         setSignUp({
           name: "",
           email: "",

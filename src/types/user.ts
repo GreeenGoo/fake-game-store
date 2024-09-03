@@ -10,11 +10,13 @@ export type LoggedInUser = {
   user: User
 }
 
+type Role = "ADMIN" | "USER"
+
 export type User = {
   id: string
   name: string
   email: string
-  role: string
+  role: Role
   birthDate: Date
   activeStatus: string
   address: string

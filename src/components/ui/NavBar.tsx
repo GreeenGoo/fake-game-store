@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import {
   Disclosure,
   DisclosureButton,
@@ -12,24 +12,36 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { useLocation, useNavigate } from "react-router-dom"
 import LoginModal from "@/pages/login"
 import SignUpPanel from "./sign-up"
-
-const navigation = [
-  { name: "All games", href: "/games/all", current: true },
-  { name: "Active games", href: "/games/active", current: false },
-  { name: "My orders", href: "/users/me/orders", current: false },
-  { name: "All orders", href: "/orders", current: false }
-]
+import useUser from "@/context/UserContext"
+import { User } from "@/types/user"
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
 }
 
 export default function NavBar() {
-  const [token, setToken] = useState(localStorage.getItem("authToken"))
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { setUser, user } = useUser()
+
+  const navigation: {
+    name: string
+    href: string
+    current: boolean
+    isAccessable: boolean
+  }[] = [
+    { name: "All games", href: "/games/all", current: true, isAccessable: user?.role === "ADMIN" },
+    { name: "Active games", href: "/games/active", current: false, isAccessable: true },
+    {
+      name: "My orders",
+      href: "/users/me/orders",
+      current: false,
+      isAccessable: user?.role === "USER"
+    },
+    { name: "All orders", href: "/orders", current: false, isAccessable: user?.role === "ADMIN" }
+  ]
 
   const openLoginModal = () => setLoginModalOpen(true)
   const closeLoginModal = () => setLoginModalOpen(false)
@@ -37,31 +49,24 @@ export default function NavBar() {
   const openRegisterModal = () => setRegisterModalOpen(true)
   const closeRegisterModal = () => setRegisterModalOpen(false)
 
-  const handleLogin = (newToken: string) => {
+  const handleLogin = (newToken: string, user: User) => {
     localStorage.setItem("authToken", newToken)
-    setToken(newToken)
-    closeLoginModal()
+    console.log("User in nav is ", user)
+    setUser(user)
+
+    if (isLoginModalOpen) {
+      closeLoginModal()
+    }
   }
 
   const handleLogout = () => {
     const userConfirmed = window.confirm("Are you sure you'd like to log out?")
     if (userConfirmed) {
+      setUser(null)
       localStorage.removeItem("authToken")
-      setToken(null)
       navigate("/games/active")
     }
   }
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(localStorage.getItem("authToken"))
-    }
-
-    window.addEventListener("storage", handleStorageChange)
-    return () => {
-      window.removeEventListener("storage", handleStorageChange)
-    }
-  }, [])
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -85,26 +90,31 @@ export default function NavBar() {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={location.pathname === item.href ? "page" : undefined}
-                    className={classNames(
-                      location.pathname === item.href
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "rounded-md px-3 py-2 text-sm font-medium"
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {navigation.map((item) => {
+                  if (!item.isAccessable) {
+                    return null
+                  }
+                  return (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      aria-current={location.pathname === item.href ? "page" : undefined}
+                      className={classNames(
+                        location.pathname === item.href
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "rounded-md px-3 py-2 text-sm font-medium"
+                      )}
+                    >
+                      {item.name}
+                    </a>
+                  )
+                })}
               </div>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            {token ? (
+            {localStorage.getItem("authToken") ? (
               <Menu as="div" className="relative ml-3">
                 <div>
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

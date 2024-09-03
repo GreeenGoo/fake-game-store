@@ -1,18 +1,9 @@
-import { useState, useEffect, useRef, ChangeEvent } from "react"
-import { GlobalResponse } from "@/types"
-import { Game, GamesFiltering, GamesList } from "@/types/game"
+import { useState, useEffect, useRef } from "react"
+import { Game } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import {
-  useActivateGame,
-  useAddGameKey,
-  useAllGamesList,
-  useDeleteGame,
-  useGenres,
-  usePlayerSupports
-} from "@/features/games"
+import { useActivateGame, useAddGameKey } from "@/features/games"
 import { useNavigate } from "react-router-dom"
-import { Popup } from "../ui/popup-message"
 
 type ListOfGames = {
   games: Game[]

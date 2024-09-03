@@ -2,8 +2,8 @@ import { AllGamesList } from "@/components/game/all-games-list"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
 import { useAllGamesList, useGenres, usePlayerSupports } from "@/features/games"
-import { Game, GamesFiltering } from "@/types/game"
-import { ChangeEvent, useEffect, useState } from "react"
+import { GamesFiltering } from "@/types/game"
+import { ChangeEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function AllGames() {
