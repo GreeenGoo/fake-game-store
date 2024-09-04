@@ -17,7 +17,6 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
     password: "",
     confirmPassword: ""
   })
-  const [isLoading, setIsLoading] = useState(false)
 
   if (!isOpen) return null
 
@@ -36,8 +35,6 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
       return
     }
 
-    setIsLoading(true)
-
     signUpQuery.mutate(signUp, {
       onSuccess: (data) => {
         onRegister(data.data.token, data.data.user)
@@ -51,9 +48,6 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
       },
       onError: (error) => {
         alert("Something went wrong. Please try again.")
-      },
-      onSettled: () => {
-        setIsLoading(false)
       }
     })
   }
@@ -121,8 +115,8 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
             />
           </div>
           <div className="flex justify-end">
-            <Button type="submit" variant="default" disabled={isLoading}>
-              {isLoading ? "Registering..." : "Register"}
+            <Button type="submit" variant="default" disabled={signUpQuery.isPending}>
+              {signUpQuery.isPending ? "Registering..." : "Register"}
             </Button>
           </div>
         </form>

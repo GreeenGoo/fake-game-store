@@ -4,13 +4,11 @@ import { useMemo } from "react"
 
 import { useGetCurrentUserOrders, usePayCurrentOrder } from "@/features/order"
 import { PayForOrder } from "@/types/order"
-import MyOrdersList from "@/components/order/my-orders"
+import MyOrdersList from "@/components/order/my-orders-list"
 
 export default function MyOrders() {
   const { data: ordersData, isLoading, isError } = useGetCurrentUserOrders()
   const payOrder = usePayCurrentOrder()
-
-  console.log(ordersData)
 
   const data = useMemo(
     () =>

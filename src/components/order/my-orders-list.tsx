@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
+import { useCheckoutCurrentOrder } from "@/features/order"
 import { OrderDto } from "@/types/order"
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
@@ -15,6 +16,8 @@ type MyOrdersListProps = {
 }
 
 export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProps) {
+  const checkoutOrder = useCheckoutCurrentOrder()
+
   const columns: ColumnDef<OrderDto>[] = [
     {
       accessorKey: "createdAt",
@@ -28,7 +31,6 @@ export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProp
       accessorKey: "games",
       header: "Games",
       cell: ({ row }) => {
-        console.log(row.original.games)
         return row.original.games.map((game) => game.game.name).join(", ")
       }
     },
@@ -48,7 +50,14 @@ export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProp
       id: "actions",
       header: "Actions",
       cell: ({ row }) =>
-        row.original.paymentStatus === "WAITING" ? (
+        row.original.paymentStatus === "UNPAID" ? (
+          <button
+            onClick={() => checkoutOrder.mutate()}
+            className="text-green-500 hover:text-green-700"
+          >
+            Checkout
+          </button>
+        ) : row.original.paymentStatus === "WAITING" ? (
           <button
             onClick={() => handlePayment(row.original.id)}
             className="text-green-500 hover:text-green-700"

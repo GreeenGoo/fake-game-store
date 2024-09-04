@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
-import { Home } from "./pages/game/active-games"
+import { ActiveGames } from "./pages/game/active-games"
 import { Game } from "./pages/game/single-game"
 import NavBar from "./components/ui/NavBar"
 import { AllGames } from "./pages/game/all-games"
@@ -23,7 +23,7 @@ function App() {
           <NavBar />
           <Routes>
             <Route path="/" element={<Navigate to="/games/active" replace />} />
-            <Route path="/games/active" element={<Home />} />
+            <Route path="/games/active" element={<ActiveGames />} />
             <Route path="/games/:id" element={<Game />} />
             <Route path="/not-authorized" element={<p>Not Authorized</p>} />
             <Route

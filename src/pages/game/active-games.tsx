@@ -10,12 +10,12 @@ import { ActiveGamesList } from "@/components/game/active-games-grid"
 import { useActiveGamesList, useGenres, usePlayerSupports } from "@/features/games"
 import { CreditCard } from "lucide-react"
 import { Card } from "../card"
-import { Game, GamesFiltering } from "@/types/game"
+import { GamesFiltering } from "@/types/game"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
 
-export function Home() {
-  const genres = useGenres()
+export function ActiveGames() {
+  const {genres, isLoading: isGenresLoading, isError: isGenresError} = useGenres()
   const playerSupport = usePlayerSupports()
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
@@ -27,9 +27,15 @@ export function Home() {
     playerSupport: []
   })
   const { data, isLoading, isError } = useActiveGamesList(filters)
-  const [games, setGames] = useState<Game[]>(data ? data.data.allGamesList : [])
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [sortBarValue, setSortBarValue] = useState<string>("")
+
+  if(isGenresLoading){
+    return null
+  } 
+  if(isGenresError){
+    return null
+  } 
 
   const handleReset = () => {
     setFilters({
@@ -43,12 +49,6 @@ export function Home() {
     })
     setSortBarValue("")
   }
-
-  useEffect(() => {
-    if (data) {
-      setGames(data.data.allGamesList)
-    }
-  }, [data])
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target
@@ -101,7 +101,7 @@ export function Home() {
         searchKeyword={filters.searchKeyword}
         filteredGenres={filters.genres}
         filteredPlayerSupport={filters.playerSupport}
-        genresList={genres.genres?.data || []}
+        genresList={genres?.data || []}
         playerSupportList={playerSupport.playerSupports?.data || []}
         handleReset={handleReset}
         handleChange={handleChange}
@@ -109,7 +109,7 @@ export function Home() {
 
       {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
-      {games && <ActiveGamesList gamesData={games} />}
+      {data?.data.allGamesList && <ActiveGamesList gamesData={data?.data.allGamesList} />}
 
       <GamesPagination
         pageNumber={parseInt(filters.pageNumber)}
