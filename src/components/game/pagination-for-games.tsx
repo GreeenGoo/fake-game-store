@@ -1,4 +1,3 @@
-import { GamesFiltering } from "@/types/game"
 import {
   Pagination,
   PaginationContent,

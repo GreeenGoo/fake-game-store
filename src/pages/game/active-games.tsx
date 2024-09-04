@@ -14,8 +14,12 @@ import { GamesFiltering } from "@/types/game"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
 import LoadingSpinner from "@/components/loading-spinner"
+import { useNavigate } from "react-router-dom"
+import { useAddGameToCard } from "@/features/order"
 
 export function ActiveGames() {
+  const navigate = useNavigate()
+  const addGameToCard = useAddGameToCard()
   const { genres, isLoading: isGenresLoading, isError: isGenresError } = useGenres()
   const playerSupport = usePlayerSupports()
   const [filters, setFilters] = useState<GamesFiltering>({
@@ -87,6 +91,14 @@ export function ActiveGames() {
     setFilters((prevState) => ({ ...prevState, pageNumber: value }))
   }
 
+  const handleGameClick = (id: string) => {
+    navigate(`/games/${id}`)
+  }
+
+  const handleAddToOrder = (id: string) => {
+    addGameToCard.mutate(id)
+  }
+
   if (isGenresLoading || isLoading) {
     return <LoadingSpinner />
   }
@@ -107,7 +119,13 @@ export function ActiveGames() {
 
       {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
-      {data?.data.allGamesList && <ActiveGamesList gamesData={data?.data.allGamesList} />}
+      {data?.data.allGamesList && (
+        <ActiveGamesList
+          gamesData={data?.data.allGamesList}
+          handleAddToOrder={handleAddToOrder}
+          handleGameClick={handleGameClick}
+        />
+      )}
 
       <GamesPagination
         pageNumber={parseInt(filters.pageNumber)}

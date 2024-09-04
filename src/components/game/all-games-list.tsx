@@ -2,7 +2,7 @@ import { Game } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
 
-type ListOfGames = {
+type ListOfGamesProps = {
   games: Game[]
   tableRef: React.MutableRefObject<HTMLTableElement | null>
   selectedGameId: string
@@ -22,7 +22,7 @@ export function AllGamesList({
   handleAddKey,
   handleOpenGame,
   handleUpdateGame
-}: ListOfGames) {
+}: ListOfGamesProps) {
   return (
     <div className="overflow-x-auto">
       <div>

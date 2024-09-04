@@ -1,57 +1,24 @@
-import React, { useState } from "react"
-import { Button } from "./Button"
-import { SignUp, User } from "@/types/user"
-import { useSignUp } from "@/features/authentication"
+import { UseMutationResult } from "@tanstack/react-query"
+import { Button } from "../ui/Button"
+import { GlobalResponse } from "@/types"
+import { LoggedInUser } from "@/types/user"
+import { SignUp } from "@/types/user"
 
 type SignUpProps = {
-  isOpen: boolean
+  signUp: SignUp
+  signUpQuery: UseMutationResult<GlobalResponse<LoggedInUser>, Error, SignUp, unknown>
   onClose: () => void
-  onRegister: (newToken: string, user: User) => void
+  handleSubmit: (e: React.FormEvent) => void
+  handleSignUpChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => {
-  const signUpQuery = useSignUp()
-  const [signUp, setSignUp] = useState<SignUp>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  })
-
-  if (!isOpen) return null
-
-  const handleSignUpChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
-    setSignUp((prevState) => ({
-      ...prevState,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (signUp.password !== signUp.confirmPassword) {
-      alert("Passwords do not match")
-      return
-    }
-
-    signUpQuery.mutate(signUp, {
-      onSuccess: (data) => {
-        onRegister(data.data.token, data.data.user)
-        setSignUp({
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: ""
-        })
-        onClose()
-      },
-      onError: (error) => {
-        alert("Something went wrong. Please try again.")
-      }
-    })
-  }
-
+export default function SignUpForm({
+  signUp,
+  onClose,
+  signUpQuery,
+  handleSubmit,
+  handleSignUpChange
+}: SignUpProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -124,5 +91,3 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
     </div>
   )
 }
-
-export default SignUpPanel

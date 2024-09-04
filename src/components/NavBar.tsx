@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   Disclosure,
   DisclosureButton,
@@ -11,7 +11,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { useLocation, useNavigate } from "react-router-dom"
 import LoginModal from "@/pages/authentication/login"
-import SignUpPanel from "./sign-up"
+import SignUpPanel from "../pages/authentication/sign-up"
 import useUser from "@/context/UserContext"
 import { User } from "@/types/user"
 

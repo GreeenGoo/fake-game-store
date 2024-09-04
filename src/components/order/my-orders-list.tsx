@@ -6,18 +6,20 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { useCheckoutCurrentOrder } from "@/features/order"
 import { OrderDto } from "@/types/order"
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
 type MyOrdersListProps = {
   orders: OrderDto[]
   handlePayment: (orderId: string) => void
+  handleCheckoutOrder: () => void
 }
 
-export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProps) {
-  const checkoutOrder = useCheckoutCurrentOrder()
-
+export default function MyOrdersList({
+  orders,
+  handlePayment,
+  handleCheckoutOrder
+}: MyOrdersListProps) {
   const columns: ColumnDef<OrderDto>[] = [
     {
       accessorKey: "createdAt",
@@ -52,7 +54,7 @@ export default function MyOrdersList({ orders, handlePayment }: MyOrdersListProp
       cell: ({ row }) =>
         row.original.paymentStatus === "UNPAID" ? (
           <button
-            onClick={() => checkoutOrder.mutate()}
+            onClick={() => handleCheckoutOrder}
             className="text-green-500 hover:text-green-700"
           >
             Checkout

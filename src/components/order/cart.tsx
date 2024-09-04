@@ -60,6 +60,7 @@ export default function Cart({ orders, handleDelete, handleCheckout, handleClear
     columns,
     getCoreRowModel: getCoreRowModel()
   })
+
   return (
     <div className="rounded-md border">
       <Table>

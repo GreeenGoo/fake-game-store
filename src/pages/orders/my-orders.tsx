@@ -2,12 +2,17 @@
 
 import { useMemo } from "react"
 
-import { useGetCurrentUserOrders, usePayCurrentOrder } from "@/features/order"
+import {
+  useCheckoutCurrentOrder,
+  useGetCurrentUserOrders,
+  usePayCurrentOrder
+} from "@/features/order"
 import { PayForOrder } from "@/types/order"
 import MyOrdersList from "@/components/order/my-orders-list"
 import LoadingSpinner from "@/components/loading-spinner"
 
 export default function MyOrders() {
+  const checkoutOrder = useCheckoutCurrentOrder()
   const { data: ordersData, isLoading, isError } = useGetCurrentUserOrders()
   const payOrder = usePayCurrentOrder()
 
@@ -32,7 +37,17 @@ export default function MyOrders() {
     payOrder.mutate(payForOrderProps)
   }
 
+  const handleCheckoutOrder = () => {
+    checkoutOrder.mutate()
+  }
+
   if (isLoading) return <LoadingSpinner />
 
-  return <MyOrdersList orders={data} handlePayment={handlePayment} />
+  return (
+    <MyOrdersList
+      orders={data}
+      handlePayment={handlePayment}
+      handleCheckoutOrder={handleCheckoutOrder}
+    />
+  )
 }
