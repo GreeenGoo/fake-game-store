@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import {
   Sheet,
   SheetTrigger,
@@ -13,9 +13,10 @@ import { Card } from "../orders/cart"
 import { GamesFiltering } from "@/types/game"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
+import LoadingSpinner from "@/components/loading-spinner"
 
 export function ActiveGames() {
-  const {genres, isLoading: isGenresLoading, isError: isGenresError} = useGenres()
+  const { genres, isLoading: isGenresLoading, isError: isGenresError } = useGenres()
   const playerSupport = usePlayerSupports()
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
@@ -29,13 +30,6 @@ export function ActiveGames() {
   const { data, isLoading, isError } = useActiveGamesList(filters)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [sortBarValue, setSortBarValue] = useState<string>("")
-
-  if(isGenresLoading){
-    return null
-  } 
-  if(isGenresError){
-    return null
-  } 
 
   const handleReset = () => {
     setFilters({
@@ -91,6 +85,10 @@ export function ActiveGames() {
 
   const handlePagination = (value: string) => {
     setFilters((prevState) => ({ ...prevState, pageNumber: value }))
+  }
+
+  if (isGenresLoading || isLoading) {
+    return <LoadingSpinner />
   }
 
   return (

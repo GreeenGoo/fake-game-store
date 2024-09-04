@@ -9,6 +9,7 @@ import {
 } from "@/features/order"
 import { useMemo } from "react"
 import Cart from "@/components/order/cart"
+import LoadingSpinner from "@/components/loading-spinner"
 
 export function Card() {
   const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
@@ -39,6 +40,9 @@ export function Card() {
   const handleClearCart = () => {
     clearCard.mutate()
   }
+
+  if (isLoading || deleteGameFromCard.isPending || checkoutOrder.isPending || clearCard.isPending)
+    return <LoadingSpinner />
 
   return (
     <Cart

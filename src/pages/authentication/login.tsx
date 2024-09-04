@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from "react"
 import { useForgotPassword, useLogin, useResetPasswordWithCode } from "@/features/authentication"
 import { ResetPasswordWithCodePlusCode, User } from "@/types/user"
 import LoginForm from "@/components/authentication/login"
+import LoadingSpinner from "@/components/loading-spinner"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -81,6 +82,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   }
 
   if (!isOpen) return null
+
+  if (
+    isLoading ||
+    login.isPending ||
+    forgotPasswordMutation.isPending ||
+    resetPasswordWithCode.isPending
+  ) {
+    return <LoadingSpinner />
+  }
 
   return (
     <LoginForm

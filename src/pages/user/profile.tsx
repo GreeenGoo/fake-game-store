@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useGetCurrentUser } from "@/features/user"
 import ProfilePage from "@/components/user/profile"
+import LoadingSpinner from "@/components/loading-spinner"
 
 export function UserProfilePage() {
   const [isChangePasswordOpen, setChangePasswordOpen] = useState(false)
@@ -14,15 +15,15 @@ export function UserProfilePage() {
 
   const { data, isLoading, isError } = useGetCurrentUser()
 
-  if (isLoading) {
-    return <p>Loading user info...</p>
-  }
-
   if (!data) {
     throw new Error("Something went wrong displaying user info.")
   }
 
   const user = data.data
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <ProfilePage

@@ -3,6 +3,7 @@ import { useChangePassword } from "@/features/user"
 import { ChangeUserPassword } from "@/types/user"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import LoadingSpinner from "@/components/loading-spinner"
 
 export type ChangePasswordProps = {
   isOpen: boolean
@@ -16,7 +17,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
     newPasswordConfirm: ""
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { mutate, errorMessage, isError } = useChangePassword()
+  const { mutate, errorMessage, isChangePasswordLoading } = useChangePassword()
   const navigate = useNavigate()
 
   const handlePasswordChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +57,10 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
   }
 
   if (!isOpen) return null
+
+  if (isLoading || isChangePasswordLoading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <ChangePasswordForm

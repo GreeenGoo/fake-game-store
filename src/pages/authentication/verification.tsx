@@ -1,6 +1,7 @@
 import VerificationForm from "@/components/authentication/verification"
 import { useSendVerificationCode, useVerifyUser } from "@/features/authentication"
 import React, { useState } from "react"
+import LoadingSpinner from "@/components/loading-spinner"
 
 interface VerificationModalProps {
   isOpen: boolean
@@ -35,6 +36,10 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({ isOpen, on
   }
 
   if (!isOpen) return null
+
+  if (isLoading || verifyUser.isPending || sendVerificationCode.isPending) {
+    return <LoadingSpinner />
+  }
 
   return (
     <VerificationForm

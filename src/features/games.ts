@@ -178,6 +178,7 @@ export function useActivateGame() {
   return {
     ...mutation,
     errorMessage,
-    handlePopupMessage
+    handlePopupMessage,
+    isActivationgGameLoading: mutation.isPending
   }
 }

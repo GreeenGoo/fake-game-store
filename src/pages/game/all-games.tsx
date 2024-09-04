@@ -1,6 +1,7 @@
 import { AllGamesList } from "@/components/game/all-games-list"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
+import LoadingSpinner from "@/components/loading-spinner"
 import {
   useActivateGame,
   useAddGameKey,
@@ -27,7 +28,7 @@ export function AllGames() {
     playerSupport: []
   })
   const { data: gamesData, isLoading, isError } = useAllGamesList(filters)
-  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
+  const { mutate: activateGame, errorMessage, isActivationgGameLoading } = useActivateGame()
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const tableRef = useRef<HTMLTableElement | null>(null)
   const addGameKey = useAddGameKey()
@@ -136,9 +137,18 @@ export function AllGames() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
+  if (
+    genres.isLoading ||
+    playerSupport.isLoading ||
+    isLoading ||
+    isActivationgGameLoading ||
+    addGameKey.isPending
+  ) {
+    return <LoadingSpinner />
+  }
+
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
-      {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
       {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
       <FiltersForGames
         sortBarValue={sortBarValue}

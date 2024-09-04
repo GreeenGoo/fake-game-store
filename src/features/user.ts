@@ -36,6 +36,7 @@ export function useChangePassword() {
 
   return {
     ...mutation,
-    errorMessage
+    errorMessage,
+    isChangePasswordLoading: mutation.isPending
   }
 }

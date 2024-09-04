@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
 import CreateUpdateGameForm from "@/components/game/create-update-game"
+import LoadingSpinner from "@/components/loading-spinner"
 
 export default function CreateUpdateGame() {
   const genres = useGenres()
@@ -184,6 +185,10 @@ export default function CreateUpdateGame() {
       ...prevState,
       images: prevState.images.filter((image: string) => image !== imageToRemove)
     }))
+  }
+
+  if(genres.isLoading || playerSupport.isLoading || createGame.isPending || updateGame.isPending){
+    return <LoadingSpinner />
   }
 
   return (
