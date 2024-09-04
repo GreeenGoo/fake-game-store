@@ -9,7 +9,7 @@ import {
 import { ActiveGamesList } from "@/components/game/active-games-grid"
 import { useActiveGamesList, useGenres, usePlayerSupports } from "@/features/games"
 import { CreditCard } from "lucide-react"
-import { Card } from "../card"
+import { Card } from "../orders/cart"
 import { GamesFiltering } from "@/types/game"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"

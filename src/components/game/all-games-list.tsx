@@ -1,59 +1,28 @@
-import { useState, useEffect, useRef } from "react"
 import { Game } from "@/types/game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
-import { useActivateGame, useAddGameKey } from "@/features/games"
-import { useNavigate } from "react-router-dom"
 
 type ListOfGames = {
   games: Game[]
+  tableRef: React.MutableRefObject<HTMLTableElement | null>
+  selectedGameId: string
+  handleRowClick: (id: string) => void
+  handleOpenGame: (id: string) => void
+  handleUpdateGame: (id: string) => void
+  handleAddKey: (id: string) => void
+  handleActivateGame: (id: string, gameActivationStatus: boolean) => void
 }
 
-export function AllGamesList({ games }: ListOfGames) {
-  const navigate = useNavigate()
-  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
-  const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
-  const tableRef = useRef<HTMLTableElement | null>(null)
-  const addGameKey = useAddGameKey()
-
-  const handleRowClick = (id: string) => {
-    setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
-  }
-
-  const handleOpenGame = (id: string) => {
-    navigate(`/games/${id}`)
-  }
-
-  const handleUpdateGame = (id: string) => {
-    navigate(`/games/add`, {
-      state: {
-        myData: {
-          type: "updating",
-          id: id
-        }
-      }
-    })
-  }
-
-  const handleAddKey = (id: string) => {
-    addGameKey.mutate(id)
-  }
-
-  const handleActivateGame = (id: string, gameActivationStatus: boolean) => {
-    activateGame([id, !gameActivationStatus])
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (tableRef.current && !tableRef.current.contains(event.target as Node)) {
-        setSelectedGameId(null)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
-
+export function AllGamesList({
+  games,
+  tableRef,
+  selectedGameId,
+  handleRowClick,
+  handleActivateGame,
+  handleAddKey,
+  handleOpenGame,
+  handleUpdateGame
+}: ListOfGames) {
   return (
     <div className="overflow-x-auto">
       <div>

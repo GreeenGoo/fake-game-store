@@ -1,61 +1,20 @@
-import { useChangePassword } from "@/features/user"
 import { ChangeUserPassword } from "@/types/user"
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-interface ChangePasswordProps {
-  isOpen: boolean
+type ChangePasswordProps = {
+  passwordChange: ChangeUserPassword
+  isLoading: boolean
   onClose: () => void
+  handleSubmit: (e: React.FormEvent) => void
+  handlePasswordChanges : (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
-  const [passwordChange, setPasswordChange] = useState<ChangeUserPassword>({
-    password: "",
-    newPassword: "",
-    newPasswordConfirm: ""
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const { mutate, errorMessage, isError } = useChangePassword()
-  const navigate = useNavigate()
-
-  const handlePasswordChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
-
-    setPasswordChange((prevState) => ({
-      ...prevState,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (passwordChange.newPassword !== passwordChange.newPasswordConfirm) {
-      alert("New passwords do not match.")
-      return
-    }
-
-    setIsLoading(true)
-
-    mutate(passwordChange, {
-      onSuccess: () => {
-        alert("Password changed successfully.")
-        localStorage.removeItem("authToken")
-        navigate("/games/active")
-        onClose()
-        window.location.reload()
-      },
-      onError: () => {
-        alert(errorMessage || "An error occurred while changing password.")
-      },
-      onSettled: () => {
-        setIsLoading(false)
-      }
-    })
-  }
-
-  if (!isOpen) return null
-
+export default function ChangePasswordForm({
+  passwordChange,
+  isLoading,
+  onClose,
+  handleSubmit,
+  handlePasswordChanges
+}: ChangePasswordProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">

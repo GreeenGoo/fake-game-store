@@ -1,9 +1,15 @@
 import { AllGamesList } from "@/components/game/all-games-list"
 import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
-import { useAllGamesList, useGenres, usePlayerSupports } from "@/features/games"
+import {
+  useActivateGame,
+  useAddGameKey,
+  useAllGamesList,
+  useGenres,
+  usePlayerSupports
+} from "@/features/games"
 import { GamesFiltering } from "@/types/game"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function AllGames() {
@@ -21,6 +27,10 @@ export function AllGames() {
     playerSupport: []
   })
   const { data: gamesData, isLoading, isError } = useAllGamesList(filters)
+  const { mutate: activateGame, errorMessage, handlePopupMessage } = useActivateGame()
+  const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
+  const tableRef = useRef<HTMLTableElement | null>(null)
+  const addGameKey = useAddGameKey()
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target
@@ -88,6 +98,44 @@ export function AllGames() {
     })
   }
 
+  const handleRowClick = (id: string) => {
+    setSelectedGameId((prevSelected) => (prevSelected === id ? null : id))
+  }
+
+  const handleOpenGame = (id: string) => {
+    navigate(`/games/${id}`)
+  }
+
+  const handleUpdateGame = (id: string) => {
+    navigate(`/games/add`, {
+      state: {
+        myData: {
+          type: "updating",
+          id: id
+        }
+      }
+    })
+  }
+
+  const handleAddKey = (id: string) => {
+    addGameKey.mutate(id)
+  }
+
+  const handleActivateGame = (id: string, gameActivationStatus: boolean) => {
+    activateGame([id, !gameActivationStatus])
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tableRef.current && !tableRef.current.contains(event.target as Node)) {
+        setSelectedGameId(null)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
       {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
@@ -110,7 +158,18 @@ export function AllGames() {
         <i className="fas fa-plus"></i>
         <span>Add Game</span>
       </button>
-      {gamesData && <AllGamesList games={gamesData.data.allGamesList} />}
+      {gamesData && (
+        <AllGamesList
+          games={gamesData?.data.allGamesList || []}
+          tableRef={tableRef}
+          selectedGameId={selectedGameId || ""}
+          handleRowClick={handleRowClick}
+          handleOpenGame={handleOpenGame}
+          handleUpdateGame={handleUpdateGame}
+          handleAddKey={handleAddKey}
+          handleActivateGame={handleActivateGame}
+        />
+      )}
       <GamesPagination
         pageNumber={parseInt(filters.pageNumber)}
         handlePagination={handlePagination}

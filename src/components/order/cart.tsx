@@ -1,6 +1,3 @@
-"use client"
-
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import {
   Table,
   TableBody,
@@ -10,40 +7,16 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { GameInCard } from "@/types/game"
-import {
-  useCheckoutCurrentOrder,
-  useCleanCurrentUserCard,
-  useDeleteGameFromCard,
-  useGetCurrentUserCard
-} from "@/features/order"
-import { useMemo } from "react"
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
-export function Card() {
-  const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
-  const deleteGameFromCard = useDeleteGameFromCard()
-  const checkoutOrder = useCheckoutCurrentOrder()
-  const clearCard = useCleanCurrentUserCard()
+type CartProps = {
+  orders: GameInCard[]
+  handleDelete: (id: string) => void
+  handleCheckout: () => void
+  handleClearCart: () => void
+}
 
-  const data: GameInCard[] = useMemo(
-    () =>
-      gamesData?.data.games.map((gameEntry) => ({
-        id: gameEntry.game.id,
-        name: gameEntry.game.name,
-        thumbnail: gameEntry.game.thumbnail,
-        price: gameEntry.game.price,
-        quantity: gameEntry.quantity
-      })) || [],
-    [gamesData]
-  )
-
-  const handleDelete = (id: string) => {
-    deleteGameFromCard.mutate(id)
-  }
-
-  const calculateTotal = () => {
-    return data.reduce((acc, game) => acc + game.price * game.quantity, 0)
-  }
-
+export default function Cart({ orders, handleDelete, handleCheckout, handleClearCart }: CartProps) {
   const columns: ColumnDef<GameInCard>[] = [
     {
       accessorKey: "thumbnail",
@@ -83,19 +56,10 @@ export function Card() {
   ]
 
   const table = useReactTable({
-    data,
+    data: orders,
     columns,
     getCoreRowModel: getCoreRowModel()
   })
-
-  const handleCheckout = () => {
-    checkoutOrder.mutate()
-  }
-
-  const handleClearCart = () => {
-    clearCard.mutate()
-  }
-
   return (
     <div className="rounded-md border">
       <Table>
@@ -136,7 +100,7 @@ export function Card() {
         <div className="flex justify-between items-center">
           <span className="text-lg font-medium text-gray-900">Total:</span>
           <span className="text-lg font-semibold text-gray-900">
-            ${calculateTotal().toFixed(2)}
+            ${orders.reduce((acc, game) => acc + game.price * game.quantity, 0).toFixed(2)}
           </span>
         </div>
         <div className="flex space-x-2 mt-4">

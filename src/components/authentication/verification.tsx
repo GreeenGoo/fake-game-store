@@ -1,40 +1,18 @@
-import { useSendVerificationCode, useVerifyUser } from "@/features/authentication"
-import React, { useState } from "react"
-
-interface VerificationModalProps {
-  isOpen: boolean
+type VerificationFormProps = {
+  verificationCode: string
+  isLoading: boolean
+  handleSubmit: (e: React.FormEvent) => void
+  handleVerificationChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onClose: () => void
 }
 
-export const VerificationModal: React.FC<VerificationModalProps> = ({ isOpen, onClose }) => {
-  const [verificationCode, setVerificationCode] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const verifyUser = useVerifyUser()
-  const sendVerificationCode = useSendVerificationCode()
-
-  const handleVerificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVerificationCode(e.target.value)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setErrorMessage(null)
-    try {
-      sendVerificationCode.mutate()
-      verifyUser.mutate(verificationCode)
-
-      setIsLoading(false)
-      alert("Verification code submitted.")
-      onClose()
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-  if (!isOpen) return null
-
+export default function VerificationForm({
+  verificationCode,
+  isLoading,
+  handleSubmit,
+  handleVerificationChange,
+  onClose
+}: VerificationFormProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">

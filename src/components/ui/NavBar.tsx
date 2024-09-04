@@ -10,7 +10,7 @@ import {
 } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { useLocation, useNavigate } from "react-router-dom"
-import LoginModal from "@/pages/login"
+import LoginModal from "@/pages/authentication/login"
 import SignUpPanel from "./sign-up"
 import useUser from "@/context/UserContext"
 import { User } from "@/types/user"

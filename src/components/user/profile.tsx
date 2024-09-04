@@ -1,30 +1,33 @@
-import { useState } from "react"
-import { ChangePassword } from "./change-password"
-import { VerificationModal } from "./verification"
-import { useGetCurrentUser } from "@/features/user"
+import { ChangePassword } from "@/pages/authentication/change-password"
+import { VerificationModal } from "@/pages/authentication/verification"
 
-export function UserProfilePage() {
-  const [isChangePasswordOpen, setChangePasswordOpen] = useState(false)
-  const [isVerificationOpen, setVerificationOpen] = useState(false)
-
-  const openChangePassword = () => setChangePasswordOpen(true)
-  const closeChangePassword = () => setChangePasswordOpen(false)
-
-  const openVerification = () => setVerificationOpen(true)
-  const closeVerification = () => setVerificationOpen(false)
-
-  const { data, isLoading, isError } = useGetCurrentUser()
-
-  if (isLoading) {
-    return <p>Loading user info...</p>
+type ProfilePageProps = {
+  user: {
+    name: string
+    email: string
+    role: string
+    birthDate?: Date | null
+    activeStatus: string
+    address?: string | null
+    phone?: string | null
   }
+  openChangePassword: () => void
+  openVerification: () => void
+  isChangePasswordOpen: boolean
+  closeChangePassword: () => void
+  isVerificationOpen: boolean
+  closeVerification: () => void
+}
 
-  if (!data) {
-    throw new Error("Something went wrong displaying user info.")
-  }
-
-  const user = data.data
-
+export default function ProfilePage({
+  user,
+  openChangePassword,
+  openVerification,
+  isChangePasswordOpen,
+  closeChangePassword,
+  isVerificationOpen,
+  closeVerification
+}: ProfilePageProps) {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
