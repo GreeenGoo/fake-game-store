@@ -3,6 +3,7 @@ import { useForgotPassword, useLogin, useResetPasswordWithCode } from "@/feature
 import { ResetPasswordWithCodePlusCode, User } from "@/types/user"
 import LoginForm from "@/components/authentication/login"
 import LoadingSpinner from "@/components/loading-spinner"
+import NotificationSnackbar from "@/components/snackbar"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -18,6 +19,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   const [isLoading, setIsLoading] = useState(false)
   const [resetEmail, setResetEmail] = useState("")
   const [step, setStep] = useState<"login" | "forgot" | "reset">("login")
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("error")
 
   const login = useLogin()
   const forgotPasswordMutation = useForgotPassword()
@@ -33,8 +39,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
       }
       onClose()
     } catch (error) {
-      console.error("Login failed:", error)
-      alert("Login failed. Please check your credentials and try again.")
+      setSnackbarMessage("Login failed. Please check your credentials and try again.")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
     } finally {
       setIsLoading(false)
     }
@@ -46,9 +53,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
     try {
       await forgotPasswordMutation.mutateAsync({ email: resetEmail })
       setStep("reset")
+      setSnackbarMessage("Reset email sent successfully. Please check your inbox.")
+      setSnackbarSeverity("success")
+      setSnackbarOpen(true)
     } catch (error) {
-      console.error("Failed to send reset email:", error)
-      alert("Failed to send reset email. Please try again.")
+      setSnackbarMessage("Failed to send reset email. Please try again.")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
     } finally {
       setIsLoading(false)
     }
@@ -57,7 +68,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   const handleResetPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (password !== confirmPassword || password.length < 8) {
-      alert("Passwords do not match or less than 8 characters.")
+      setSnackbarMessage("Passwords do not match or less than 8 characters.")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
       return
     }
 
@@ -70,15 +83,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
     setIsLoading(true)
     try {
       await resetPasswordWithCode.mutateAsync(resetPasswordData)
-      alert("Password reset successfully.")
+      setSnackbarMessage("Password reset successfully.")
+      setSnackbarSeverity("success")
+      setSnackbarOpen(true)
       setStep("login")
       onClose()
     } catch (error) {
       console.error("Password reset failed:", error)
-      alert("Password reset failed. Please try again.")
+      setSnackbarMessage("Password reset failed. Please try again.")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
   }
 
   if (!isOpen) return null
@@ -93,24 +114,32 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   }
 
   return (
-    <LoginForm
-      step={step}
-      handleResetPasswordSubmit={handleResetPasswordSubmit}
-      resetCode={resetCode}
-      setResetCode={setResetCode}
-      password={password}
-      setPassword={setPassword}
-      confirmPassword={confirmPassword}
-      setConfirmPassword={setConfirmPassword}
-      isLoading={isLoading}
-      setStep={setStep}
-      handleForgotPasswordSubmit={handleForgotPasswordSubmit}
-      resetEmail={resetEmail}
-      setResetEmail={setResetEmail}
-      handleLoginSubmit={handleLoginSubmit}
-      email={email}
-      setEmail={setEmail}
-    />
+    <>
+      <LoginForm
+        step={step}
+        handleResetPasswordSubmit={handleResetPasswordSubmit}
+        resetCode={resetCode}
+        setResetCode={setResetCode}
+        password={password}
+        setPassword={setPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+        isLoading={isLoading}
+        setStep={setStep}
+        handleForgotPasswordSubmit={handleForgotPasswordSubmit}
+        resetEmail={resetEmail}
+        setResetEmail={setResetEmail}
+        handleLoginSubmit={handleLoginSubmit}
+        email={email}
+        setEmail={setEmail}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }
 

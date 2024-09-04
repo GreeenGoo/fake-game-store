@@ -4,6 +4,7 @@ import { ChangeUserPassword } from "@/types/user"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import LoadingSpinner from "@/components/loading-spinner"
+import NotificationSnackbar from "@/components/snackbar"
 
 export type ChangePasswordProps = {
   isOpen: boolean
@@ -17,6 +18,12 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
     newPasswordConfirm: ""
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("success")
+
   const { mutate, errorMessage, isChangePasswordLoading } = useChangePassword()
   const navigate = useNavigate()
 
@@ -33,7 +40,9 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
     e.preventDefault()
 
     if (passwordChange.newPassword !== passwordChange.newPasswordConfirm) {
-      alert("New passwords do not match.")
+      setSnackbarMessage("New passwords do not match.")
+      setSnackbarSeverity("warning")
+      setSnackbarOpen(true)
       return
     }
 
@@ -41,19 +50,28 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
 
     mutate(passwordChange, {
       onSuccess: () => {
-        alert("Password changed successfully.")
+        setSnackbarMessage("Password changed successfully.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
         localStorage.removeItem("authToken")
         navigate("/games/active")
         onClose()
         window.location.reload()
       },
       onError: () => {
-        alert(errorMessage || "An error occurred while changing password.")
+        const errorMsg = errorMessage || "An error occurred while changing password."
+        setSnackbarMessage(errorMsg)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
       },
       onSettled: () => {
         setIsLoading(false)
       }
     })
+  }
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
   }
 
   if (!isOpen) return null
@@ -63,12 +81,20 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose 
   }
 
   return (
-    <ChangePasswordForm
-      passwordChange={passwordChange}
-      isLoading={isLoading}
-      onClose={onClose}
-      handleSubmit={handleSubmit}
-      handlePasswordChanges={handlePasswordChanges}
-    />
+    <>
+      <ChangePasswordForm
+        passwordChange={passwordChange}
+        isLoading={isLoading}
+        onClose={onClose}
+        handleSubmit={handleSubmit}
+        handlePasswordChanges={handlePasswordChanges}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }

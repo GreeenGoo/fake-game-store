@@ -1,15 +1,11 @@
-import {
-  useCreateGame,
-  useGenres,
-  useGetSingleGame,
-  usePlayerSupports,
-  useUpdateGame
-} from "@/features/games"
+import { useCreateGame, useGenres, useGetSingleGame, usePlayerSupports, useUpdateGame } from "@/features/games"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
 import CreateUpdateGameForm from "@/components/game/create-update-game"
 import LoadingSpinner from "@/components/loading-spinner"
+import NotificationSnackbar from "@/components/snackbar"
+import axios from "axios"
 
 export default function CreateUpdateGame() {
   const genres = useGenres()
@@ -34,6 +30,12 @@ export default function CreateUpdateGame() {
     price: 0,
     description: ""
   })
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("success")
 
   const [popupState, setPopupState] = useState<{ show: boolean; message: string }>({
     show: false,
@@ -70,13 +72,11 @@ export default function CreateUpdateGame() {
 
   const convertToCreateGame = (game: CreateOrUpdateGame): CreateGame => {
     const { id, ...createGame } = game
-    console.log("Create game is ", createGame)
     return createGame
   }
 
   const convertToCreateOrUpdateGame = (game: Game): CreateOrUpdateGame => {
     const { sku, active, rating, ...createGame } = game
-    console.log("Create or update game is ", createGame)
     return {
       ...createGame,
       releaseDate: createGame.releaseDate ? new Date(createGame.releaseDate) : new Date()
@@ -151,10 +151,6 @@ export default function CreateUpdateGame() {
     } else setNewGame((prevState) => ({ ...prevState, [name]: value }))
   }
 
-  const handleShowPopup = (message: string) => {
-    setPopupState({ show: true, message })
-  }
-
   const handleCancel = () => {
     const cancelCreatingGame = window.confirm(
       "Are you sure you'd like to cancel creating the game? The information will not be saved!"
@@ -166,18 +162,45 @@ export default function CreateUpdateGame() {
 
   const handleSave = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
+    console.log("We're here")
     if (validateFields(newGame)) {
       if (isUpdate) {
-        updateGame.mutate(newGame)
-        navigate(`/games/all`)
+        updateGame.mutate(newGame, {
+          onSuccess: () => {
+            setSnackbarMessage("Game updated successfully.")
+            setSnackbarSeverity("success")
+            setSnackbarOpen(true)
+            navigate("/games/all")
+          },
+          onError: (error) => {
+            const errorMessage = axios.isAxiosError(error)
+              ? error.response?.data?.error?.errorMessage
+              : "An unexpected error occurred."
+            setSnackbarMessage(errorMessage)
+            setSnackbarSeverity("error")
+            setSnackbarOpen(true)
+          }
+        })
       } else {
         const gameForCreation = convertToCreateGame(newGame)
-        createGame.mutate(gameForCreation)
-        navigate(`/games/all`)
+        createGame.mutate(gameForCreation, {
+          onSuccess: () => {
+            setSnackbarMessage("Game created successfully.")
+            setSnackbarSeverity("success")
+            setSnackbarOpen(true)
+            navigate("/games/all")
+          },
+          onError: (error) => {
+            const errorMessage = axios.isAxiosError(error)
+              ? error.response?.data?.error?.errorMessage
+              : "An unexpected error occurred."
+            setSnackbarMessage(errorMessage)
+            setSnackbarSeverity("error")
+            setSnackbarOpen(true)
+          }
+        })
       }
-    } else {
-      handleShowPopup("Fill all the necessary fields")
-    }
+    } 
   }
 
   const handleRemoveImage = (imageToRemove: string) => {
@@ -187,28 +210,36 @@ export default function CreateUpdateGame() {
     }))
   }
 
-  if(genres.isLoading || playerSupport.isLoading || createGame.isPending || updateGame.isPending){
+  if (genres.isLoading || playerSupport.isLoading || createGame.isPending || updateGame.isPending) {
     return <LoadingSpinner />
   }
 
   return (
-    <CreateUpdateGameForm
-      gameTitle={newGame.name}
-      gameDescription={newGame.description}
-      newGameGenres={newGame.genreList}
-      newGamePlayerSupport={newGame.playerSupport}
-      genresList={genres.genres?.data || []}
-      playerSupportList={playerSupport.playerSupports?.data || []}
-      thumbnail={newGame.thumbnail}
-      images={newGame.images}
-      developer={newGame.developer}
-      releaseDate={newGame.releaseDate}
-      systemRequirements={newGame.systemRequirements}
-      price={newGame.price}
-      handlenewGameChanges={handlenewGameChanges}
-      handleRemoveImage={handleRemoveImage}
-      handleCancel={handleCancel}
-      handleSave={handleSave}
-    />
+    <>
+      <CreateUpdateGameForm
+        gameTitle={newGame.name}
+        gameDescription={newGame.description}
+        newGameGenres={newGame.genreList}
+        newGamePlayerSupport={newGame.playerSupport}
+        genresList={genres.genres?.data || []}
+        playerSupportList={playerSupport.playerSupports?.data || []}
+        thumbnail={newGame.thumbnail}
+        images={newGame.images}
+        developer={newGame.developer}
+        releaseDate={newGame.releaseDate}
+        systemRequirements={newGame.systemRequirements}
+        price={newGame.price}
+        handlenewGameChanges={handlenewGameChanges}
+        handleRemoveImage={handleRemoveImage}
+        handleCancel={handleCancel}
+        handleSave={handleSave}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }

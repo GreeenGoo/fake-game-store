@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 import { ActiveGames } from "./pages/game/active-games"
 import { Game } from "./pages/game/single-game"
-import NavBar from "./components/NavBar"
+import NavBar from "./components/navbar"
 import { AllGames } from "./pages/game/all-games"
 import CreateUpdateGame from "./pages/game/create-update-game"
 import { UserProfilePage } from "./pages/user/profile"
@@ -77,7 +77,7 @@ function App() {
           </Routes>
         </Router>
       </UserProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   )
 }

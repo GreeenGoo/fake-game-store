@@ -12,11 +12,17 @@ import {
 import { GamesFiltering } from "@/types/game"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import NotificationSnackbar from "@/components/snackbar"
+import axios from "axios"
 
 export function AllGames() {
   const navigate = useNavigate()
-  const genres = useGenres()
-  const playerSupport = usePlayerSupports()
+  const { genres, isLoading: isGenresLoading, isError: isGenresError } = useGenres()
+  const {
+    playerSupports,
+    isLoading: isPlayerSupportLoading,
+    isError: isPlayerSupportError
+  } = usePlayerSupports()
   const [sortBarValue, setSortBarValue] = useState<string>("")
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
@@ -28,20 +34,25 @@ export function AllGames() {
     playerSupport: []
   })
   const { data: gamesData, isLoading, isError } = useAllGamesList(filters)
-  const { mutate: activateGame, errorMessage, isActivationgGameLoading } = useActivateGame()
+  const { mutate: activateGame, isActivationgGameLoading } = useActivateGame()
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const tableRef = useRef<HTMLTableElement | null>(null)
   const addGameKey = useAddGameKey()
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("success")
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target
     if (name === "sortBy" && value !== "") {
-      setSortBarValue(event.target.value)
-      const sortFieldAndOrder = value.split("_")
+      setSortBarValue(value)
+      const [sortField, sortValue] = value.split("_")
       setFilters((prevState) => ({
         ...prevState,
-        sortField: sortFieldAndOrder[0],
-        sortValue: sortFieldAndOrder[1]
+        sortField,
+        sortValue
       }))
     } else if (name === "pageSize" && value !== "") {
       setFilters((prevState) => ({
@@ -112,18 +123,46 @@ export function AllGames() {
       state: {
         myData: {
           type: "updating",
-          id: id
+          id
         }
       }
     })
   }
 
   const handleAddKey = (id: string) => {
-    addGameKey.mutate(id)
+    addGameKey.mutate(id, {
+      onSuccess: () => {
+        setSnackbarMessage("Game key added successfully.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
+      },
+      onError: (error) => {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error?.errorMessage || "An unexpected error occurred."
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
+      }
+    })
   }
 
   const handleActivateGame = (id: string, gameActivationStatus: boolean) => {
-    activateGame([id, !gameActivationStatus])
+    activateGame([id, !gameActivationStatus], {
+      onSuccess: () => {
+        setSnackbarMessage("Game activation status updated successfully.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
+      },
+      onError: (error) => {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error?.errorMessage
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
+      }
+    })
   }
 
   useEffect(() => {
@@ -137,27 +176,23 @@ export function AllGames() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  if (
-    genres.isLoading ||
-    playerSupport.isLoading ||
-    isLoading ||
-    isActivationgGameLoading ||
-    addGameKey.isPending
-  ) {
+  if (isGenresLoading || isPlayerSupportLoading || isLoading || isActivationgGameLoading) {
     return <LoadingSpinner />
   }
 
   return (
     <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
-      {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
+      {(isError || isGenresError || isPlayerSupportError) && (
+        <p className="text-lg text-red-600">Error fetching data</p>
+      )}
       <FiltersForGames
         sortBarValue={sortBarValue}
         pageSize={gamesData?.data.allGamesHead.gamesPerPage || 0}
         searchKeyword={filters.searchKeyword}
         filteredGenres={filters.genres}
         filteredPlayerSupport={filters.playerSupport}
-        genresList={genres.genres?.data || []}
-        playerSupportList={playerSupport.playerSupports?.data || []}
+        genresList={genres?.data || []}
+        playerSupportList={playerSupports?.data || []}
         handleReset={handleReset}
         handleChange={handleChange}
       />
@@ -184,6 +219,12 @@ export function AllGames() {
         pageNumber={parseInt(filters.pageNumber)}
         handlePagination={handlePagination}
         totalPages={gamesData?.data.allGamesHead.totalPages || 0}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        severity={snackbarSeverity}
       />
     </div>
   )

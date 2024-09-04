@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { SignUp, User } from "@/types/user"
 import { useSignUp } from "@/features/authentication"
 import SignUpForm from "@/components/authentication/sign-up"
+import NotificationSnackbar from "@/components/snackbar"
+import axios from "axios"
 
 type SignUpProps = {
   isOpen: boolean
@@ -17,6 +19,11 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
     password: "",
     confirmPassword: ""
   })
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("error")
 
   if (!isOpen) return null
 
@@ -31,7 +38,9 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (signUp.password !== signUp.confirmPassword) {
-      alert("Passwords do not match")
+      setSnackbarMessage("Passwords do not match")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
       return
     }
 
@@ -45,21 +54,41 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
           confirmPassword: ""
         })
         onClose()
+        setSnackbarMessage("Registration successful.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
       },
       onError: (error) => {
-        alert("Something went wrong. Please try again.")
+        const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.error.errorMessage
+        : "An unexpected error occurred."
+      setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
       }
     })
   }
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
+  }
+
   return (
-    <SignUpForm
-      signUp={signUp}
-      signUpQuery={signUpQuery}
-      onClose={onClose}
-      handleSubmit={handleSubmit}
-      handleSignUpChange={handleSignUpChange}
-    />
+    <>
+      <SignUpForm
+        signUp={signUp}
+        signUpQuery={signUpQuery}
+        onClose={onClose}
+        handleSubmit={handleSubmit}
+        handleSignUpChange={handleSignUpChange}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }
 

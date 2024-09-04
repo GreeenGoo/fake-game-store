@@ -2,6 +2,8 @@ import VerificationForm from "@/components/authentication/verification"
 import { useSendVerificationCode, useVerifyUser } from "@/features/authentication"
 import React, { useState } from "react"
 import LoadingSpinner from "@/components/loading-spinner"
+import NotificationSnackbar from "@/components/snackbar"
+import axios from "axios"
 
 interface VerificationModalProps {
   isOpen: boolean
@@ -10,8 +12,11 @@ interface VerificationModalProps {
 
 export const VerificationModal: React.FC<VerificationModalProps> = ({ isOpen, onClose }) => {
   const [verificationCode, setVerificationCode] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("error")
   const verifyUser = useVerifyUser()
   const sendVerificationCode = useSendVerificationCode()
 
@@ -21,33 +26,51 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({ isOpen, on
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setErrorMessage(null)
-    try {
-      sendVerificationCode.mutate()
-      verifyUser.mutate(verificationCode)
+    setSnackbarMessage("")
+    setSnackbarSeverity("error")
 
-      setIsLoading(false)
-      alert("Verification code submitted.")
+    try {
+      await sendVerificationCode.mutateAsync()
+      await verifyUser.mutateAsync(verificationCode)
+
+      setSnackbarMessage("Verification code submitted.")
+      setSnackbarSeverity("success")
       onClose()
     } catch (error) {
-      alert(error)
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.error.errorMessage
+        : "An unexpected error occurred."
+      setSnackbarMessage(errorMessage)
+    } finally {
+      setSnackbarOpen(true)
     }
+  }
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
   }
 
   if (!isOpen) return null
 
-  if (isLoading || verifyUser.isPending || sendVerificationCode.isPending) {
+  if (verifyUser.isPending || sendVerificationCode.isPending) {
     return <LoadingSpinner />
   }
 
   return (
-    <VerificationForm
-      verificationCode={verificationCode}
-      isLoading={isLoading}
-      handleSubmit={handleSubmit}
-      handleVerificationChange={handleVerificationChange}
-      onClose={onClose}
-    />
+    <>
+      <VerificationForm
+        verificationCode={verificationCode}
+        isLoading={verifyUser.isPending || sendVerificationCode.isPending}
+        handleSubmit={handleSubmit}
+        handleVerificationChange={handleVerificationChange}
+        onClose={onClose}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }

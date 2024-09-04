@@ -1,5 +1,4 @@
-"use client"
-
+import { useMemo, useState } from "react"
 import { GameInCard } from "@/types/game"
 import {
   useCheckoutCurrentOrder,
@@ -7,15 +6,22 @@ import {
   useDeleteGameFromCard,
   useGetCurrentUserCard
 } from "@/features/order"
-import { useMemo } from "react"
 import Cart from "@/components/order/cart"
 import LoadingSpinner from "@/components/loading-spinner"
+import NotificationSnackbar from "@/components/snackbar"
+import axios from "axios"
 
 export function Card() {
-  const { data: gamesData, isLoading, isError } = useGetCurrentUserCard()
+  const { data: gamesData, isLoading } = useGetCurrentUserCard()
   const deleteGameFromCard = useDeleteGameFromCard()
   const checkoutOrder = useCheckoutCurrentOrder()
   const clearCard = useCleanCurrentUserCard()
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("success")
 
   const data: GameInCard[] = useMemo(
     () =>
@@ -30,26 +36,81 @@ export function Card() {
   )
 
   const handleDelete = (id: string) => {
-    deleteGameFromCard.mutate(id)
+    deleteGameFromCard.mutate(id, {
+      onSuccess: () => {
+        setSnackbarMessage("Game removed successfully.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
+      },
+      onError: (error) => {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error.errorMessage
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
+      }
+    })
   }
 
   const handleCheckout = () => {
-    checkoutOrder.mutate()
+    checkoutOrder.mutate(undefined, {
+      onSuccess: () => {
+        setSnackbarMessage("Checkout successful.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
+      },
+      onError: (error) => {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error.errorMessage
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
+      }
+    })
   }
 
   const handleClearCart = () => {
-    clearCard.mutate()
+    clearCard.mutate(undefined, {
+      onSuccess: () => {
+        setSnackbarMessage("Cart cleared.")
+        setSnackbarSeverity("success")
+        setSnackbarOpen(true)
+      },
+      onError: (error) => {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error.errorMessage
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
+        setSnackbarSeverity("error")
+        setSnackbarOpen(true)
+      }
+    })
   }
 
-  if (isLoading || deleteGameFromCard.isPending || checkoutOrder.isPending || clearCard.isPending)
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
+  }
+
+  if (isLoading || deleteGameFromCard.isPending || checkoutOrder.isPending || clearCard.isPending) {
     return <LoadingSpinner />
+  }
 
   return (
-    <Cart
-      orders={data}
-      handleDelete={handleDelete}
-      handleCheckout={handleCheckout}
-      handleClearCart={handleClearCart}
-    />
+    <>
+      <Cart
+        orders={data}
+        handleDelete={handleDelete}
+        handleCheckout={handleCheckout}
+        handleClearCart={handleClearCart}
+      />
+      <NotificationSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }
