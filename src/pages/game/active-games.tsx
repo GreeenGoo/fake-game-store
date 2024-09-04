@@ -16,8 +16,10 @@ import GamesPagination from "@/components/game/pagination-for-games"
 import LoadingSpinner from "@/components/loading-spinner"
 import { useNavigate } from "react-router-dom"
 import { useAddGameToCard } from "@/features/order"
+import useUser from "@/context/UserContext"
 
 export function ActiveGames() {
+  const { user } = useUser()
   const navigate = useNavigate()
   const addGameToCard = useAddGameToCard()
   const { genres, isLoading: isGenresLoading, isError: isGenresError } = useGenres()
@@ -121,6 +123,7 @@ export function ActiveGames() {
       {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
       {data?.data.allGamesList && (
         <ActiveGamesList
+          role={user?.role || null}
           gamesData={data?.data.allGamesList}
           handleAddToOrder={handleAddToOrder}
           handleGameClick={handleGameClick}
@@ -133,22 +136,24 @@ export function ActiveGames() {
         totalPages={data?.data.allGamesHead.totalPages || 0}
       />
 
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetTrigger asChild>
-          <button
-            onClick={() => setIsSheetOpen(true)}
-            className="fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 focus:outline-none"
-          >
-            <CreditCard className="h-8 w-8" />
-          </button>
-        </SheetTrigger>
-        <SheetContent className="w-[400px] sm:w-[540px]">
-          <SheetTitle></SheetTitle>
-          <SheetDescription></SheetDescription>
-          <h2 className="text-xl font-bold mb-4">Card</h2>
-          <Card />
-        </SheetContent>
-      </Sheet>
+      {user?.role === "USER" && (
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
+            <button
+              onClick={() => setIsSheetOpen(true)}
+              className="fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 focus:outline-none"
+            >
+              <CreditCard className="h-8 w-8" />
+            </button>
+          </SheetTrigger>
+          <SheetContent className="w-[400px] sm:w-[540px]">
+            <SheetTitle></SheetTitle>
+            <SheetDescription></SheetDescription>
+            <h2 className="text-xl font-bold mb-4">Card</h2>
+            <Card />
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   )
 }

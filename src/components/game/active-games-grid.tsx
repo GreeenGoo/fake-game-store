@@ -5,10 +5,11 @@ const defaultImage = "https://via.placeholder.com/150?text=No+Image"
 type ListOfGamesProps = {
   gamesData: Game[],
   handleGameClick: (id: string) => void,
-  handleAddToOrder: (id: string) => void
+  handleAddToOrder: (id: string) => void,
+  role: string | null
 }
 
-export function ActiveGamesList({gamesData, handleAddToOrder, handleGameClick}: ListOfGamesProps) {
+export function ActiveGamesList({gamesData, role, handleAddToOrder, handleGameClick}: ListOfGamesProps) {
 
   return (
     <div>
@@ -33,7 +34,7 @@ export function ActiveGamesList({gamesData, handleAddToOrder, handleGameClick}: 
                   </div>
                   <h3 className="mt-4 text-sm text-gray-700">{game.name}</h3>
                   <p className="mt-1 text-lg font-medium text-gray-900">{game.price}</p>
-                  <button
+                  {role === "USER" && <button
                     onClick={(e) => {
                       e.stopPropagation()
                       handleAddToOrder(game.id)
@@ -41,7 +42,7 @@ export function ActiveGamesList({gamesData, handleAddToOrder, handleGameClick}: 
                     className="absolute top-2 right-2 p-1 rounded-full bg-gray-800 text-white hover:bg-gray-600"
                   >
                     <i className="fas fa-plus"></i>
-                  </button>
+                  </button>}
                 </div>
               ))}
             </div>
