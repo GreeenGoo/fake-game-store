@@ -1,4 +1,10 @@
-import { useCreateGame, useGenres, useGetSingleGame, usePlayerSupports, useUpdateGame } from "@/features/games"
+import {
+  useCreateGame,
+  useGenres,
+  useGetSingleGame,
+  usePlayerSupports,
+  useUpdateGame
+} from "@/features/games"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
@@ -162,7 +168,6 @@ export default function CreateUpdateGame() {
 
   const handleSave = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
-    console.log("We're here")
     if (validateFields(newGame)) {
       if (isUpdate) {
         updateGame.mutate(newGame, {
@@ -200,7 +205,11 @@ export default function CreateUpdateGame() {
           }
         })
       }
-    } 
+    } else {
+      setSnackbarMessage("Fill all the fields!")
+      setSnackbarSeverity("error")
+      setSnackbarOpen(true)
+    }
   }
 
   const handleRemoveImage = (imageToRemove: string) => {
