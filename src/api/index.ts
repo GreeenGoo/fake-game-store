@@ -1,11 +1,10 @@
-import axios from 'axios'
+import axios from "axios"
 
-const isDevelopment = import.meta.env.MODE === 'development'
-let baseURL = 'https://fs18-java-backend-uladzislau-krukouski.onrender.com/api/v1'
+const isDevelopment = import.meta.env.MODE === "development"
+let baseURL = "http://localhost:8080/api/v1"
 
 if (!isDevelopment) {
-  // Update this later when you have a working backend server
-  baseURL = 'http://localhost:5125/api/v1'
+  baseURL = "https://fs18-java-backend-uladzislau-krukouski.onrender.com/api/v1"
 }
 
 const api = axios.create({
@@ -21,14 +20,5 @@ const api = axios.create({
 //     }
 //   }
 // )
-
-export const getGameById = async (id: string) => {
-  try {
-    const response = await api.get(`/games/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error('Error fetching game data');
-  }
-};
 
 export default api
