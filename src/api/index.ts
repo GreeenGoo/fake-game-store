@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const isDevelopment = import.meta.env.MODE === 'development'
-let baseURL = 'http://localhost:8080/api/v1'
+let baseURL = 'https://fs18-java-backend-uladzislau-krukouski.onrender.com/api/v1'
 
 if (!isDevelopment) {
   // Update this later when you have a working backend server

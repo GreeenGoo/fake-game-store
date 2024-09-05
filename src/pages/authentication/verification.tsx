@@ -30,7 +30,6 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({ isOpen, on
     setSnackbarSeverity("error")
 
     try {
-      await sendVerificationCode.mutateAsync()
       await verifyUser.mutateAsync(verificationCode)
 
       setSnackbarMessage("Verification code submitted.")

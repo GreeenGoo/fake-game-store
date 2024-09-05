@@ -3,6 +3,7 @@ import { useGetCurrentUser } from "@/features/user"
 import ProfilePage from "@/components/user/profile"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
+import { useSendVerificationCode } from "@/features/authentication"
 
 export function UserProfilePage() {
   const [isChangePasswordOpen, setChangePasswordOpen] = useState(false)
@@ -12,11 +13,14 @@ export function UserProfilePage() {
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "info" | "warning"
   >("error")
-
+  const sendVerificationCode = useSendVerificationCode()
   const openChangePassword = () => setChangePasswordOpen(true)
   const closeChangePassword = () => setChangePasswordOpen(false)
 
-  const openVerification = () => setVerificationOpen(true)
+  const openVerification = () => {
+    sendVerificationCode.mutate()
+    setVerificationOpen(true)
+  }
   const closeVerification = () => setVerificationOpen(false)
 
   const { data, isLoading, isError } = useGetCurrentUser()

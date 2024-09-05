@@ -5,7 +5,7 @@ import UserService from "@/api/user"
 import { useState } from "react"
 
 export function useGetCurrentUser() {
-  const { data, isLoading, isError } = useQuery<GlobalResponse<User>>({
+  const { data, isLoading, isError, refetch } = useQuery<GlobalResponse<User>>({
     queryKey: ["users/me"],
     queryFn: UserService.getCurrentUser
   })
@@ -13,7 +13,8 @@ export function useGetCurrentUser() {
   return {
     data,
     isLoading,
-    isError
+    isError,
+    refetch
   }
 }
 
@@ -29,7 +30,7 @@ export function useChangePassword() {
       queryClient.invalidateQueries({ queryKey: ["login"] })
       setErrorMessage("")
     },
-    onError: (error: Error) => {
+    onError: () => {
       setErrorMessage("Error occurred while changing password.")
     }
   })

@@ -8,6 +8,7 @@ import {
   SignUp
 } from "@/types/user"
 import { GlobalResponse } from "@/types"
+import { useGetCurrentUser } from "./user"
 
 export function useLogin() {
   const queryClient = useQueryClient()
@@ -75,10 +76,17 @@ export function useSendVerificationCode() {
 
 export function useVerifyUser() {
   const queryClient = useQueryClient()
+  const { refetch } = useGetCurrentUser()
   const mutation = useMutation({
+    retry: 10,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 60000),
     mutationFn: (code: string) => AuthenticationService.verifyUser(code),
     onSuccess: () => {
+      refetch()
       queryClient.invalidateQueries({ queryKey: ["login"] })
+    },
+    onError: (error) => {
+      console.log("useVerifyUser() failed", error)
     }
   })
 
