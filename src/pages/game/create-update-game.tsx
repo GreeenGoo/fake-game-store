@@ -12,13 +12,14 @@ import CreateUpdateGameForm from "@/components/game/create-update-game"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
+import { useSnackbar } from "notistack"
 
 export default function CreateUpdateGame() {
   const genres = useGenres()
   const playerSupport = usePlayerSupports()
   const createGame = useCreateGame()
   const updateGame = useUpdateGame()
-
+  const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -43,11 +44,6 @@ export default function CreateUpdateGame() {
     "success" | "error" | "info" | "warning"
   >("success")
 
-  const [popupState, setPopupState] = useState<{ show: boolean; message: string }>({
-    show: false,
-    message: ""
-  })
-
   const isUpdate = Boolean(location.state?.myData?.id)
   const { singleGameData } = isUpdate
     ? useGetSingleGame(location.state.myData?.id)
@@ -64,7 +60,6 @@ export default function CreateUpdateGame() {
     return (
       game.name.trim() !== "" &&
       game.genreList.length > 0 &&
-      game.thumbnail.trim() !== "" &&
       game.images.length > 0 &&
       game.developer.trim() !== "" &&
       game.releaseDate instanceof Date &&
@@ -77,12 +72,12 @@ export default function CreateUpdateGame() {
   }
 
   const convertToCreateGame = (game: CreateOrUpdateGame): CreateGame => {
-    const { id, ...createGame } = game
+    const { ...createGame } = game
     return createGame
   }
 
   const convertToCreateOrUpdateGame = (game: Game): CreateOrUpdateGame => {
-    const { sku, active, rating, ...createGame } = game
+    const { ...createGame } = game
     return {
       ...createGame,
       releaseDate: createGame.releaseDate ? new Date(createGame.releaseDate) : new Date()
@@ -168,7 +163,10 @@ export default function CreateUpdateGame() {
 
   const handleSave = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
-    if (validateFields(newGame)) {
+    const valid = validateFields(newGame)
+    if (!valid) {
+      enqueueSnackbar("Not valid game data inputed", { variant: "error", autoHideDuration: 4000 })
+    } else {
       if (isUpdate) {
         updateGame.mutate(newGame, {
           onSuccess: () => {
@@ -205,10 +203,6 @@ export default function CreateUpdateGame() {
           }
         })
       }
-    } else {
-      setSnackbarMessage("Fill all the fields!")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
     }
   }
 

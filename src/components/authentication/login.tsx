@@ -1,3 +1,4 @@
+import { Box, Button, TextField } from "@mui/material"
 import { FormEvent, SetStateAction } from "react"
 
 type LoginFormProps = {
@@ -43,136 +44,100 @@ export default function LoginForm({
         <h2 className="text-2xl font-bold mb-6 text-center">
           {step === "reset" ? "Reset Password" : step === "forgot" ? "Forgot Password" : "Login"}
         </h2>
-
         {step === "reset" ? (
-          <form onSubmit={handleResetPasswordSubmit}>
-            <div className="mb-4">
-              <label htmlFor="reset-code" className="block text-sm font-medium text-gray-700">
-                Reset Code
-              </label>
-              <input
-                type="text"
-                id="reset-code"
+          <Box component="form" noValidate autoComplete="off" onSubmit={handleResetPasswordSubmit}>
+            <div className="flex flex-col justify-center gap-4 mb-8">
+              <TextField
+                required
+                id="outlined-required"
+                label="Reset Code"
                 value={resetCode}
                 onChange={(e) => setResetCode(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
               />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                New Password
-              </label>
-              <input
-                type="password"
-                id="password"
+              <TextField
+                required
+                id="outlined-required"
+                label="New Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
                 type="password"
-                id="confirm-password"
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
+                type="password"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Resetting..." : "Reset Password"}
-            </button>
-            <button
-              type="button"
-              className="mt-4 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => setStep("login")}
-            >
-              Back to Login
-            </button>
-          </form>
+            <div className="flex flex-col justify-center gap-4">
+              <Button variant="contained" type="submit">
+                {isLoading ? "Resetting..." : "Reset Password"}
+              </Button>
+              <Button
+                variant="outlined"
+                type="button"
+                onClick={() => setStep("login")}
+                color="error"
+              >
+                Back to Login
+              </Button>
+            </div>
+          </Box>
         ) : step === "forgot" ? (
-          <form onSubmit={handleForgotPasswordSubmit}>
-            <div className="mb-4">
-              <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                id="reset-email"
+          <Box component="form" noValidate autoComplete="off" onSubmit={handleForgotPasswordSubmit}>
+            <div className="flex flex-col justify-center gap-4 mb-8">
+              <TextField
+                required
+                id="outlined-required"
+                label="Email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
               />
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Sending..." : "Send Reset Link"}
-            </button>
-            <button
-              type="button"
-              className="mt-4 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => setStep("login")}
-            >
-              Back to Login
-            </button>
-          </form>
+            <div className="flex flex-col justify-center gap-4">
+              <Button onClick={handleForgotPasswordSubmit} variant="contained" type="submit">
+                {isLoading ? "Sending..." : "Send Reset Link"}
+              </Button>
+              <Button
+                variant="outlined"
+                type="button"
+                onClick={() => setStep("login")}
+                color="error"
+              >
+                Back to Login
+              </Button>
+            </div>
+          </Box>
         ) : (
-          <form onSubmit={handleLoginSubmit}>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
+          <Box component="form" noValidate autoComplete="off" onSubmit={handleLoginSubmit}>
+            <div className="flex flex-col justify-center gap-4 mb-8">
+              <TextField
+                required
+                id="outlined-required"
+                label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
               />
-            </div>
-            <div className="mb-6">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
+              <TextField
+                required
+                id="outlined-required"
+                label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
+                type="password"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-            <button
-              type="button"
-              className="mt-4 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => setStep("forgot")}
-            >
-              Forgot Password?
-            </button>
-          </form>
+            <div className="flex flex-col justify-center gap-4">
+              <Button variant="contained" type="submit" disabled={isLoading}>
+                {isLoading ? "Logging in..." : "Login"}
+              </Button>
+              <Button variant="outlined" type="button" onClick={() => setStep("forgot")}>
+                Forgot Password?
+              </Button>
+            </div>
+          </Box>
         )}
       </div>
     </div>

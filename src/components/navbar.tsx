@@ -51,7 +51,6 @@ export default function NavBar() {
 
   const handleLogin = (newToken: string, user: User) => {
     localStorage.setItem("authToken", newToken)
-    console.log("User in nav is ", user)
     setUser(user)
 
     if (isLoginModalOpen) {

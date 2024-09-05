@@ -72,5 +72,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    --tw-bg-opacity: 1;
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity)) /* #f3f4f6 */;
   }
 }

@@ -1,30 +1,17 @@
 import { ChangeEvent, useState } from "react"
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetTitle,
-  SheetDescription
-} from "@/components/ui/sheet"
-import { ActiveGamesList } from "@/components/game/active-games-grid"
 import { useActiveGamesList, useGenres, usePlayerSupports } from "@/features/games"
-import { CreditCard } from "lucide-react"
-import { Card } from "../orders/cart"
 import { GamesFiltering } from "@/types/game"
-import FiltersForGames from "@/components/game/filters-for-games"
-import GamesPagination from "@/components/game/pagination-for-games"
-import LoadingSpinner from "@/components/loading-spinner"
-import { useNavigate } from "react-router-dom"
-import { useAddGameToCard } from "@/features/order"
 import useUser from "@/context/UserContext"
-import NotificationSnackbar from "@/components/snackbar"
-import axios from "axios"
+import GamesTable from "@/components/GamesTable"
+import Filters from "@/components/Filters"
+import { SelectChangeEvent } from "@mui/material/Select"
+import LoadingSpinner from "@/components/loading-spinner"
+import CartDrawer from "@/components/CartDrawer"
 
 export function ActiveGames() {
   const { user } = useUser()
-  const navigate = useNavigate()
-  const addGameToCard = useAddGameToCard()
-  const { genres, isLoading: isGenresLoading } = useGenres()
+
+  const { genres } = useGenres()
   const playerSupport = usePlayerSupports()
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
@@ -35,14 +22,8 @@ export function ActiveGames() {
     genres: [],
     playerSupport: []
   })
-  const { data, isLoading, isError } = useActiveGamesList(filters)
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const { data: gamesList, isPending } = useActiveGamesList(filters)
   const [sortBarValue, setSortBarValue] = useState<string>("")
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "error" | "info" | "warning"
-  >("success")
 
   const handleReset = () => {
     setFilters({
@@ -57,7 +38,12 @@ export function ActiveGames() {
     setSortBarValue("")
   }
 
-  const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleChange = (
+    event:
+      | SelectChangeEvent<string>
+      | ChangeEvent<HTMLSelectElement | HTMLInputElement>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target
     if (name === "sortBy" && value !== "") {
       setSortBarValue(value)
@@ -78,13 +64,18 @@ export function ActiveGames() {
         [name]: value
       }))
     } else if (name === "genreList") {
-      setFilters((prevState) => {
-        const newGenres = prevState.genres.includes(value)
-          ? prevState.genres.filter((genre) => genre !== value)
-          : [...prevState.genres, value]
-
-        return { ...prevState, genres: newGenres }
-      })
+      const values = value as unknown as string[]
+      const genreI = filters.genres.findIndex((el) => el === values[values.length - 1])
+      if (genreI === -1) {
+        const newValues = [...filters.genres, values[values.length - 1]]
+        setFilters({ ...filters, genres: newValues })
+        return
+      } else {
+        const newValues = [...filters.genres]
+        newValues.splice(genreI, 1)
+        setFilters({ ...filters, genres: newValues })
+        return
+      }
     } else if (name === "playerSupport") {
       setFilters((prevState) => {
         const newPlayerSupport = prevState.playerSupport.includes(value)
@@ -96,46 +87,12 @@ export function ActiveGames() {
     }
   }
 
-  const handlePagination = (value: string) => {
-    setFilters((prevState) => ({ ...prevState, pageNumber: value }))
-  }
-
-  const handleGameClick = (id: string) => {
-    navigate(`/games/${id}`)
-  }
-
-  const handleAddToOrder = (id: string) => {
-    addGameToCard.mutate(id, {
-      onSuccess: () => {
-        setSnackbarMessage("Game added to cart.")
-        setSnackbarSeverity("success")
-        setSnackbarOpen(true)
-      },
-      onError: (error) => {
-        const errorMessage = axios.isAxiosError(error)
-          ? error.response?.data?.error.errorMessage
-          : "An unexpected error occurred."
-        setSnackbarMessage(errorMessage)
-        setSnackbarSeverity("error")
-        setSnackbarOpen(true)
-      }
-    })
-  }
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false)
-  }
-
-  if (isGenresLoading || isLoading) {
-    return <LoadingSpinner />
-  }
-
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100 relative">
-        <FiltersForGames
+      <div className="flex flex-col items-center gap-10 p-4 bg-gray-100 relative pt-10">
+        <Filters
           sortBarValue={sortBarValue}
-          pageSize={data?.data.allGamesHead.gamesPerPage || 0}
+          pageSize={gamesList?.data.allGamesHead.gamesPerPage || 0}
           searchKeyword={filters.searchKeyword}
           filteredGenres={filters.genres}
           filteredPlayerSupport={filters.playerSupport}
@@ -144,50 +101,19 @@ export function ActiveGames() {
           handleReset={handleReset}
           handleChange={handleChange}
         />
-
-        {isLoading && <p className="text-lg text-blue-600">Loading...</p>}
-        {isError && <p className="text-lg text-red-600">Error fetching active games</p>}
-        {data?.data.allGamesList && (
-          <ActiveGamesList
-            role={user?.role || null}
-            gamesData={data?.data.allGamesList}
-            handleAddToOrder={handleAddToOrder}
-            handleGameClick={handleGameClick}
+        {isPending && <LoadingSpinner />}
+        {gamesList?.data ? (
+          <GamesTable
+            data={gamesList?.data}
+            amountOfPages={gamesList?.data.allGamesHead.totalPages ?? 0}
+            onChangePage={(number) =>
+              setFilters((prev) => ({ ...prev, pageNumber: number.toString() }))
+            }
+            currentPageNumber={gamesList?.data.allGamesHead.currentPageNumber ?? 0}
           />
-        )}
-
-        <GamesPagination
-          pageNumber={parseInt(filters.pageNumber)}
-          handlePagination={handlePagination}
-          totalPages={data?.data.allGamesHead.totalPages || 0}
-        />
-
-        {user?.role === "USER" && (
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild>
-              <button
-                onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 focus:outline-none"
-              >
-                <CreditCard className="h-8 w-8" />
-              </button>
-            </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[540px]">
-              <SheetTitle>Card</SheetTitle>
-              <SheetDescription>
-                <p className="text-sm text-gray-600">Manage your cart and proceed to checkout.</p>
-              </SheetDescription>
-              <Card />
-            </SheetContent>
-          </Sheet>
-        )}
+        ) : null}
+        {user?.role === "USER" ? <CartDrawer /> : null}
       </div>
-      <NotificationSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-        severity={snackbarSeverity}
-      />
     </>
   )
 }

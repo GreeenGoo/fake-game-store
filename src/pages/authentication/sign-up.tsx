@@ -60,9 +60,9 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
       },
       onError: (error) => {
         const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.error.errorMessage
-        : "An unexpected error occurred."
-      setSnackbarMessage(errorMessage)
+          ? error.response?.data?.error.errorMessage
+          : "An unexpected error occurred."
+        setSnackbarMessage(errorMessage)
         setSnackbarSeverity("error")
         setSnackbarOpen(true)
       }

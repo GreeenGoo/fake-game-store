@@ -48,21 +48,24 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   }
 
   const handleForgotPasswordSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-      await forgotPasswordMutation.mutateAsync({ email: resetEmail })
-      setStep("reset")
-      setSnackbarMessage("Reset email sent successfully. Please check your inbox.")
-      setSnackbarSeverity("success")
-      setSnackbarOpen(true)
-    } catch (error) {
-      setSnackbarMessage("Failed to send reset email. Please try again.")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
-    } finally {
-      setIsLoading(false)
-    }
+    // e.preventDefault()
+    // console.log("Start")
+    // setIsLoading(true)
+    // try {
+    //   await forgotPasswordMutation.mutateAsync({ email: resetEmail })
+    //   setStep("reset")
+    //   console.log("We're here")
+    //   setSnackbarMessage("Reset email sent successfully. Please check your inbox.")
+    //   setSnackbarSeverity("success")
+    //   setSnackbarOpen(true)
+    // } catch (error) {
+    //   setSnackbarMessage("Failed to send reset email. Please try again.")
+    //   setSnackbarSeverity("error")
+    //   setSnackbarOpen(true)
+    // } finally {
+    //   setIsLoading(false)
+    // }
+    // console.log("End")
   }
 
   const handleResetPasswordSubmit = async (e: FormEvent) => {
@@ -87,6 +90,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
       setSnackbarSeverity("success")
       setSnackbarOpen(true)
       setStep("login")
+      setPassword("")
       onClose()
     } catch (error) {
       console.error("Password reset failed:", error)

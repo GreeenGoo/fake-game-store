@@ -1,5 +1,4 @@
 import { AllGamesList } from "@/components/game/all-games-list"
-import FiltersForGames from "@/components/game/filters-for-games"
 import GamesPagination from "@/components/game/pagination-for-games"
 import LoadingSpinner from "@/components/loading-spinner"
 import {
@@ -14,6 +13,8 @@ import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
+import Filters from "@/components/Filters"
+import { SelectChangeEvent } from "@mui/material"
 
 export function AllGames() {
   const navigate = useNavigate()
@@ -44,7 +45,12 @@ export function AllGames() {
     "success" | "error" | "info" | "warning"
   >("success")
 
-  const handleChange = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleChange = (
+    event:
+      | SelectChangeEvent<string>
+      | ChangeEvent<HTMLSelectElement | HTMLInputElement>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target
     if (name === "sortBy" && value !== "") {
       setSortBarValue(value)
@@ -65,13 +71,18 @@ export function AllGames() {
         [name]: value
       }))
     } else if (name === "genreList") {
-      setFilters((prevState) => {
-        const newGenres = prevState.genres.includes(value)
-          ? prevState.genres.filter((genre) => genre !== value)
-          : [...prevState.genres, value]
-
-        return { ...prevState, genres: newGenres }
-      })
+      const values = value as unknown as string[]
+      const genreI = filters.genres.findIndex((el) => el === values[values.length - 1])
+      if (genreI === -1) {
+        const newValues = [...filters.genres, values[values.length - 1]]
+        setFilters({ ...filters, genres: newValues })
+        return
+      } else {
+        const newValues = [...filters.genres]
+        newValues.splice(genreI, 1)
+        setFilters({ ...filters, genres: newValues })
+        return
+      }
     } else if (name === "playerSupport") {
       setFilters((prevState) => {
         const newPlayerSupport = prevState.playerSupport.includes(value)
@@ -181,11 +192,11 @@ export function AllGames() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-10 h-screen p-4 bg-gray-100">
+    <div className="flex flex-col justify-center items-center gap-10 p-4 bg-gray-100">
       {(isError || isGenresError || isPlayerSupportError) && (
         <p className="text-lg text-red-600">Error fetching data</p>
       )}
-      <FiltersForGames
+      <Filters
         sortBarValue={sortBarValue}
         pageSize={gamesData?.data.allGamesHead.gamesPerPage || 0}
         searchKeyword={filters.searchKeyword}

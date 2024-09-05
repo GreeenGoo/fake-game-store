@@ -2,6 +2,7 @@ import { GlobalResponse } from "@/types"
 import { OrderDto, PayForOrder } from "@/types/order"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import OrderService from "../api/order"
+import { useSnackbar } from "notistack"
 
 export function useAllOrders() {
   const { data, isLoading, isError } = useQuery<GlobalResponse<OrderDto[]>>({
@@ -60,11 +61,23 @@ export function usePayCurrentOrder() {
 }
 
 export function useCheckoutCurrentOrder() {
+  const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: () => OrderService.checkoutCurrentOrder(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users/me/orders/current"] })
+    },
+    onError: (error) => {
+      enqueueSnackbar(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        "Error when checking out " + JSON.stringify(error.response.data.error.errorMessage),
+        {
+          variant: "error",
+          autoHideDuration: 4000
+        }
+      )
     }
   })
 

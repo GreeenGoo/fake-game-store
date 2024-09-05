@@ -2,13 +2,24 @@ import { GlobalResponse } from "@/types"
 import { ChangeUserPassword, User } from "@/types/user"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import UserService from "@/api/user"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSnackbar } from "notistack"
 
 export function useGetCurrentUser() {
+  const { enqueueSnackbar } = useSnackbar()
   const { data, isLoading, isError, refetch } = useQuery<GlobalResponse<User>>({
     queryKey: ["users/me"],
     queryFn: UserService.getCurrentUser
   })
+
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar("Failed to load user data.", {
+        variant: "error",
+        autoHideDuration: 4000
+      })
+    }
+  }, [isError])
 
   return {
     data,

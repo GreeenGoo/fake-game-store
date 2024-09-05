@@ -37,7 +37,9 @@ export default {
     genres,
     playerSupport
   }: GamesFiltering) => {
-    const response = await api.get(`/${RESOURCE}/active?sort=${sortField}&order=${sortValue}&page=${pageNumber}&size=${pageSize}&search=${searchKeyword}&genres=${genres}&playerSupports=${playerSupport}`)
+    const response = await api.get(
+      `/${RESOURCE}/active?sort=${sortField}&order=${sortValue}&page=${pageNumber}&size=${pageSize}&search=${searchKeyword}&genres=${genres}&playerSupports=${playerSupport}`
+    )
     if (response.status !== 200) {
       throw Error("Error fetching data")
     }
@@ -134,7 +136,7 @@ export default {
 
   activateGame: async (id: string, activate: boolean) => {
     const token = "Bearer " + localStorage.getItem("authToken")
-    var activationType = ""
+    let activationType = ""
     activate ? (activationType = "activation") : (activationType = "deactivation")
     const res = await api.patch(
       `/${RESOURCE}/${activationType}/${id}`,

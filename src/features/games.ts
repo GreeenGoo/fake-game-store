@@ -3,7 +3,8 @@ import GameService from "@/api/games"
 import { GlobalResponse } from "@/types"
 import { GamesList } from "@/types/game"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSnackbar } from "notistack"
 
 // const QUERY_KEY = "games"
 // export function getQueryKey(id?: string) {
@@ -32,7 +33,8 @@ export function useActiveGamesList(filterSettings: GamesFiltering) {
   const {
     data: gamesData,
     isLoading,
-    isError
+    isError,
+    isPending
   } = useQuery<GlobalResponse<GamesList>>({
     queryKey: ["games/active", filterSettings],
     queryFn: () => GameService.getAllActive(filterSettings)
@@ -41,7 +43,8 @@ export function useActiveGamesList(filterSettings: GamesFiltering) {
   return {
     data: gamesData,
     isLoading,
-    isError
+    isError,
+    isPending
   }
 }
 
@@ -82,19 +85,28 @@ export function useDeleteGame() {
 }
 
 export function useGetSingleGame(id: string) {
+  const { enqueueSnackbar } = useSnackbar()
   const {
     data: singleGameData,
     isLoading,
-    isError
+    isError,
+    isFetching
   } = useQuery<GlobalResponse<SingleGame>>({
     queryKey: ["games"],
     queryFn: () => GameService.getSingleGame(id)
   })
 
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar("Error when fetching game data", { variant: "error", autoHideDuration: 4000 })
+    }
+  }, [isError])
+
   return {
     singleGameData,
     isLoading,
-    isError
+    isError,
+    isFetching
   }
 }
 
@@ -166,7 +178,7 @@ export function useActivateGame() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["games/all"] })
     },
-    onError: (error: Error) => {
+    onError: () => {
       setErrorMessage("There should be at least one key to activate game.")
     }
   })

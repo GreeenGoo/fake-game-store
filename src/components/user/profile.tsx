@@ -1,5 +1,6 @@
 import { ChangePassword } from "@/pages/authentication/change-password"
 import { VerificationModal } from "@/pages/authentication/verification"
+import { Button } from "@mui/material"
 
 type ProfilePageProps = {
   user: {
@@ -29,10 +30,9 @@ export default function ProfilePage({
   closeVerification
 }: ProfilePageProps) {
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100">
       <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
-
         <div className="space-y-4">
           <div className="flex justify-between">
             <div className="font-medium text-gray-700">Name:</div>
@@ -59,7 +59,7 @@ export default function ProfilePage({
           <div className="flex justify-between">
             <div className="font-medium text-gray-700">Status:</div>
             <div
-              className={`text-gray-600 ${
+              className={`flex flex-row justify-center items-center gap-4 text-gray-600 ${
                 user.activeStatus === "ACTIVE"
                   ? "text-green-600"
                   : user.activeStatus === "UNVERIFIED"
@@ -67,14 +67,11 @@ export default function ProfilePage({
                     : "text-red-600"
               }`}
             >
-              {user.activeStatus}
+              <p>{user.activeStatus}</p>
               {user.activeStatus === "UNVERIFIED" && (
-                <button
-                  onClick={openVerification}
-                  className="ml-4 bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
+                <Button variant="contained" onClick={openVerification} color="warning">
                   Verify
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -101,13 +98,9 @@ export default function ProfilePage({
         </div>
 
         <hr className="my-6 border-gray-300" />
-
-        <button
-          onClick={openChangePassword}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
+        <Button variant="contained" onClick={openChangePassword} className="w-full">
           Change Password
-        </button>
+        </Button>
       </div>
       <ChangePassword isOpen={isChangePasswordOpen} onClose={closeChangePassword} />
       <VerificationModal isOpen={isVerificationOpen} onClose={closeVerification} />{" "}

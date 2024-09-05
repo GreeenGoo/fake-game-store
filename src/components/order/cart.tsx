@@ -62,7 +62,7 @@ export default function Cart({ orders, handleDelete, handleCheckout, handleClear
   })
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

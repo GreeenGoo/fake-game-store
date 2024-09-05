@@ -1,3 +1,4 @@
+import { useSnackbar } from "notistack"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import AuthenticationService from "@/api/authentication"
 import {
@@ -11,37 +12,60 @@ import { GlobalResponse } from "@/types"
 import { useGetCurrentUser } from "./user"
 
 export function useLogin() {
+  const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const mutation = useMutation<GlobalResponse<LoggedInUser>, Error, Login>({
     mutationFn: (login: Login) => AuthenticationService.login(login),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["login"] })
       localStorage.setItem("authToken", data.data.token)
+      enqueueSnackbar("You have successfully logged in as " + data.data.user.name, {
+        variant: "success",
+        autoHideDuration: 4000
+      })
+    },
+    onError: () => {
+      enqueueSnackbar("Login failed", { variant: "error", autoHideDuration: 4000 })
     }
   })
   return mutation
 }
 
 export function useSignUp() {
+  const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const mutation = useMutation<GlobalResponse<LoggedInUser>, Error, SignUp>({
     mutationFn: (signUp: SignUp) => AuthenticationService.signUp(signUp),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["login"] })
       localStorage.setItem("authToken", data.data.token)
+      enqueueSnackbar("Successful signup")
+    },
+    onError: () => {
+      enqueueSnackbar("Signup failed", { variant: "error", autoHideDuration: 4000 })
     }
   })
   return mutation
 }
 
 export function useForgotPassword() {
+  const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
-
   const mutation = useMutation<GlobalResponse<string>, Error, ForgotPassword>({
     mutationFn: (email: ForgotPassword) => AuthenticationService.sendCodeForResetingPassword(email),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["login"] })
       localStorage.setItem("authToken", "")
+      enqueueSnackbar("Reset email sent successfully. Please check your inbox.", {
+        variant: "success",
+        autoHideDuration: 4000
+      })
+    },
+    onError: () => {
+      enqueueSnackbar("Failed to send reset email. Please try again.", {
+        variant: "error",
+        autoHideDuration: 4000
+      })
     }
   })
 
@@ -49,13 +73,23 @@ export function useForgotPassword() {
 }
 
 export function useResetPasswordWithCode() {
+  const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
-
   const mutation = useMutation<GlobalResponse<LoggedInUser>, Error, ResetPasswordWithCodePlusCode>({
     mutationFn: (passwordData) => AuthenticationService.useResetPasswordWithCode(passwordData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["login"] })
       localStorage.setItem("authToken", "")
+      enqueueSnackbar("Password reset successfully.", {
+        variant: "success",
+        autoHideDuration: 4000
+      })
+    },
+    onError: () => {
+      enqueueSnackbar("Password reset failed. Please try again.", {
+        variant: "error",
+        autoHideDuration: 4000
+      })
     }
   })
 
@@ -64,10 +98,21 @@ export function useResetPasswordWithCode() {
 
 export function useSendVerificationCode() {
   const queryClient = useQueryClient()
+  const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation({
     mutationFn: AuthenticationService.sendVerificationEmail,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["login"] })
+      enqueueSnackbar("Verification code successfully sent to your email", {
+        variant: "success",
+        autoHideDuration: 4000
+      })
+    },
+    onError: () => {
+      enqueueSnackbar("Failed to send verification code", {
+        variant: "error",
+        autoHideDuration: 4000
+      })
     }
   })
 
