@@ -33,7 +33,7 @@ export default function NavBar() {
     isAccessable: boolean
   }[] = [
     { name: "All games", href: "/games/all", current: true, isAccessable: user?.role === "ADMIN" },
-    { name: "Active games", href: "/games/active", current: false, isAccessable: true },
+    { name: "Games", href: "/games/active", current: false, isAccessable: true },
     {
       name: "My orders",
       href: "/users/me/orders",
