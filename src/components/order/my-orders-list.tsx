@@ -38,7 +38,11 @@ export default function MyOrdersList({
     },
     {
       accessorKey: "totalPrice",
-      header: "Total Price"
+      header: "Total Price",
+      cell: ({ getValue }) => {
+        const value = getValue() as number
+        return value.toFixed(2)
+      }
     },
     {
       accessorKey: "status",
@@ -54,7 +58,7 @@ export default function MyOrdersList({
       cell: ({ row }) =>
         row.original.paymentStatus === "UNPAID" ? (
           <button
-            onClick={() => handleCheckoutOrder}
+            onClick={() => handleCheckoutOrder()}
             className="text-green-500 hover:text-green-700"
           >
             Checkout
