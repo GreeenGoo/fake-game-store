@@ -33,7 +33,7 @@ yarn run dev
 
 ### Website Functionality
 
-When the project is run or the website is accessed, the home page is displayed. This page contains a list of active games - games that have one or more keys and have been activated by an admin for purchase. 
+When the project is run or the website is accessed, the home page is displayed. This page contains a list of active games - games that have one or more keys and have been activated by an admin for purchase:
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Not-authorized-user-active-games.jpg" alt="Fake Game Store"/>
@@ -60,14 +60,14 @@ A Not Authorized User can access the active games page and manipulate the list w
 - **Filtering**: Filter games by genres and player support.
 - **Searching**: Search for games using phrases from their titles.
 
-It's important to note that if multiple genres or player supports are selected, any game will be found if it has at least one match from the chosen list. This allows users to efficiently explore the available games even without signing in.
+It's important to note that if multiple genres or player supports are selected, any game will be found if it has at least one match from the chosen list. This allows users to efficiently explore the available games even without signing in:
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Not-authorized-user-active-games-with-filters.jpg" alt="Fake Game Store"/>
 </div>
 <p></p> 
 
-Additionally, users can see the full information about every game by clicking on it. 
+Additionally, users can see the full information about every game by clicking on it: 
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Single-game.jpg" alt="Fake Game Store"/>
@@ -76,7 +76,7 @@ Additionally, users can see the full information about every game by clicking on
 
 ### Signing Up
 
-Users can also register on the website by following simple instructions. Please note that after registration, the user will not be verified until he completes the verification through his email (see further instructions). Also in the end of registration User will get a message on his email for his account verification and will be logged in authomatically.
+Users can also register on the website by following simple instructions. Please note that after registration, the user will not be verified until he completes the verification through his email (see further instructions). Also in the end of registration the user will get a message on his email for his account verification and will be logged in authomatically:
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Sign-up-register-form.jpg" alt="Fake Game Store"/>
@@ -85,7 +85,7 @@ Users can also register on the website by following simple instructions. Please 
 
 ### User
 
-If a user already has an account, he can press the login button after clicking on the round icon in the top corner of the navigation bar. Here, he can enter their email and password to sign in. 
+If a user already has an account, he can press the login button after clicking on the round icon in the top corner of the navigation bar. Here, he can enter their email and password to sign in: 
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Login-form.jpg" alt="Fake Game Store"/>
@@ -106,7 +106,7 @@ A verification code will then be sent to his email:
 </div>
 <p></p>
 
-, which he can use to access a new form and enter a new password:
+, which he can use after being automatically directed to a new form to enter a new password:
 
 <div align="center">
   <img src="https://github.com/GreeeenGoo/fs18_java_frontend/blob/main/assets/Forgot-password-new-password-form.jpg" alt="Fake Game Store"/>
