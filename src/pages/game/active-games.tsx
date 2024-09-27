@@ -77,13 +77,18 @@ export function ActiveGames() {
         return
       }
     } else if (name === "playerSupport") {
-      setFilters((prevState) => {
-        const newPlayerSupport = prevState.playerSupport.includes(value)
-          ? prevState.playerSupport.filter((playerS) => playerS !== value)
-          : [...prevState.playerSupport, value]
-
-        return { ...prevState, playerSupport: newPlayerSupport }
-      })
+      const values = value as unknown as string[]
+      const playerSupportI = filters.playerSupport.findIndex((el) => el === values[values.length - 1])
+      if (playerSupportI === -1) {
+        const newValues = [...filters.playerSupport, values[values.length - 1]]
+        setFilters({ ...filters, playerSupport: newValues })
+        return
+      } else {
+        const newValues = [...filters.playerSupport]
+        newValues.splice(playerSupportI, 1)
+        setFilters({ ...filters, playerSupport: newValues })
+        return
+      }
     }
   }
 

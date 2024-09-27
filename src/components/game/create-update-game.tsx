@@ -1,4 +1,7 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid"
+// import { useState } from "react"
+// import { Cloudinary } from "@cloudinary/url-gen"
+// import UploadWidget from "./upload-widget"
 
 type CreateUpdateGameProps = {
   gameTitle: string
@@ -39,6 +42,21 @@ export default function CreateUpdateGameForm({
   handleCancel,
   handleSave
 }: CreateUpdateGameProps) {
+  // const [publicId, setPublicId] = useState("")
+  // const [cloudName] = useState("dtoob7izs")
+  // const [uploadPreset] = useState("aoh4fpwm")
+  // const [uwConfig] = useState({
+  //   cloudName,
+  //   uploadPreset
+  // })
+  // const cld = new Cloudinary({
+  //   cloud: {
+  //     cloudName
+  //   }
+  // })
+
+  // const myImage = cld.image(publicId)
+
   return (
     <form className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <div className="space-y-6">
@@ -158,6 +176,8 @@ export default function CreateUpdateGameForm({
               </button>
             </div>
           </div>
+
+          {/* <UploadWidget /> */}
 
           <div>
             <label htmlFor="images" className="block text-sm font-medium text-gray-700">
