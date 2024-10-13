@@ -17,7 +17,7 @@
 9. [Features for Future](#features-for-future)
 
 ## Welcome
-Welcome to the **Fake Game Store** frontend project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the backend that I developed for the project with my team [here](https://github.com/GreeeenGoo/fake-game-store-backend).
+Welcome to the **Fake Game Store** frontend project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the backend that I developed for the project with my team [here](https://github.com/GreeenGoo/fake-game-store-backend).
 
 > **Please Note**: This website was developed for educational purposes. All data, including the games and purchases, is entirely fake. You cannot buy any real games through this platform.
 
@@ -37,7 +37,7 @@ This project represents my first large-scale **frontend** work, which I complete
 
 You can access this app through the following link: [Fake Game Store](https://fake-game-uladkruk-dynsb5rly-greeeengoos-projects.vercel.app/games/active). This version is hosted on Vercel and connected to a database on Render.com. Please note, some performance issues may occur since it's hosted on Render's free tier, which has limitations on space and data access speed.
 
-Alternatively, if you want to run the development version, clone this project, clone the local database (see the instructions for setting up the local backend part [here](https://github.com/GreeeenGoo/fake-game-store-backend?tab=readme-ov-file#local-setup)) and run the following command to connect it to your local database:
+Alternatively, if you want to run the development version, clone this project, clone the local database (see the instructions for setting up the local backend part [here](https://github.com/GreeenGoo/fake-game-store-backend?tab=readme-ov-file#local-setup)) and run the following command to connect it to your local database:
 
 ```bash
 yarn run dev
