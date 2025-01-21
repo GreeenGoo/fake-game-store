@@ -84,6 +84,22 @@ export default function CreateUpdateGame() {
     } as CreateOrUpdateGame
   }
 
+  const handleAddThumbnail = (imageURL: string) => {
+    setNewGame((prevState) => ({
+      ...prevState,
+      thumbnail: imageURL
+    }))
+  }
+
+  const handleAddImage = (imageURL: string) => {
+    // const newArray: string[] = []
+    // newArray.push(imageURL)
+    setNewGame((prevState) => ({
+      ...prevState,
+      images: [...prevState.images, ...[imageURL]]
+    }))
+  }
+
   const handlenewGameChanges = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -120,26 +136,8 @@ export default function CreateUpdateGame() {
         }
         reader.readAsDataURL(file)
       }
-    } else if (name === "images") {
-      const { files } = event.target as HTMLInputElement
-      if (files) {
-        const newImages: string[] = []
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i]
-          const reader = new FileReader()
-          reader.onloadend = () => {
-            newImages.push(reader.result as string)
-            if (newImages.length === files.length) {
-              setNewGame((prevState) => ({
-                ...prevState,
-                images: [...prevState.images, ...newImages]
-              }))
-            }
-          }
-          reader.readAsDataURL(file)
-        }
-      }
-    } else if (name === "releaseDate") {
+    }
+    else if (name === "releaseDate") {
       setNewGame((prevState) => ({
         ...prevState,
         releaseDate: new Date(value)
@@ -236,6 +234,8 @@ export default function CreateUpdateGame() {
         handleRemoveImage={handleRemoveImage}
         handleCancel={handleCancel}
         handleSave={handleSave}
+        handleAddImage={handleAddImage}
+        handleAddThumbnail={handleAddThumbnail}
       />
       <NotificationSnackbar
         open={snackbarOpen}

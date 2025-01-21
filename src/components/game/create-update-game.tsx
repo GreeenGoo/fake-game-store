@@ -1,7 +1,5 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid"
-// import { useState } from "react"
-// import { Cloudinary } from "@cloudinary/url-gen"
-// import UploadWidget from "./upload-widget"
+import { useState } from "react"
 
 type CreateUpdateGameProps = {
   gameTitle: string
@@ -22,6 +20,8 @@ type CreateUpdateGameProps = {
   handleRemoveImage: (image: string) => void
   handleCancel: () => void
   handleSave: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  handleAddImage: (imageURL: string) => void
+  handleAddThumbnail: (imageURL: string) => void
 }
 
 export default function CreateUpdateGameForm({
@@ -40,22 +40,35 @@ export default function CreateUpdateGameForm({
   handlenewGameChanges,
   handleRemoveImage,
   handleCancel,
-  handleSave
+  handleSave,
+  handleAddImage,
+  handleAddThumbnail
 }: CreateUpdateGameProps) {
-  // const [publicId, setPublicId] = useState("")
-  // const [cloudName] = useState("dtoob7izs")
-  // const [uploadPreset] = useState("aoh4fpwm")
-  // const [uwConfig] = useState({
-  //   cloudName,
-  //   uploadPreset
-  // })
-  // const cld = new Cloudinary({
-  //   cloud: {
-  //     cloudName
-  //   }
-  // })
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isOtherDialogOpen, setIsOtherDialogOpen] = useState(false)
+  const [imageUrl, setImageUrl] = useState("")
 
-  // const myImage = cld.image(publicId)
+  const handleInputClick = (event: React.MouseEvent) => {
+    event.preventDefault()
+    if (event.target.name === "thumbnail") setIsOtherDialogOpen(true)
+    else if (event.target.name === "images") setIsDialogOpen(true)
+  }
+
+  const handleCloseDialog = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault()
+    setIsDialogOpen(false)
+    setIsOtherDialogOpen(false)
+    setImageUrl("")
+  }
+
+  const handleDialogOk = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault()
+    if (imageUrl.trim()) {
+      if (event.currentTarget.name === "images") handleAddImage(imageUrl)
+      else if (event.currentTarget.name === "thumbnail") handleAddThumbnail(imageUrl)
+    }
+    handleCloseDialog(event)
+  }
 
   return (
     <form className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -159,21 +172,56 @@ export default function CreateUpdateGameForm({
               ) : (
                 <UserCircleIcon aria-hidden="true" className="h-16 w-16 text-gray-300" />
               )}
-              <input
-                type="file"
+              <button
                 id="thumbnail"
                 name="thumbnail"
-                accept="image/*"
-                onChange={handlenewGameChanges}
-                className="sr-only"
-              />
-              <button
+                onClick={handleInputClick}
+                className="mt-2 ml-5 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 bg-indigo-500 text-white"
+              >
+                Upload Thumbnail
+              </button>
+
+              {isOtherDialogOpen && (
+                <div
+                  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                  role="dialog"
+                >
+                  <div className="bg-white p-6 rounded shadow-lg w-96">
+                    <h2 className="text-lg font-bold mb-4">Enter Thumbnail URL</h2>
+                    <input
+                      type="text"
+                      placeholder="https://example.com/image.jpg"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full p-2 mb-4"
+                    />
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={handleCloseDialog}
+                        className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        id="thumbnail"
+                        name="thumbnail"
+                        onClick={handleDialogOk}
+                        className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+                      >
+                        OK
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* <button
                 type="button"
                 className="ml-4 px-3 py-1.5 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                 onClick={() => document.getElementById("thumbnail")?.click()}
               >
                 Change
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -202,7 +250,52 @@ export default function CreateUpdateGameForm({
                   </div>
                 ))}
               </div>
-              <input
+              <div>
+                {/* Input acting as a button */}
+                <button
+                  id="images"
+                  name="images"
+                  onClick={handleInputClick}
+                  className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 bg-indigo-500 text-white"
+                >
+                  Upload Image
+                </button>
+
+                {isDialogOpen && (
+                  <div
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                    role="dialog"
+                  >
+                    <div className="bg-white p-6 rounded shadow-lg w-96">
+                      <h2 className="text-lg font-bold mb-4">Enter Image URL</h2>
+                      <input
+                        type="text"
+                        placeholder="https://example.com/image.jpg"
+                        value={imageUrl}
+                        onChange={(e) => setImageUrl(e.target.value)}
+                        className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full p-2 mb-4"
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={handleCloseDialog}
+                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          id="images"
+                          name="images"
+                          onClick={handleDialogOk}
+                          className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* <input
                 type="file"
                 id="images"
                 name="images"
@@ -210,7 +303,7 @@ export default function CreateUpdateGameForm({
                 multiple
                 onChange={handlenewGameChanges}
                 className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+              /> */}
             </div>
           </div>
 
