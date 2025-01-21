@@ -17,13 +17,13 @@
 9. [Features for Future](#features-for-future)
 
 ## Welcome
-Welcome to the **Fake Game Store** frontend project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the backend that I developed for the project with my team [here](https://github.com/GreeenGoo/fake-game-store-backend).
+Welcome to the **Fake Game Store** Full-Stack project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the [Backend Part](https://github.com/GreeenGoo/fake-game-store-backend) of the project that I developed with my team.
 
 > **Please Note**: This website was developed for educational purposes. All data, including the games and purchases, is entirely fake. You cannot buy any real games through this platform.
 
 ### About the Project
 
-This project represents my first large-scale **frontend** work, which I completed over the course of 3 weeks. Its purpose was to enhance my skills in frontend development, server communication, and the design of a seamless user experience for an e-commerce application.
+This project represents my first large-scale **Full-Stack** work, which I completed over the course of 3 weeks. Its purpose was to enhance my skills in frontend development, server communication, and the design of a seamless user experience for an e-commerce application.
 
 ### Technologies Used
 
