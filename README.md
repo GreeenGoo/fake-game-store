@@ -1,4 +1,4 @@
-# Fake Game Store - Frontend
+# Fake Game Store
 
 <div align="center">
   <img src="https://github.com/GreeenGoo/fake-game-store-frontend/blob/main/assets/main-picture" alt="Fake Game Store Main Photo" width="400"/>
