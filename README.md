@@ -35,9 +35,7 @@ This project represents my first large-scale **Full-Stack** work, which I comple
 
 ### Setup
 
-You can access this app through the following link: [Fake Game Store](https://fake-game-uladkruk-dynsb5rly-greeeengoos-projects.vercel.app/games/active). This version is hosted on Vercel and connected to a database on Render.com. Please note, some performance issues may occur since it's hosted on Render's free tier, which has limitations on space and data access speed.
-
-Alternatively, if you want to run the development version, clone this project, clone the local database (see the instructions for setting up the local backend part [here](https://github.com/GreeenGoo/fake-game-store-backend?tab=readme-ov-file#local-setup)) and run the following command to connect it to your local database:
+If you want to run the development version, clone this project, clone the local database (see the instructions for setting up the local backend part [here](https://github.com/GreeenGoo/fake-game-store-backend?tab=readme-ov-file#local-setup)) and run the following command to connect it to your local database:
 
 ```bash
 yarn run dev
