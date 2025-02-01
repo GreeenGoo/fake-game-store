@@ -1,13 +1,7 @@
-import { AllGamesList } from "@/components/game/all-games-list"
+import { AllGamesList } from "@/components/game/AllGamesList"
 import GamesPagination from "@/components/game/GamesPagination"
 import LoadingSpinner from "@/components/loading-spinner"
-import {
-  useActivateGame,
-  useAddGameKey,
-  useAllGamesList,
-  useGenres,
-  usePlayerSupports
-} from "@/features/games"
+import { useActivateGame, useAddGameKey, useAllGamesList, useGenres, usePlayerSupports } from "@/features/games"
 import { GamesFiltering } from "@/types/game"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -15,15 +9,13 @@ import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
 import Filters from "@/components/game/Filters"
 import { SelectChangeEvent } from "@mui/material"
+import { Button } from "@mui/material"
+import "./styles/AllGames.css"
 
 export function AllGames() {
   const navigate = useNavigate()
   const { genres, isLoading: isGenresLoading, isError: isGenresError } = useGenres()
-  const {
-    playerSupports,
-    isLoading: isPlayerSupportLoading,
-    isError: isPlayerSupportError
-  } = usePlayerSupports()
+  const { playerSupports, isLoading: isPlayerSupportLoading, isError: isPlayerSupportError } = usePlayerSupports()
   const [sortBarValue, setSortBarValue] = useState<string>("")
   const [filters, setFilters] = useState<GamesFiltering>({
     sortField: "",
@@ -41,47 +33,30 @@ export function AllGames() {
   const addGameKey = useAddGameKey()
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "error" | "info" | "warning"
-  >("success")
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success")
 
   const handleChange = (
-    event:
-      | SelectChangeEvent<string>
-      | ChangeEvent<HTMLSelectElement | HTMLInputElement>
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: SelectChangeEvent<string> | ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target
     if (name === "sortBy" && value !== "") {
       setSortBarValue(value)
       const [sortField, sortValue] = value.split("_")
-      setFilters((prevState) => ({
-        ...prevState,
-        sortField,
-        sortValue
-      }))
+      setFilters((prevState) => ({ ...prevState, sortField, sortValue }))
     } else if (name === "pageSize" && value !== "") {
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value
-      }))
+      setFilters((prevState) => ({ ...prevState, [name]: value }))
     } else if (name === "searchKeyword") {
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value
-      }))
+      setFilters((prevState) => ({ ...prevState, [name]: value }))
     } else if (name === "genreList") {
       const values = value as unknown as string[]
-      const genreI = filters.genres.findIndex((el) => el === values[values.length - 1])
-      if (genreI === -1) {
+      const genreIndex = filters.genres.findIndex((el) => el === values[values.length - 1])
+      if (genreIndex === -1) {
         const newValues = [...filters.genres, values[values.length - 1]]
         setFilters({ ...filters, genres: newValues })
-        return
       } else {
         const newValues = [...filters.genres]
-        newValues.splice(genreI, 1)
+        newValues.splice(genreIndex, 1)
         setFilters({ ...filters, genres: newValues })
-        return
       }
     } else if (name === "playerSupport") {
       setFilters((prevState) => {
@@ -113,11 +88,7 @@ export function AllGames() {
 
   const handleAddGame = () => {
     navigate(`/games/add`, {
-      state: {
-        myData: {
-          type: "creating"
-        }
-      }
+      state: { myData: { type: "creating" } }
     })
   }
 
@@ -131,12 +102,7 @@ export function AllGames() {
 
   const handleUpdateGame = (id: string) => {
     navigate(`/games/add`, {
-      state: {
-        myData: {
-          type: "updating",
-          id
-        }
-      }
+      state: { myData: { type: "updating", id } }
     })
   }
 
@@ -192,10 +158,8 @@ export function AllGames() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-10 p-4 bg-gray-100">
-      {(isError || isGenresError || isPlayerSupportError) && (
-        <p className="text-lg text-red-600">Error fetching data</p>
-      )}
+    <div className="container">
+      {(isError || isGenresError || isPlayerSupportError) && <p className="error-message">Error fetching data</p>}
       <Filters
         sortBarValue={sortBarValue}
         pageSize={gamesData?.data.allGamesHead.gamesPerPage || 0}
@@ -207,23 +171,20 @@ export function AllGames() {
         handleReset={handleReset}
         handleChange={handleChange}
       />
-      <button
-        onClick={handleAddGame}
-        className="bg-blue-500 border border-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 flex items-center space-x-2 mb-4"
-      >
+      <Button variant="contained" color="primary" onClick={handleAddGame} className="button">
         <i className="fas fa-plus"></i>
         <span>Add Game</span>
-      </button>
+      </Button>
       {gamesData && (
         <AllGamesList
-          games={gamesData?.data.allGamesList || []}
-          tableRef={tableRef}
-          selectedGameId={selectedGameId || ""}
-          handleRowClick={handleRowClick}
-          handleOpenGame={handleOpenGame}
-          handleUpdateGame={handleUpdateGame}
-          handleAddKey={handleAddKey}
-          handleActivateGame={handleActivateGame}
+        games={gamesData?.data.allGamesList || []}
+        tableRef={tableRef}
+        selectedGameId={selectedGameId || ""}
+        handleRowClick={handleRowClick}
+        handleOpenGame={handleOpenGame}
+        handleUpdateGame={handleUpdateGame}
+        handleAddKey={handleAddKey}
+        handleActivateGame={handleActivateGame}
         />
       )}
       <GamesPagination
@@ -232,10 +193,10 @@ export function AllGames() {
         totalPages={gamesData?.data.allGamesHead.totalPages || 0}
       />
       <NotificationSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        onClose={() => setSnackbarOpen(false)}
-        severity={snackbarSeverity}
+         open={snackbarOpen}
+         message={snackbarMessage}
+         onClose={() => setSnackbarOpen(false)}
+         severity={snackbarSeverity}
       />
     </div>
   )
