@@ -1,0 +1,31 @@
+.game-row {
+    & > td {
+      cursor: pointer;
+    }
+    &:last-child td, &:last-child th {
+      border: 0;
+    }
+  }
+  
+  .game-thumbnail {
+    width: 150px;  
+    height: 100px;      
+    object-fit: cover;  
+    overflow: hidden;  
+    flex-shrink: 0;  
+  }
+  
+  .game-name {
+    max-width: 100px;
+  }
+  
+  .add-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .add-button p {
+    margin-left: 8px;
+  }
+  

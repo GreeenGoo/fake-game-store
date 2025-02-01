@@ -11,6 +11,7 @@ import {
 } from "@mui/material"
 import { ChangeEvent } from "react"
 import RotateLeftIcon from "@mui/icons-material/RotateLeft"
+import "./styles/Filters.css"
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -70,8 +71,8 @@ export default function Filters({
   ]
 
   return (
-    <div className="flex flex-wrap gap-4">
-      <Box sx={{ minWidth: 200 }}>
+    <div className="filters-container">
+      <Box className="filters-item">
         <FormControl fullWidth>
           <InputLabel id="sortBy-label">Sort by...</InputLabel>
           <Select
@@ -82,17 +83,15 @@ export default function Filters({
             label="Sort by..."
             onChange={handleChange}
           >
-            {sortBy.map((el) => {
-              return (
-                <MenuItem value={el.value} key={el.value}>
-                  {el.label}
-                </MenuItem>
-              )
-            })}
+            {sortBy.map((el) => (
+              <MenuItem value={el.value} key={el.value}>
+                {el.label}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
-      <Box sx={{ minWidth: 200 }}>
+      <Box className="filters-item">
         <FormControl fullWidth>
           <InputLabel id="pageSize-label">Games per page</InputLabel>
           <Select
@@ -103,41 +102,29 @@ export default function Filters({
             label="Games per page"
             onChange={handleChange}
           >
-            {gamesPerPage.map((el) => {
-              return (
-                <MenuItem value={el.value} key={el.value}>
-                  {el.label}
-                </MenuItem>
-              )
-            })}
+            {gamesPerPage.map((el) => (
+              <MenuItem value={el.value} key={el.value}>
+                {el.label}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
-      {genresList ? (
-        <Box sx={{ minWidth: 200 }}>
+      {genresList && (
+        <Box className="filters-item">
           <FormControl fullWidth>
             <InputLabel id="genreList-label">Genres</InputLabel>
             <Select
               labelId="genreList-label"
               id="genreList"
               name="genreList"
-              multiple={true}
+              multiple
               value={filteredGenres as unknown as string}
               onChange={handleChange}
-              input={
-                <OutlinedInput
-                  label="Genre"
-                  sx={{
-                    maxWidth: 200,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    height: "auto"
-                  }}
-                />
-              }
+              input={<OutlinedInput label="Genre" />}
               MenuProps={MenuProps}
             >
-              {genresList?.map((name) => (
+              {genresList.map((name) => (
                 <MenuItem key={name} value={name}>
                   {name}
                 </MenuItem>
@@ -145,31 +132,21 @@ export default function Filters({
             </Select>
           </FormControl>
         </Box>
-      ) : null}
-      <Box sx={{ minWidth: 200 }}>
+      )}
+      <Box className="filters-item">
         <FormControl fullWidth>
           <InputLabel id="playerSupport-label">Player support</InputLabel>
           <Select
             labelId="playerSupport-label"
             id="playerSupport"
             name="playerSupport"
-            multiple={true}
+            multiple
             value={filteredPlayerSupport as unknown as string}
             onChange={handleChange}
-            input={
-              <OutlinedInput
-                label="Player support"
-                sx={{
-                  maxWidth: 200,
-                  display: "flex",
-                  flexWrap: "wrap",
-                  height: "auto"
-                }}
-              />
-            }
+            input={<OutlinedInput label="Player support" />}
             MenuProps={MenuProps}
           >
-            {playerSupportList?.map((name) => (
+            {playerSupportList.map((name) => (
               <MenuItem key={name} value={name}>
                 {name}
               </MenuItem>
@@ -182,7 +159,7 @@ export default function Filters({
         type="text"
         name="searchKeyword"
         label="Search keyword"
-        sx={{ maxWidth: 200 }}
+        className="filters-item"
         value={searchKeyword}
         onChange={handleChange}
       />

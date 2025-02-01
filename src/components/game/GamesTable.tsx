@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
@@ -9,12 +8,12 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { useNavigate } from "react-router-dom"
 import AddIcon from "@mui/icons-material/Add"
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import { Game, GamesList } from "@/types/game"
 import { useAddGameToCard, useDeleteGameFromCard } from "@/features/order"
 import { useSnackbar } from "notistack"
 import useUser from "@/context/UserContext"
 import { Stack, Pagination, Button } from "@mui/material"
+import "./styles/GamesTable.css"
 
 export default function GamesTable({
   data,
@@ -54,35 +53,35 @@ export default function GamesTable({
     })
   }
 
-  const handleDeleteFromOrder = (id: string) => {
-    deleteGameFromCard.mutate(id, {
-      onError: () => {
-        enqueueSnackbar("Error when deleting a game from your cart", {
-          variant: "error",
-          autoHideDuration: 4000
-        })
-      },
-      onSuccess: () => {
-        const foundI = addedGames.indexOf(id)
-        if (foundI !== -1) {
-          const newAddedGames = [...addedGames]
-          newAddedGames.splice(foundI, 1)
-          setAddedGames(newAddedGames)
-          enqueueSnackbar("Removed from your cart", { variant: "success", autoHideDuration: 4000 })
-        } else {
-          enqueueSnackbar("Error when deleting a game from your cart", {
-            variant: "error",
-            autoHideDuration: 4000
-          })
-        }
-      }
-    })
-  }
+  // const handleDeleteFromOrder = (id: string) => {
+  //   deleteGameFromCard.mutate(id, {
+  //     onError: () => {
+  //       enqueueSnackbar("Error when deleting a game from your cart", {
+  //         variant: "error",
+  //         autoHideDuration: 4000
+  //       })
+  //     },
+  //     onSuccess: () => {
+  //       const foundI = addedGames.indexOf(id)
+  //       if (foundI !== -1) {
+  //         const newAddedGames = [...addedGames]
+  //         newAddedGames.splice(foundI, 1)
+  //         setAddedGames(newAddedGames)
+  //         enqueueSnackbar("Removed from your cart", { variant: "success", autoHideDuration: 4000 })
+  //       } else {
+  //         enqueueSnackbar("Error when deleting a game from your cart", {
+  //           variant: "error",
+  //           autoHideDuration: 4000
+  //         })
+  //       }
+  //     }
+  //   })
+  // }
 
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="table">
+        <Table aria-label="table">
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -98,17 +97,10 @@ export default function GamesTable({
           </TableHead>
           <TableBody>
             {data.allGamesList.map((row, i) => (
-              <TableRow
-                key={row.name + i}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  onClick={() => navigate(`/games/${row.id}`)}
-                  sx={{ maxWidth: 100 }}
-                >
+              <TableRow key={row.name + i} className="game-row">
+                <TableCell component="th" scope="row" onClick={() => navigate(`/games/${row.id}`)}>
                   <img
+                    className="game-thumbnail"
                     src={
                       row.thumbnail !== ""
                         ? row.thumbnail
@@ -121,7 +113,7 @@ export default function GamesTable({
                 <TableCell
                   align="right"
                   onClick={() => navigate(`/games/${row.id}`)}
-                  sx={{ maxWidth: 100 }}
+                  className="game-name"
                 >
                   {row.name}
                 </TableCell>
@@ -154,7 +146,7 @@ export default function GamesTable({
                         handleAddToOrder(row.id)
                       }}
                     >
-                      <div className="flex flex-row justify-center items-center">
+                      <div className="add-button">
                         <AddIcon color="success" />
                         <p>Add</p>
                       </div>
@@ -166,16 +158,6 @@ export default function GamesTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack spacing={2}>
-        <Pagination
-          page={currentPageNumber}
-          count={amountOfPages}
-          shape="rounded"
-          onChange={(_, pageN) => {
-            onChangePage(pageN)
-          }}
-        />
-      </Stack>
     </>
   )
 }

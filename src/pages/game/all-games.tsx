@@ -1,5 +1,5 @@
 import { AllGamesList } from "@/components/game/all-games-list"
-import GamesPagination from "@/components/game/pagination-for-games"
+import GamesPagination from "@/components/game/GamesPagination"
 import LoadingSpinner from "@/components/loading-spinner"
 import {
   useActivateGame,
@@ -13,7 +13,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
-import Filters from "@/components/Filters"
+import Filters from "@/components/game/Filters"
 import { SelectChangeEvent } from "@mui/material"
 
 export function AllGames() {

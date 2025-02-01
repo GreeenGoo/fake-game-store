@@ -1,0 +1,27 @@
+.filters-container {
+  margin: 20px 0px 20px 0px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.filters-item {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.MuiFormControl-root {
+  margin-bottom: 16px;
+}
+
+.MuiSelect-root {
+  display: block;
+}
+
+button#resetButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
