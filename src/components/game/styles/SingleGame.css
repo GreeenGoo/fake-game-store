@@ -1,0 +1,50 @@
+.single-game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 6rem;
+  }
+  
+  .card-container {
+    max-width: 50%;
+  }
+  
+  .card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card-genres, .card-player-support, .card-system-requirements, .card-sku {
+    color: #6c757d;
+    margin: 1rem 0;
+  }
+  
+  .card-price {
+    color: #6c757d;
+    font-size: 1.25rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-subtext {
+    font-size: 0.875rem;
+  }
+  
+  .card-actions {
+    margin-left: 1rem;
+    padding-bottom: 2rem;
+  }
+  

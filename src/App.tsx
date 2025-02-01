@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { SnackbarProvider } from "notistack"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 import { ActiveGames } from "./pages/game/ActiveGames"
-import { Game } from "./pages/game/single-game"
+import { SingleGame } from "./pages/game/SingleGame"
 import { AllGames } from "./pages/game/all-games"
 import CreateUpdateGame from "./pages/game/create-update-game"
 import { UserProfilePage } from "./pages/user/profile"
@@ -26,7 +26,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/games/active" replace />} />
               <Route path="/games/active" element={<ActiveGames />} />
-              <Route path="/games/:id" element={<Game />} />
+              <Route path="/games/:id" element={<SingleGame />} />
               <Route path="/not-authorized" element={<p>Not Authorized</p>} />
               <Route
                 path="/games/all"

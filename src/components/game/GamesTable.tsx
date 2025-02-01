@@ -12,14 +12,11 @@ import { Game, GamesList } from "@/types/game"
 import { useAddGameToCard, useDeleteGameFromCard } from "@/features/order"
 import { useSnackbar } from "notistack"
 import useUser from "@/context/UserContext"
-import { Stack, Pagination, Button } from "@mui/material"
+import { Button } from "@mui/material"
 import "./styles/GamesTable.css"
 
 export default function GamesTable({
-  data,
-  amountOfPages,
-  onChangePage,
-  currentPageNumber
+  data
 }: {
   data: GamesList
   amountOfPages: number

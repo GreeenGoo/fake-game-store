@@ -1,4 +1,4 @@
-import { Game } from "@/pages/game/single-game"
+// import { Game } from "@/pages/game/single-game"
 
 export type Game = {
   id: string
