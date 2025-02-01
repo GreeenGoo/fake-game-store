@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import { ActiveGames } from "./pages/game/ActiveGames"
 import { SingleGame } from "./pages/game/SingleGame"
 import { AllGames } from "./pages/game/AllGames"
-import CreateUpdateGame from "./pages/game/create-update-game"
+import CreateUpdateGame from "./pages/game/CreateUpdateGame"
 import { UserProfilePage } from "./pages/user/profile"
 import { Card } from "./pages/orders/cart"
 import MyOrders from "./pages/orders/my-orders"

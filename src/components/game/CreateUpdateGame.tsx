@@ -1,5 +1,5 @@
-import { UserCircleIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
+import "./styles/CreateUpdateGame.css"
 
 type CreateUpdateGameProps = {
   gameTitle: string
@@ -71,15 +71,15 @@ export default function CreateUpdateGameForm({
   }
 
   return (
-    <form className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <div className="space-y-6">
-        <div className="border-b border-gray-300 pb-6">
-          <h2 className="text-2xl font-bold text-gray-900">New Game</h2>
+    <form className="form-container">
+      <div className="form-content">
+        <div className="form-header">
+          <h2>New Game</h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-y-6">
-          <div>
-            <label htmlFor="game_title" className="block text-sm font-medium text-gray-700">
+        <div className="grid-container">
+          <div className="input-container-game-title">
+            <label htmlFor="game_title" className="input-label-game-title">
               Game Title
             </label>
             <input
@@ -89,12 +89,12 @@ export default function CreateUpdateGameForm({
               onChange={handlenewGameChanges}
               type="text"
               placeholder="Assassin's Creed"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 pl-2"
+              className="input-field-game-title"
             />
           </div>
 
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          <div className="textarea-container-description">
+            <label htmlFor="description" className="textarea-label-description">
               Description
             </label>
             <textarea
@@ -104,12 +104,12 @@ export default function CreateUpdateGameForm({
               value={gameDescription}
               onChange={handlenewGameChanges}
               placeholder="Assassin's Creed is an action-adventure game series..."
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 pl-2"
+              className="textarea-field-description"
             />
           </div>
 
-          <div>
-            <label htmlFor="genres" className="block text-sm font-medium text-gray-700">
+          <div className="select-container-genres">
+            <label htmlFor="genres" className="select-label-genres">
               Select Genres
             </label>
             <select
@@ -118,7 +118,7 @@ export default function CreateUpdateGameForm({
               multiple
               value={newGameGenres}
               onChange={handlenewGameChanges}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="select-field-genres"
             >
               {genresList.map((genre, index) => (
                 <option key={index} value={genre}>
@@ -126,15 +126,15 @@ export default function CreateUpdateGameForm({
                 </option>
               ))}
             </select>
-            <ul className="mt-2 list-disc list-inside text-gray-700">
+            <ul className="genre-list">
               {newGameGenres &&
                 Array.isArray(newGameGenres) &&
                 newGameGenres.map((genre, index) => <li key={index}>{genre}</li>)}
             </ul>
           </div>
 
-          <div>
-            <label htmlFor="playerSupport" className="block text-sm font-medium text-gray-700">
+          <div className="select-container-player-support">
+            <label htmlFor="playerSupport" className="select-label-player-support">
               Select Player Supports
             </label>
             <select
@@ -143,7 +143,7 @@ export default function CreateUpdateGameForm({
               multiple
               value={newGamePlayerSupport}
               onChange={handlenewGameChanges}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="select-field-player-support"
             >
               {playerSupportList.map((playerSupport, index) => (
                 <option key={index} value={playerSupport}>
@@ -151,54 +151,59 @@ export default function CreateUpdateGameForm({
                 </option>
               ))}
             </select>
-            <ul className="mt-2 list-disc list-inside text-gray-700">
+            <ul className="player-support-list">
               {newGamePlayerSupport.map((support: string, index: number) => (
                 <li key={index}>{support}</li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
+          <div className="thumbnail-container">
+            <label htmlFor="thumbnail" className="thumbnail-label">
               Thumbnail
             </label>
             <div className="mt-2 flex items-center">
               {thumbnail ? (
-                <img
-                  src={thumbnail as string}
-                  alt="Thumbnail"
-                  className="h-16 w-16 rounded-full object-cover"
-                />
+                <img src={thumbnail as string} alt="Thumbnail" className="thumbnail-image" />
               ) : (
-                <UserCircleIcon aria-hidden="true" className="h-16 w-16 text-gray-300" />
+                <svg
+                  className="icon-default"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 1c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               )}
               <button
                 id="thumbnail"
                 name="thumbnail"
                 onClick={handleInputClick}
-                className="mt-2 ml-5 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 bg-indigo-500 text-white"
+                className="thumbnail-upload-button"
               >
                 Upload Thumbnail
               </button>
 
               {isOtherDialogOpen && (
-                <div
-                  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                  role="dialog"
-                >
-                  <div className="bg-white p-6 rounded shadow-lg w-96">
-                    <h2 className="text-lg font-bold mb-4">Enter Thumbnail URL</h2>
+                <div className="dialog-overlay" role="dialog">
+                  <div className="dialog-box">
+                    <h2 className="dialog-header">Enter Thumbnail URL</h2>
                     <input
                       type="text"
                       placeholder="https://example.com/image.jpg"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full p-2 mb-4"
+                      className="dialog-input"
                     />
-                    <div className="flex justify-end gap-2">
+                    <div className="dialog-actions">
                       <button
                         onClick={handleCloseDialog}
-                        className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                        className="dialog-button dialog-button-cancel"
                       >
                         Cancel
                       </button>
@@ -206,7 +211,7 @@ export default function CreateUpdateGameForm({
                         id="thumbnail"
                         name="thumbnail"
                         onClick={handleDialogOk}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+                        className="dialog-button dialog-button-ok"
                       >
                         OK
                       </button>
@@ -214,35 +219,21 @@ export default function CreateUpdateGameForm({
                   </div>
                 </div>
               )}
-
-              {/* <button
-                type="button"
-                className="ml-4 px-3 py-1.5 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                onClick={() => document.getElementById("thumbnail")?.click()}
-              >
-                Change
-              </button> */}
             </div>
           </div>
 
-          {/* <UploadWidget /> */}
-
-          <div>
+          <div className="images-container">
             <label htmlFor="images" className="block text-sm font-medium text-gray-700">
               Images
             </label>
             <div className="mt-2 flex flex-col gap-2">
-              <div className="flex flex-wrap gap-2">
+              <div className="images-wrapper">
                 {images.map((image: string, index: number) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={image}
-                      alt={`Uploaded ${index}`}
-                      className="h-24 w-24 rounded-md object-cover"
-                    />
+                  <div key={index} className="image-item">
+                    <img src={image} alt={`Uploaded ${index}`} className="image-thumbnail" />
                     <button
                       type="button"
-                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 text-xs"
+                      className="remove-button"
                       onClick={() => handleRemoveImage(image)}
                     >
                       &times;
@@ -251,34 +242,30 @@ export default function CreateUpdateGameForm({
                 ))}
               </div>
               <div>
-                {/* Input acting as a button */}
                 <button
                   id="images"
                   name="images"
                   onClick={handleInputClick}
-                  className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 bg-indigo-500 text-white"
+                  className="upload-button"
                 >
                   Upload Image
                 </button>
 
                 {isDialogOpen && (
-                  <div
-                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                    role="dialog"
-                  >
-                    <div className="bg-white p-6 rounded shadow-lg w-96">
-                      <h2 className="text-lg font-bold mb-4">Enter Image URL</h2>
+                  <div className="dialog-overlay" role="dialog">
+                    <div className="dialog-box">
+                      <h2 className="dialog-header">Enter Image URL</h2>
                       <input
                         type="text"
                         placeholder="https://example.com/image.jpg"
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
-                        className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full p-2 mb-4"
+                        className="dialog-input"
                       />
-                      <div className="flex justify-end gap-2">
+                      <div className="dialog-actions">
                         <button
                           onClick={handleCloseDialog}
-                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                          className="dialog-button dialog-button-cancel"
                         >
                           Cancel
                         </button>
@@ -286,7 +273,7 @@ export default function CreateUpdateGameForm({
                           id="images"
                           name="images"
                           onClick={handleDialogOk}
-                          className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+                          className="dialog-button dialog-button-ok"
                         >
                           OK
                         </button>
@@ -295,20 +282,11 @@ export default function CreateUpdateGameForm({
                   </div>
                 )}
               </div>
-              {/* <input
-                type="file"
-                id="images"
-                name="images"
-                accept="image/*"
-                multiple
-                onChange={handlenewGameChanges}
-                className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              /> */}
             </div>
           </div>
 
-          <div>
-            <label htmlFor="developer" className="block text-sm font-medium text-gray-700">
+          <div className="input-container">
+            <label htmlFor="developer" className="input-label">
               Developer
             </label>
             <input
@@ -318,12 +296,12 @@ export default function CreateUpdateGameForm({
               value={developer}
               onChange={handlenewGameChanges}
               placeholder="Nintendo Co."
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 pl-2"
+              className="input-field"
             />
           </div>
 
-          <div>
-            <label htmlFor="release_date" className="block text-sm font-medium text-gray-700">
+          <div className="release-date-container">
+            <label htmlFor="release_date" className="input-label">
               Release Date
             </label>
             <input
@@ -331,15 +309,12 @@ export default function CreateUpdateGameForm({
               name="releaseDate"
               value={releaseDate instanceof Date ? releaseDate.toISOString().split("T")[0] : ""}
               onChange={handlenewGameChanges}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="input-field release-date-field"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="system_requirements"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="system-requirements-container">
+            <label htmlFor="system_requirements" className="input-label">
               System Requirements
             </label>
             <input
@@ -349,12 +324,12 @@ export default function CreateUpdateGameForm({
               onChange={handlenewGameChanges}
               type="text"
               placeholder="Windows 11, Intel Core i7, 16 GB RAM, RTX 3060, 30 GB storage"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 pl-2"
+              className="input-field system-requirements-field"
             />
           </div>
 
-          <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+          <div className="price-container">
+            <label htmlFor="price" className="input-label">
               Price ($)
             </label>
             <input
@@ -364,23 +339,23 @@ export default function CreateUpdateGameForm({
               onChange={handlenewGameChanges}
               type="number"
               placeholder="59.99"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 pl-2"
+              className="input-field price-field"
             />
           </div>
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="button-container flex justify-end gap-4">
           <button
             onClick={handleCancel}
             type="button"
-            className="text-sm font-semibold text-gray-900 hover:text-gray-700"
+            className="cancel-button text-sm font-semibold text-gray-900 hover:text-gray-700"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             type="submit"
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="save-button rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
           >
             Save
           </button>

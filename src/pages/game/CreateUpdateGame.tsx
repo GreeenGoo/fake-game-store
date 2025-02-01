@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
-import CreateUpdateGameForm from "@/components/game/create-update-game"
+import CreateUpdateGameForm from "@/components/game/CreateUpdateGame"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"

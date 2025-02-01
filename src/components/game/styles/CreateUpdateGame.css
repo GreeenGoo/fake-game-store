@@ -1,0 +1,467 @@
+.form-container {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.form-content {
+  margin-bottom: 1.5rem;
+}
+
+.form-header {
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 1.5rem;
+}
+
+.form-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+.input-container-game-title {
+  margin-bottom: 1.5rem;
+}
+
+.input-label-game-title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.input-field-game-title {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.input-field-game-title:focus {
+  border-color: #4f46e5;
+  outline: 2px solid #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.textarea-container-description {
+  margin-bottom: 1.5rem;
+}
+
+.textarea-label-description {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.textarea-field-description {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.textarea-field-description:focus {
+  border-color: #4f46e5;
+  outline: 2px solid #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.select-container-genres {
+  margin-bottom: 1.5rem;
+}
+
+.select-label-genres {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.select-field-genres {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.select-field-genres:focus {
+  border-color: #4f46e5;
+  outline: 2px solid #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.genre-list {
+  margin-top: 0.5rem;
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  color: #4b5563;
+}
+
+.select-container-player-support {
+  margin-bottom: 1.5rem;
+}
+
+.select-label-player-support {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.select-field-player-support {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.select-field-player-support:focus {
+  border-color: #4f46e5;
+  outline: 2px solid #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.player-support-list {
+  margin-top: 0.5rem;
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  color: #4b5563;
+}
+
+.thumbnail-container {
+  margin-bottom: 1.5rem;
+}
+
+.thumbnail-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.thumbnail-upload-button {
+  margin-top: 0.5rem;
+  margin-left: 1.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  background-color: #4f46e5;
+  color: white;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail-upload-button:hover {
+  background-color: #4338ca;
+}
+
+.thumbnail-image {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.dialog-box {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: 24rem;
+}
+
+.dialog-header {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.dialog-input {
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dialog-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  border: none;
+}
+
+.dialog-button-cancel {
+  background-color: #6b7280;
+  color: white;
+}
+
+.dialog-button-ok {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.dialog-button-cancel:hover {
+  background-color: #4b5563;
+}
+
+.dialog-button-ok:hover {
+  background-color: #4338ca;
+}
+
+.icon-default {
+  height: 4rem;
+  width: 4rem;
+  color: #d1d5db;
+}
+
+.images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.images-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.image-item {
+  position: relative;
+}
+
+.image-thumbnail {
+  height: 6rem;
+  width: 6rem;
+  border-radius: 0.375rem;
+  object-fit: cover;
+}
+
+.remove-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 9999px;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
+.upload-button {
+  margin-top: 0.5rem;
+  background-color: #6366f1;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.dialog-box {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 24rem;
+}
+
+.dialog-header {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dialog-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+}
+
+.dialog-button-cancel {
+  background-color: #6b7280;
+  color: white;
+}
+
+.dialog-button-ok {
+  background-color: #6366f1;
+  color: white;
+}
+
+.input-container {
+  margin-top: 0.5rem;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.input-field {
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline-color: #6366f1;
+  background-color: white;
+}
+
+.input-field:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+}
+
+.release-date-container {
+  margin-top: 0.5rem;
+}
+
+.system-requirements-container {
+  margin-top: 0.5rem;
+}
+
+.price-container {
+  margin-top: 0.5rem;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.input-field {
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline-color: #6366f1;
+  background-color: white;
+}
+
+.input-field:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancel-button {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  transition: color 0.2s;
+}
+
+.cancel-button:hover {
+  color: #374151;
+}
+
+.save-button {
+  border-radius: 0.375rem;
+  background-color: #4f46e5;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.save-button:hover {
+  background-color: #4338ca;
+}
+
+.save-button:focus {
+  outline: none;
+  ring: 2px solid #6366f1;
+}
