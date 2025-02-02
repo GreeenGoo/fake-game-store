@@ -1,4 +1,4 @@
-import VerificationForm from "@/components/authentication/verification"
+import VerificationForm from "@/components/authentication/Verification"
 import { useSendVerificationCode, useVerifyUser } from "@/features/authentication"
 import React, { useState } from "react"
 import LoadingSpinner from "@/components/loading-spinner"

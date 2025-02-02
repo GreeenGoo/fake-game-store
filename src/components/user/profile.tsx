@@ -1,5 +1,5 @@
 import { ChangePassword } from "@/pages/authentication/ChangePassword"
-import { VerificationModal } from "@/pages/authentication/verification"
+import { VerificationModal } from "@/pages/authentication/Verification"
 import { Button } from "@mui/material"
 import "./styles/Profile.css"
 
