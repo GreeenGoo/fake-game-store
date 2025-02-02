@@ -1,4 +1,4 @@
-import ChangePasswordForm from "@/components/authentication/change-password"
+import ChangePasswordForm from "@/components/authentication/ChangePassword"
 import { useChangePassword } from "@/features/user"
 import { ChangeUserPassword } from "@/types/user"
 import React, { useState } from "react"
