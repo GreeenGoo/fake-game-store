@@ -1,0 +1,74 @@
+.profile-page-container {
+    padding: 1.5rem;
+    background-color: #f3f4f6;
+  }
+  
+  .profile-card {
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  
+  .profile-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .label {
+    font-weight: 500;
+    color: #4b5563;
+  }
+  
+  .value {
+    color: #374151;
+  }
+  
+  .no-data {
+    font-style: italic;
+    color: #9ca3af;
+  }
+  
+  .status-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #374151;
+  }
+  
+  .status-row.active {
+    color: #16a34a;
+  }
+  
+  .status-row.unverified {
+    color: #eab308;
+  }
+  
+  .status-row.inactive {
+    color: #ef4444;
+  }
+  
+  .divider {
+    margin: 1.5rem 0;
+    border-color: #d1d5db;
+  }
+  
+  .change-password-btn {
+    width: 100%;
+  }
+  

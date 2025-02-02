@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useGetCurrentUser } from "@/features/user"
-import ProfilePage from "@/components/user/profile"
+import ProfilePage from "@/components/user/Profile"
 import LoadingSpinner from "@/components/loading-spinner"
 // import { useSendVerificationCode } from "@/features/authentication"
 

@@ -1,6 +1,7 @@
 import { ChangePassword } from "@/pages/authentication/change-password"
 import { VerificationModal } from "@/pages/authentication/verification"
 import { Button } from "@mui/material"
+import "./styles/Profile.css"
 
 type ProfilePageProps = {
   user: {
@@ -30,43 +31,35 @@ export default function ProfilePage({
   closeVerification
 }: ProfilePageProps) {
   return (
-    <div className="p-6 bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Name:</div>
-            <div className="text-gray-600">{user.name}</div>
+    <div className="profile-page-container">
+      <div className="profile-card">
+        <h1 className="profile-title">User Profile</h1>
+        <div className="profile-details">
+          <div className="profile-row">
+            <div className="label">Name:</div>
+            <div className="value">{user.name}</div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Email:</div>
-            <div className="text-gray-600">{user.email}</div>
+          <div className="profile-row">
+            <div className="label">Email:</div>
+            <div className="value">{user.email}</div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Role:</div>
-            <div className="text-gray-600">{user.role}</div>
+          <div className="profile-row">
+            <div className="label">Role:</div>
+            <div className="value">{user.role}</div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Date of Birth:</div>
-            <div className="text-gray-600">
+          <div className="profile-row">
+            <div className="label">Date of Birth:</div>
+            <div className="value">
               {user.birthDate ? (
                 user.birthDate.toString()
               ) : (
-                <span className="italic text-gray-500">There is no data</span>
+                <span className="no-data">There is no data</span>
               )}
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Status:</div>
-            <div
-              className={`flex flex-row justify-center items-center gap-4 text-gray-600 ${
-                user.activeStatus === "ACTIVE"
-                  ? "text-green-600"
-                  : user.activeStatus === "UNVERIFIED"
-                    ? "text-yellow-600"
-                    : "text-red-600"
-              }`}
-            >
+          <div className="profile-row">
+            <div className="label">Status:</div>
+            <div className={`status-row ${user.activeStatus.toLowerCase()}`}>
               <p>{user.activeStatus}</p>
               {user.activeStatus === "UNVERIFIED" && (
                 <Button variant="contained" onClick={openVerification} color="warning">
@@ -75,35 +68,31 @@ export default function ProfilePage({
               )}
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Address:</div>
-            <div className="text-gray-600">
-              {user.address ? (
-                user.address
-              ) : (
-                <span className="italic text-gray-500">There is no data</span>
-              )}
+          <div className="profile-row">
+            <div className="label">Address:</div>
+            <div className="value">
+              {user.address ? user.address : <span className="no-data">There is no data</span>}
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-gray-700">Phone:</div>
-            <div className="text-gray-600">
+          <div className="profile-row">
+            <div className="label">Phone:</div>
+            <div className="value">
               {user.phone ? (
                 user.phone.toString()
               ) : (
-                <span className="italic text-gray-500">There is no data</span>
+                <span className="no-data">There is no data</span>
               )}
             </div>
           </div>
         </div>
 
-        <hr className="my-6 border-gray-300" />
-        <Button variant="contained" onClick={openChangePassword} className="w-full">
+        <hr className="divider" />
+        <Button variant="contained" onClick={openChangePassword} className="change-password-btn">
           Change Password
         </Button>
       </div>
       <ChangePassword isOpen={isChangePasswordOpen} onClose={closeChangePassword} />
-      <VerificationModal isOpen={isVerificationOpen} onClose={closeVerification} />{" "}
+      <VerificationModal isOpen={isVerificationOpen} onClose={closeVerification} />
     </div>
   )
 }
