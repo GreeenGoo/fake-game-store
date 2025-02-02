@@ -1,11 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { OrderDto } from "@/types/order"
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
@@ -57,17 +50,11 @@ export default function MyOrdersList({
       header: "Actions",
       cell: ({ row }) =>
         row.original.paymentStatus === "UNPAID" ? (
-          <button
-            onClick={() => handleCheckoutOrder()}
-            className="text-green-500 hover:text-green-700"
-          >
+          <button onClick={() => handleCheckoutOrder()} className="button">
             Checkout
           </button>
         ) : row.original.paymentStatus === "WAITING" ? (
-          <button
-            onClick={() => handlePayment(row.original.id)}
-            className="text-green-500 hover:text-green-700"
-          >
+          <button onClick={() => handlePayment(row.original.id)} className="button">
             Pay Now
           </button>
         ) : null
@@ -81,21 +68,21 @@ export default function MyOrdersList({
   })
 
   return (
-    <div className="rounded-md border">
+    <div className="table-container">
       <Table>
-        <TableHeader>
+        <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableCell key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHead>
+                </TableCell>
               ))}
             </TableRow>
           ))}
-        </TableHeader>
+        </TableHead>
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -109,7 +96,7 @@ export default function MyOrdersList({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="no-orders">
                 No orders found.
               </TableCell>
             </TableRow>

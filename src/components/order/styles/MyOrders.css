@@ -1,0 +1,37 @@
+.table-container {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .table-header {
+    background-color: #f3f4f6;
+  }
+  
+  .table-header th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: bold;
+  }
+  
+  .table-body td {
+    padding: 12px 16px;
+    text-align: left;
+  }
+  
+  .button {
+    background-color: transparent;
+    border: none;
+    color: #10b981;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    color: #047857;
+  }
+  
+  .no-orders {
+    height: 96px;
+    text-align: center;
+    font-size: 16px;
+    color: #6b7280;
+  }  

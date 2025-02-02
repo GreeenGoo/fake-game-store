@@ -7,7 +7,7 @@ import {
   usePayCurrentOrder
 } from "@/features/order"
 import { PayForOrder } from "@/types/order"
-import MyOrdersList from "@/components/order/my-orders-list"
+import MyOrdersList from "@/components/order/MyOrders"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
