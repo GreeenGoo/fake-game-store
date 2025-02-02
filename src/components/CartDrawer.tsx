@@ -4,7 +4,7 @@ import Drawer from "@mui/material/Drawer"
 import Button from "@mui/material/Button"
 import { IconButton } from "@mui/material"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
-import { Card } from "@/pages/orders/cart"
+import { Card } from "@/pages/orders/Cart"
 
 export default function CartDrawer() {
   const [open, setOpen] = React.useState(false)

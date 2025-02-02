@@ -6,7 +6,7 @@ import {
   useDeleteGameFromCard,
   useGetCurrentUserCard
 } from "@/features/order"
-import Cart from "@/components/order/cart"
+import Cart from "@/components/order/Cart"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
