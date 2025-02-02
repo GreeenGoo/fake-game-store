@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal"
 import { SignUp, User } from "@/types/user"
 import { useSignUp } from "@/features/authentication"
 import LoadingSpinner from "./loading-spinner"
-import SignUpForm from "./authentication/sign-up"
+import SignUpForm from "./authentication/SignUp"
 
 type SignUpProps = {
   isOpen: boolean

@@ -15,7 +15,7 @@ import MenuItem from "@mui/material/MenuItem"
 import AdbIcon from "@mui/icons-material/Adb"
 import useUser from "@/context/UserContext"
 import { User } from "@/types/user"
-import SignUpPanel from "@/pages/authentication/sign-up"
+import SignUpPanel from "@/pages/authentication/SignUp"
 import LoginModal from "./LoginModal"
 import Dialog from "./Dialog"
 

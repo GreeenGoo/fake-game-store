@@ -20,20 +20,17 @@ export default function SignUpForm({
   onClose
 }: SignUpProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Register</h2>
-          <Button variant="contained" onClick={onClose}>
-            <i className="fas fa-times"></i>
-          </Button>
+    <div className="signup-form-overlay">
+      <div className="signup-form-container">
+        <div className="signup-form-header">
+          <h2 className="signup-form-title">Register</h2>
         </div>
         <Box
           component="form"
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4"
+          className="signup-form-body"
         >
           <TextField
             required
@@ -65,8 +62,16 @@ export default function SignUpForm({
             value={signUp.confirmPassword}
             onChange={handleSignUpChange}
           />
-          <Button type="submit" variant="contained" disabled={signUpQuery.isPending}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={signUpQuery.isPending}
+            className="signup-form-submit-button"
+          >
             {signUpQuery.isPending ? "Registering..." : "Register"}
+          </Button>
+          <Button variant="outlined" onClick={onClose} className="signup-form-close-button">
+            Close
           </Button>
         </Box>
       </div>

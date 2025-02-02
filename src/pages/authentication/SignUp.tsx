@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { SignUp, User } from "@/types/user"
 import { useSignUp } from "@/features/authentication"
-import SignUpForm from "@/components/authentication/sign-up"
+import SignUpForm from "@/components/authentication/SignUp"
 import NotificationSnackbar from "@/components/snackbar"
 import axios from "axios"
 
