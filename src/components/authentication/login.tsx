@@ -1,5 +1,6 @@
 import { Box, Button, TextField } from "@mui/material"
 import { FormEvent, SetStateAction } from "react"
+import "./styles/Login.css"
 
 type LoginFormProps = {
   step: string
@@ -39,24 +40,22 @@ export default function LoginForm({
   setEmail
 }: LoginFormProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded shadow-md w-80">
-        <h2 className="text-2xl font-bold mb-6 text-center">
+    <div className="overlay">
+      <div className="modal">
+        <h2 className="title">
           {step === "reset" ? "Reset Password" : step === "forgot" ? "Forgot Password" : "Login"}
         </h2>
         {step === "reset" ? (
           <Box component="form" noValidate autoComplete="off" onSubmit={handleResetPasswordSubmit}>
-            <div className="flex flex-col justify-center gap-4 mb-8">
+            <div className="form-group">
               <TextField
                 required
-                id="outlined-required"
                 label="Reset Code"
                 value={resetCode}
                 onChange={(e) => setResetCode(e.target.value)}
               />
               <TextField
                 required
-                id="outlined-required"
                 label="New Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -64,14 +63,13 @@ export default function LoginForm({
               />
               <TextField
                 required
-                id="outlined-required"
                 label="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 type="password"
               />
             </div>
-            <div className="flex flex-col justify-center gap-4">
+            <div className="button-group">
               <Button variant="contained" type="submit">
                 {isLoading ? "Resetting..." : "Reset Password"}
               </Button>
@@ -87,16 +85,15 @@ export default function LoginForm({
           </Box>
         ) : step === "forgot" ? (
           <Box component="form" noValidate autoComplete="off" onSubmit={handleForgotPasswordSubmit}>
-            <div className="flex flex-col justify-center gap-4 mb-8">
+            <div className="form-group">
               <TextField
                 required
-                id="outlined-required"
                 label="Email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
               />
             </div>
-            <div className="flex flex-col justify-center gap-4">
+            <div className="button-group">
               <Button onClick={handleForgotPasswordSubmit} variant="contained" type="submit">
                 {isLoading ? "Sending..." : "Send Reset Link"}
               </Button>
@@ -112,24 +109,22 @@ export default function LoginForm({
           </Box>
         ) : (
           <Box component="form" noValidate autoComplete="off" onSubmit={handleLoginSubmit}>
-            <div className="flex flex-col justify-center gap-4 mb-8">
+            <div className="form-group">
               <TextField
                 required
-                id="outlined-required"
                 label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 required
-                id="outlined-required"
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"
               />
             </div>
-            <div className="flex flex-col justify-center gap-4">
+            <div className="button-group">
               <Button variant="contained" type="submit" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>

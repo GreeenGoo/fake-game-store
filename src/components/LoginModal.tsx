@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
 import { ResetPasswordWithCodePlusCode, User } from "@/types/user"
-import LoginForm from "./authentication/login"
+import LoginForm from "./authentication/Login"
 import { useLogin, useForgotPassword, useResetPasswordWithCode } from "@/features/authentication"
 import LoadingSpinner from "./loading-spinner"
 

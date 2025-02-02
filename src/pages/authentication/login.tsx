@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from "react"
 import { useForgotPassword, useLogin, useResetPasswordWithCode } from "@/features/authentication"
 import { ResetPasswordWithCodePlusCode, User } from "@/types/user"
-import LoginForm from "@/components/authentication/login"
+import LoginForm from "@/components/authentication/Login"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 
