@@ -1,7 +1,7 @@
-import { GlobalResponse } from "@/types"
-import { OrderDto, PayForOrder } from "@/types/order"
+import { GlobalResponse } from "@/types/Index"
+import { OrderDto, PayForOrder } from "@/types/Order"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import OrderService from "../api/order"
+import OrderService from "../api/Order"
 import { useSnackbar } from "notistack"
 
 export function useAllOrders() {

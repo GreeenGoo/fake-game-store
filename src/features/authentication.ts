@@ -1,15 +1,15 @@
 import { useSnackbar } from "notistack"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import AuthenticationService from "@/api/authentication"
+import AuthenticationService from "@/api/Authentication"
 import {
   ForgotPassword,
   LoggedInUser,
   Login,
   ResetPasswordWithCodePlusCode,
   SignUp
-} from "@/types/user"
-import { GlobalResponse } from "@/types"
-import { useGetCurrentUser } from "./user"
+} from "@/types/User"
+import { GlobalResponse } from "@/types/Index"
+import { useGetCurrentUser } from "./User"
 
 export function useLogin() {
   const { enqueueSnackbar } = useSnackbar()

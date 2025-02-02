@@ -1,5 +1,5 @@
-import { ChangeUserPassword } from "@/types/user"
-import api from "."
+import { ChangeUserPassword } from "@/types/User"
+import api from "./Index"
 
 const RESOURCE = "users"
 

@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
-import { GameInCard } from "@/types/game"
+import { GameInCard } from "@/types/Game"
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import "./styles/Cart.css"
 

@@ -14,9 +14,9 @@ import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
 import AdbIcon from "@mui/icons-material/Adb"
 import useUser from "@/context/UserContext"
-import { User } from "@/types/user"
+import { User } from "@/types/User"
 import SignUpPanel from "@/pages/authentication/SignUp"
-import LoginModal from "./LoginModal"
+import LoginModal from "../pages/authentication/Login"
 import Dialog from "./Dialog"
 
 function AppBar() {
@@ -240,7 +240,7 @@ function AppBar() {
       <Dialog
         open={isSignoutModalOpen}
         handleClose={() => setIsSignoutModalOpen(false)}
-        title={"Are you sure that you want to logut?"}
+        title={"Are you sure that you want to logout?"}
         handleComfirm={() => {
           setIsSignoutModalOpen(false)
           handleLogout()

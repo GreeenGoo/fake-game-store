@@ -1,9 +1,11 @@
-import React, { useState } from "react"
-import { SignUp, User } from "@/types/user"
-import { useSignUp } from "@/features/authentication"
-import SignUpForm from "@/components/authentication/SignUp"
-import NotificationSnackbar from "@/components/snackbar"
-import axios from "axios"
+import { useSnackbar } from "notistack"
+import { useState } from "react"
+import Box from "@mui/material/Box"
+import Modal from "@mui/material/Modal"
+import { SignUp, User } from "@/types/User"
+import { useSignUp } from "@/features/Authentication"
+import LoadingSpinner from "../../components/LoadingSpinner"
+import SignUpForm from "../../components/authentication/SignUp"
 
 type SignUpProps = {
   isOpen: boolean
@@ -11,20 +13,15 @@ type SignUpProps = {
   onRegister: (newToken: string, user: User) => void
 }
 
-const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => {
+export default function LoginModal({ isOpen, onClose, onRegister }: SignUpProps) {
   const signUpQuery = useSignUp()
+  const { enqueueSnackbar } = useSnackbar()
   const [signUp, setSignUp] = useState<SignUp>({
     name: "",
     email: "",
     password: "",
     confirmPassword: ""
   })
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "error" | "info" | "warning"
-  >("error")
-
   if (!isOpen) return null
 
   const handleSignUpChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,9 +35,7 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (signUp.password !== signUp.confirmPassword) {
-      setSnackbarMessage("Passwords do not match")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
+      enqueueSnackbar("Passwords do not match", { variant: "warning" })
       return
     }
 
@@ -54,42 +49,40 @@ const SignUpPanel: React.FC<SignUpProps> = ({ isOpen, onClose, onRegister }) => 
           confirmPassword: ""
         })
         onClose()
-        setSnackbarMessage("Registration successful.")
-        setSnackbarSeverity("success")
-        setSnackbarOpen(true)
-      },
-      onError: (error) => {
-        const errorMessage = axios.isAxiosError(error)
-          ? error.response?.data?.error.errorMessage
-          : "An unexpected error occurred."
-        setSnackbarMessage(errorMessage)
-        setSnackbarSeverity("error")
-        setSnackbarOpen(true)
       }
     })
   }
 
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false)
-  }
-
   return (
-    <>
-      <SignUpForm
-        signUp={signUp}
-        signUpQuery={signUpQuery}
-        onClose={onClose}
-        handleSubmit={handleSubmit}
-        handleSignUpChange={handleSignUpChange}
-      />
-      <NotificationSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-        severity={snackbarSeverity}
-      />
-    </>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "white",
+          p: 4,
+          width: 1000
+        }}
+      >
+        {signUpQuery.isPending ? (
+          <LoadingSpinner />
+        ) : (
+          <SignUpForm
+            signUp={signUp}
+            signUpQuery={signUpQuery}
+            onClose={onClose}
+            handleSubmit={handleSubmit}
+            handleSignUpChange={handleSignUpChange}
+          />
+        )}
+      </Box>
+    </Modal>
   )
 }
-
-export default SignUpPanel

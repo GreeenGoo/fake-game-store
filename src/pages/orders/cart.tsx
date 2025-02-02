@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react"
-import { GameInCard } from "@/types/game"
+import { GameInCard } from "@/types/Game"
 import {
   useCheckoutCurrentOrder,
   useCleanCurrentUserCard,
   useDeleteGameFromCard,
   useGetCurrentUserCard
-} from "@/features/order"
+} from "@/features/Order"
 import Cart from "@/components/order/Cart"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import NotificationSnackbar from "@/components/SnackBar"
 import axios from "axios"
 
 export function Card() {

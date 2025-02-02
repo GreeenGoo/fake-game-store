@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
-import LoadingSpinner from "@/components/loading-spinner"
-import { useGetSingleGame } from "@/features/games"
-import { useAddGameToCard } from "@/features/order"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import { useGetSingleGame } from "@/features/Games"
+import { useAddGameToCard } from "@/features/Order"
 import useUser from "@/context/UserContext"
 import SingleGameComponent from "@/components/game/SingleGame"
 

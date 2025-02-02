@@ -1,10 +1,10 @@
 import ChangePasswordForm from "@/components/authentication/ChangePassword"
-import { useChangePassword } from "@/features/user"
-import { ChangeUserPassword } from "@/types/user"
+import { useChangePassword } from "@/features/User"
+import { ChangeUserPassword } from "@/types/User"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import NotificationSnackbar from "@/components/SnackBar"
 
 export type ChangePasswordProps = {
   isOpen: boolean

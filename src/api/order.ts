@@ -1,5 +1,5 @@
-import { PayForOrder } from "@/types/order"
-import api from "."
+import { PayForOrder } from "@/types/Order"
+import api from "./Index"
 const RESOURCE = "orders"
 
 export default {

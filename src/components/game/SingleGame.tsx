@@ -1,5 +1,5 @@
-import { Game } from "@/types/game"
-import { User } from "@/types/user"
+import { Game } from "@/types/Game"
+import { User } from "@/types/User"
 import {
   Button,
   Card,

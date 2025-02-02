@@ -1,4 +1,4 @@
-import { Game } from "@/types/game"
+import { Game } from "@/types/Game"
 import "@fortawesome/fontawesome-free/css/all.css"
 import React from "react"
 import "./styles/AllGamesList.css"

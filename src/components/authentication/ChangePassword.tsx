@@ -1,4 +1,4 @@
-import { ChangeUserPassword } from "@/types/user"
+import { ChangeUserPassword } from "@/types/User"
 import { Button } from "@mui/material"
 import "./styles/ChangePassword.css"
 

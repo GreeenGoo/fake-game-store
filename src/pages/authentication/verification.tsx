@@ -1,8 +1,8 @@
 import VerificationForm from "@/components/authentication/Verification"
-import { useSendVerificationCode, useVerifyUser } from "@/features/authentication"
+import { useSendVerificationCode, useVerifyUser } from "@/features/Authentication"
 import React, { useState } from "react"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import NotificationSnackbar from "@/components/SnackBar"
 import axios from "axios"
 
 interface VerificationModalProps {

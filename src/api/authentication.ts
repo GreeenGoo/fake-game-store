@@ -1,11 +1,11 @@
-import api from "."
+import api from "./Index"
 import {
   ForgotPassword,
   Login,
   ResetPasswordWithCode,
   ResetPasswordWithCodePlusCode,
   SignUp
-} from "@/types/user"
+} from "@/types/User"
 
 const RESOURCE = "auth"
 

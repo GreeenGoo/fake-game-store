@@ -1,6 +1,6 @@
-import api from "."
+import api from "./Index"
 
-import { CreateGame, CreateOrUpdateGame, GamesFiltering, Game as SingleGame } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, GamesFiltering, Game as SingleGame } from "@/types/Game"
 const RESOURCE = "games"
 
 export default {

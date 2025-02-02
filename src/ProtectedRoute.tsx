@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import useUser from "./context/UserContext"
-import { Role } from "./types/user"
+import { Role } from "./types/User"
 
 type ProtectedRouteProps = {
   children: ReactNode

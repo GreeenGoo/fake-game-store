@@ -1,4 +1,4 @@
-import { OrderDto } from "@/types/order"
+import { OrderDto } from "@/types/Order"
 import "./styles/AllOrders.css"
 
 type AllOrdersListProps = {

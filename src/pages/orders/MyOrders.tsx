@@ -5,11 +5,11 @@ import {
   useCheckoutCurrentOrder,
   useGetCurrentUserOrders,
   usePayCurrentOrder
-} from "@/features/order"
-import { PayForOrder } from "@/types/order"
+} from "@/features/Order"
+import { PayForOrder } from "@/types/Order"
 import MyOrdersList from "@/components/order/MyOrders"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import NotificationSnackbar from "@/components/SnackBar"
 import axios from "axios"
 
 export default function MyOrders() {

@@ -1,8 +1,9 @@
 import { UseMutationResult } from "@tanstack/react-query"
 import { Box, Button, TextField } from "@mui/material"
-import { GlobalResponse } from "@/types"
-import { LoggedInUser } from "@/types/user"
-import { SignUp } from "@/types/user"
+import { GlobalResponse } from "@/types/Index"
+import { LoggedInUser } from "@/types/User"
+import { SignUp } from "@/types/User"
+import "./styles/SignUp.css"
 
 type SignUpProps = {
   signUp: SignUp

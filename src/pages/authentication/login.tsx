@@ -1,9 +1,11 @@
-import React, { FormEvent, useState } from "react"
-import { useForgotPassword, useLogin, useResetPasswordWithCode } from "@/features/authentication"
-import { ResetPasswordWithCodePlusCode, User } from "@/types/user"
-import LoginForm from "@/components/authentication/Login"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import { useSnackbar } from "notistack"
+import { FormEvent, useState } from "react"
+import Box from "@mui/material/Box"
+import Modal from "@mui/material/Modal"
+import { ResetPasswordWithCodePlusCode, User } from "@/types/User"
+import LoginForm from "../../components/authentication/Login"
+import { useLogin, useForgotPassword, useResetPasswordWithCode } from "@/features/Authentication"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -11,69 +13,47 @@ interface LoginModalProps {
   onLogin: (token: string, role: User) => void
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => {
+export default function LoginModal({ isOpen, onClose, onLogin }: LoginModalProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [resetCode, setResetCode] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const [resetEmail, setResetEmail] = useState("")
   const [step, setStep] = useState<"login" | "forgot" | "reset">("login")
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "error" | "info" | "warning"
-  >("error")
+  const { enqueueSnackbar } = useSnackbar()
 
   const login = useLogin()
   const forgotPasswordMutation = useForgotPassword()
   const resetPasswordWithCode = useResetPasswordWithCode()
 
+  const handleResetStates = () => {
+    setEmail("")
+    setPassword("")
+    setConfirmPassword("")
+    setResetCode("")
+    setResetEmail("")
+  }
+
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    try {
-      const data = await login.mutateAsync({ email, password })
-      if (data.data.token) {
-        onLogin(data.data.token, data.data.user)
-      }
-      onClose()
-    } catch (error) {
-      setSnackbarMessage("Login failed. Please check your credentials and try again.")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
-    } finally {
-      setIsLoading(false)
+    const data = await login.mutateAsync({ email, password })
+    if (data.data.token) {
+      onLogin(data.data.token, data.data.user)
     }
+    handleResetStates()
+    onClose()
   }
 
   const handleForgotPasswordSubmit = async (e: FormEvent) => {
-    // e.preventDefault()
-    // console.log("Start")
-    // setIsLoading(true)
-    // try {
-    //   await forgotPasswordMutation.mutateAsync({ email: resetEmail })
-    //   setStep("reset")
-    //   console.log("We're here")
-    //   setSnackbarMessage("Reset email sent successfully. Please check your inbox.")
-    //   setSnackbarSeverity("success")
-    //   setSnackbarOpen(true)
-    // } catch (error) {
-    //   setSnackbarMessage("Failed to send reset email. Please try again.")
-    //   setSnackbarSeverity("error")
-    //   setSnackbarOpen(true)
-    // } finally {
-    //   setIsLoading(false)
-    // }
-    // console.log("End")
+    e.preventDefault()
+    await forgotPasswordMutation.mutateAsync({ email: resetEmail })
+    setStep("reset")
   }
 
   const handleResetPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (password !== confirmPassword || password.length < 8) {
-      setSnackbarMessage("Passwords do not match or less than 8 characters.")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
+      enqueueSnackbar("Passwords do not match or less than 8 characters.", { variant: "warning" })
       return
     }
 
@@ -83,68 +63,56 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
       code: resetCode
     }
 
-    setIsLoading(true)
-    try {
-      await resetPasswordWithCode.mutateAsync(resetPasswordData)
-      setSnackbarMessage("Password reset successfully.")
-      setSnackbarSeverity("success")
-      setSnackbarOpen(true)
-      setStep("login")
-      setPassword("")
-      onClose()
-    } catch (error) {
-      console.error("Password reset failed:", error)
-      setSnackbarMessage("Password reset failed. Please try again.")
-      setSnackbarSeverity("error")
-      setSnackbarOpen(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false)
-  }
-
-  if (!isOpen) return null
-
-  if (
-    isLoading ||
-    login.isPending ||
-    forgotPasswordMutation.isPending ||
-    resetPasswordWithCode.isPending
-  ) {
-    return <LoadingSpinner />
+    await resetPasswordWithCode.mutateAsync(resetPasswordData)
+    setPassword("")
+    setConfirmPassword("")
+    setStep("login")
+    onClose()
   }
 
   return (
-    <>
-      <LoginForm
-        step={step}
-        handleResetPasswordSubmit={handleResetPasswordSubmit}
-        resetCode={resetCode}
-        setResetCode={setResetCode}
-        password={password}
-        setPassword={setPassword}
-        confirmPassword={confirmPassword}
-        setConfirmPassword={setConfirmPassword}
-        isLoading={isLoading}
-        setStep={setStep}
-        handleForgotPasswordSubmit={handleForgotPasswordSubmit}
-        resetEmail={resetEmail}
-        setResetEmail={setResetEmail}
-        handleLoginSubmit={handleLoginSubmit}
-        email={email}
-        setEmail={setEmail}
-      />
-      <NotificationSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-        severity={snackbarSeverity}
-      />
-    </>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "white",
+          p: 4,
+          width: 350
+        }}
+      >
+        {login.isPending || forgotPasswordMutation.isPending || resetPasswordWithCode.isPending ? (
+          <LoadingSpinner />
+        ) : (
+          <div>
+            <LoginForm
+              step={step}
+              handleResetPasswordSubmit={handleResetPasswordSubmit}
+              resetCode={resetCode}
+              setResetCode={setResetCode}
+              password={password}
+              setPassword={setPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              isLoading={login.isPending}
+              setStep={setStep}
+              handleForgotPasswordSubmit={handleForgotPasswordSubmit}
+              resetEmail={resetEmail}
+              setResetEmail={setResetEmail}
+              handleLoginSubmit={handleLoginSubmit}
+              email={email}
+              setEmail={setEmail}
+            />
+          </div>
+        )}
+      </Box>
+    </Modal>
   )
 }
-
-export default LoginModal

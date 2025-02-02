@@ -1,7 +1,7 @@
-import { GlobalResponse } from "@/types"
-import { ChangeUserPassword, User } from "@/types/user"
+import { GlobalResponse } from "@/types/Index"
+import { ChangeUserPassword, User } from "@/types/User"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import UserService from "@/api/user"
+import UserService from "@/api/User"
 import { useEffect, useState } from "react"
 import { useSnackbar } from "notistack"
 

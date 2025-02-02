@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
-import { OrderDto } from "@/types/order"
+import { OrderDto } from "@/types/Order"
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
 type MyOrdersListProps = {

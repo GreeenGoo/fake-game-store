@@ -4,13 +4,13 @@ import {
   useGetSingleGame,
   usePlayerSupports,
   useUpdateGame
-} from "@/features/games"
+} from "@/features/Games"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { CreateGame, CreateOrUpdateGame, Game } from "@/types/game"
+import { CreateGame, CreateOrUpdateGame, Game } from "@/types/Game"
 import CreateUpdateGameForm from "@/components/game/CreateUpdateGame"
-import LoadingSpinner from "@/components/loading-spinner"
-import NotificationSnackbar from "@/components/snackbar"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import NotificationSnackbar from "@/components/SnackBar"
 import axios from "axios"
 import { useSnackbar } from "notistack"
 
