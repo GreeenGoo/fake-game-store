@@ -79,7 +79,7 @@ export default function CreateUpdateGameForm({
 
         <div className="grid-container">
           <div className="input-container-game-title">
-            <label htmlFor="game_title" className="input-label-game-title">
+            <label htmlFor="name" className="input-label-game-title">
               Game Title
             </label>
             <input
@@ -89,7 +89,7 @@ export default function CreateUpdateGameForm({
               onChange={handlenewGameChanges}
               type="text"
               placeholder="Assassin's Creed"
-              className="input-field-game-title"
+              className="input-field"
             />
           </div>
 
@@ -104,7 +104,7 @@ export default function CreateUpdateGameForm({
               value={gameDescription}
               onChange={handlenewGameChanges}
               placeholder="Assassin's Creed is an action-adventure game series..."
-              className="textarea-field-description"
+              className="input-field"
             />
           </div>
 
@@ -118,7 +118,7 @@ export default function CreateUpdateGameForm({
               multiple
               value={newGameGenres}
               onChange={handlenewGameChanges}
-              className="select-field-genres"
+              className="list-select-field"
             >
               {genresList.map((genre, index) => (
                 <option key={index} value={genre}>
@@ -126,7 +126,7 @@ export default function CreateUpdateGameForm({
                 </option>
               ))}
             </select>
-            <ul className="genre-list">
+            <ul className="items-list">
               {newGameGenres &&
                 Array.isArray(newGameGenres) &&
                 newGameGenres.map((genre, index) => <li key={index}>{genre}</li>)}
@@ -143,7 +143,7 @@ export default function CreateUpdateGameForm({
               multiple
               value={newGamePlayerSupport}
               onChange={handlenewGameChanges}
-              className="select-field-player-support"
+              className="list-select-field"
             >
               {playerSupportList.map((playerSupport, index) => (
                 <option key={index} value={playerSupport}>
@@ -151,7 +151,7 @@ export default function CreateUpdateGameForm({
                 </option>
               ))}
             </select>
-            <ul className="player-support-list">
+            <ul className="items-list">
               {newGamePlayerSupport.map((support: string, index: number) => (
                 <li key={index}>{support}</li>
               ))}
@@ -162,7 +162,7 @@ export default function CreateUpdateGameForm({
             <label htmlFor="thumbnail" className="thumbnail-label">
               Thumbnail
             </label>
-            <div className="mt-2 flex items-center">
+            <div>
               {thumbnail ? (
                 <img src={thumbnail as string} alt="Thumbnail" className="thumbnail-image" />
               ) : (
@@ -223,10 +223,8 @@ export default function CreateUpdateGameForm({
           </div>
 
           <div className="images-container">
-            <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-              Images
-            </label>
-            <div className="mt-2 flex flex-col gap-2">
+            <label htmlFor="images">Images</label>
+            <div>
               <div className="images-wrapper">
                 {images.map((image: string, index: number) => (
                   <div key={index} className="image-item">
@@ -344,18 +342,18 @@ export default function CreateUpdateGameForm({
           </div>
         </div>
 
-        <div className="button-container flex justify-end gap-4">
+        <div className="button-container">
           <button
             onClick={handleCancel}
             type="button"
-            className="cancel-button text-sm font-semibold text-gray-900 hover:text-gray-700"
+            className="cancel-button"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             type="submit"
-            className="save-button rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="save-button"
           >
             Save
           </button>
