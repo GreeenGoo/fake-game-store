@@ -1,0 +1,46 @@
+.orders-table-container {
+    overflow-x: auto;
+  }
+  
+  .orders-table {
+    min-width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .orders-table-header {
+    background-color: #f9fafb;
+  }
+  
+  .orders-table-header-cell {
+    padding: 12px 24px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .orders-table-body {
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .orders-table-body-cell {
+    padding: 12px 24px;
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
+  
+  .orders-table-body-cell:first-child {
+    font-weight: 500;
+  }
+  
+  .orders-table-body-cell:nth-child(odd) {
+    background-color: #f9fafb;
+  }
+  
+  .orders-table-body-cell:nth-child(even) {
+    background-color: #ffffff;
+  }
+  

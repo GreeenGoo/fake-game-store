@@ -23,11 +23,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 0.5rem !important;
   }
   
   .button:hover {
     background-color: #2b6cb0;
+    color: white;
   }
   
   .spinner {

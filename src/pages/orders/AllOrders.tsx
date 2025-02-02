@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useAllOrders } from "@/features/order"
 import { OrderDto } from "@/types/order"
-import AllOrdersList from "@/components/order/all-orders-list"
+import AllOrdersList from "@/components/order/AllOrders"
 import LoadingSpinner from "@/components/loading-spinner"
 import NotificationSnackbar from "@/components/snackbar"
 
