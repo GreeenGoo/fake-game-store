@@ -11,15 +11,14 @@ Welcome to the **Fake Game Store** Full-Stack project! This project was created 
 > **Please Note**: This website was developed for educational purposes. All data, including the games and purchases, is entirely fake. You cannot buy any real games through this platform.
 
 ## Table of Contents
-1. [Welcome](#welcome)
-2. [About the Project](#about-the-project)
-3. [Technologies Used](#technologies-used)
-4. [Setup](#setup)
-5. [Website Functionality](#website-functionality)
-6. [Not Authorized User](#not-authorized-user)
-7. [User](#user)
-8. [Admin](#admin)
-9. [Features for Future](#features-for-future)
+1. [About the Project](#about-the-project)
+2. [Technologies Used](#technologies-used)
+3. [Setup](#setup)
+4. [Website Functionality](#website-functionality)
+5. [Not Authorized User](#not-authorized-user)
+6. [User](#user)
+7. [Admin](#admin)
+8. [Features for Future](#features-for-future)
 
 ### About the Project
 
