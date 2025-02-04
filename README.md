@@ -5,6 +5,11 @@
 </div>
 <p></p>
 
+## Welcome
+Welcome to the **Fake Game Store** Full-Stack project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the [Backend Part](https://github.com/GreeenGoo/fake-game-store-backend) of the project that I developed with my team.
+
+> **Please Note**: This website was developed for educational purposes. All data, including the games and purchases, is entirely fake. You cannot buy any real games through this platform.
+
 ## Table of Contents
 1. [Welcome](#welcome)
 2. [About the Project](#about-the-project)
@@ -15,11 +20,6 @@
 7. [User](#user)
 8. [Admin](#admin)
 9. [Features for Future](#features-for-future)
-
-## Welcome
-Welcome to the **Fake Game Store** Full-Stack project! This project was created to practice building a user-friendly e-commerce application that communicates with a backend server. You can check out the [Backend Part](https://github.com/GreeenGoo/fake-game-store-backend) of the project that I developed with my team.
-
-> **Please Note**: This website was developed for educational purposes. All data, including the games and purchases, is entirely fake. You cannot buy any real games through this platform.
 
 ### About the Project
 
